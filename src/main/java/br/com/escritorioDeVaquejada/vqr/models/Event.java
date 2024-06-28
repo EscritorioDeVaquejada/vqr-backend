@@ -2,6 +2,8 @@ package br.com.escritorioDeVaquejada.vqr.models;
 
 import jakarta.persistence.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -9,7 +11,9 @@ import java.util.UUID;
 @Table(name ="Eventos")
 @Entity
 
-public class Event {
+public class Event implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     @Id @GeneratedValue(strategy = GenerationType.UUID) @Column(name = "evento_id")
     private UUID id;
     private String name;

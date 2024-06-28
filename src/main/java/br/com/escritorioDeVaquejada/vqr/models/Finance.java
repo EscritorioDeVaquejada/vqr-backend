@@ -2,11 +2,15 @@ package br.com.escritorioDeVaquejada.vqr.models;
 
 import jakarta.persistence.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
 @Table(name = "financas")
-public class Finance {
+public class Finance implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     @Id@Column(name = "financas_id")
     private UUID id;
     @OneToOne(mappedBy = "financeRelatory")
