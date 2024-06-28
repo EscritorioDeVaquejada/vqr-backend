@@ -3,7 +3,6 @@ package br.com.escritorioDeVaquejada.vqr.models;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,9 +24,9 @@ public class Event {
     List<Ticket> tickets;
     @OneToOne()
     @JoinColumn(name = "financa_id")
-    private Finances financeRelatory;
+    private Finance financeRelatory;
 
-    public Event(String name, int startPasswords, LocalDateTime dateTime, Address address, Client owner, List<Ticket> tickets, Finances financeRelatory) {
+    public Event(String name, int startPasswords, LocalDateTime dateTime, Address address, Client owner, List<Ticket> tickets, Finance financeRelatory) {
         this.name = name;
         this.startPasswords = startPasswords;
         this.dateTime = dateTime;
