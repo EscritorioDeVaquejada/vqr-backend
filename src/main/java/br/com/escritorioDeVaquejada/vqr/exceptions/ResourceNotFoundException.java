@@ -9,7 +9,7 @@ import java.io.Serial;
 public class ResourceNotFoundException extends RuntimeException{
     @Serial
     private static final long serialVersionUUID=1L;
-    ResourceNotFoundException(String message){
+    public ResourceNotFoundException(String message){
         super(message);
     }
 }
