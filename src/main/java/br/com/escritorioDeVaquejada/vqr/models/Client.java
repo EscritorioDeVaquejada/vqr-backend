@@ -1,5 +1,6 @@
 package br.com.escritorioDeVaquejada.vqr.models;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 
 import java.io.Serial;
@@ -17,7 +18,7 @@ public class Client implements Serializable {
     private String name;
     private String number;
     private String email;
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner",fetch = FetchType.EAGER)
     private List<Event> events;
     @Embedded
     private Address address;
