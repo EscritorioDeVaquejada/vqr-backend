@@ -27,7 +27,7 @@ public class ClientController {
     }
     @GetMapping()
     public ResponseEntity<List<Client>> findAll(){
-        return new ResponseEntity<>(clientServices.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(clientServices.findAll(), HttpStatus.OK);   
     }
     @GetMapping("/{id}")
     public ResponseEntity<Client> findById(@PathVariable(value = "id")UUID id){

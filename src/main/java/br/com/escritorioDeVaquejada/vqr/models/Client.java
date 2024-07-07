@@ -18,7 +18,7 @@ public class Client implements Serializable {
     private String name;
     private String number;
     private String email;
-    @OneToMany(mappedBy = "owner",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "owner")
     private List<Event> events;
     @Embedded
     private Address address;

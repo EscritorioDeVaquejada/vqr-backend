@@ -21,7 +21,7 @@ public class ClientServicesImpl implements ClientServices {
         return clientRepository.save(newClient);
     }
 
-    public List<Client> findAll(){
+    public List<Client> findAll() throws RuntimeException{
         return clientRepository.findAll();
     }
     public Optional<Client> findById(UUID id) {
