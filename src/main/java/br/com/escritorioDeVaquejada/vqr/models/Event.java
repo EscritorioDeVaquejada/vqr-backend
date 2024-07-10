@@ -19,6 +19,7 @@ public class Event implements Serializable {
     private String name;
     private int startPasswords;
     private LocalDateTime dateTime;
+    private Boolean isFinished;
     @Embedded
     private Address address;
     @ManyToOne

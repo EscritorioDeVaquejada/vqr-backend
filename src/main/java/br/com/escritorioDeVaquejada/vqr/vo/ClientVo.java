@@ -3,6 +3,9 @@ package br.com.escritorioDeVaquejada.vqr.vo;
 import br.com.escritorioDeVaquejada.vqr.models.Address;
 import br.com.escritorioDeVaquejada.vqr.models.Event;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 import java.util.Objects;
@@ -10,9 +13,12 @@ import java.util.UUID;
 
 public class ClientVo {
     private UUID id;
+    @NotEmpty
     private String name;
+    @NotEmpty
     private String number;
     private String email;
+    @NotNull @Valid
     private Address address;
 
     @Override

@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface ClientServices {
-    public Client saveClient(Client newClient);
+    public Client saveClient(ClientVo newClient);
     public List<ClientVo> findAll();
     public ClientVo findById(UUID id);
 }

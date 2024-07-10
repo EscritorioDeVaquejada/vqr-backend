@@ -6,6 +6,7 @@ import br.com.escritorioDeVaquejada.vqr.models.Client;
 import br.com.escritorioDeVaquejada.vqr.services.ClientServices;
 import br.com.escritorioDeVaquejada.vqr.vo.ClientVo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,7 +26,7 @@ public class ClientController {
     private ClientServices clientServices;
 
     @PostMapping()
-    public ResponseEntity<Client> saveClient(@RequestBody Client newClient){
+    public ResponseEntity<Client> saveClient(@RequestBody @Valid ClientVo newClient){
         return new ResponseEntity<>(clientServices.saveClient(newClient), HttpStatus.CREATED);
     }
     @GetMapping()
