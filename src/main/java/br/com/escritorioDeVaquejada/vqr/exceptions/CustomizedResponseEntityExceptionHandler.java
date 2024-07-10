@@ -2,6 +2,7 @@ package br.com.escritorioDeVaquejada.vqr.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,5 +21,10 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     private final ResponseEntity<ResponseException> handlerAllExceptions(Exception exception, WebRequest webRequest){
         logger.info("exceptionlanced");
         return new ResponseEntity<>(new ResponseException(new Date(),webRequest.getDescription(false),exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    @ExceptionHandler(ResourceNotFoundException.class)
+    private final ResponseEntity<ResponseException> handlerResourceNotFoundException(Exception exception, WebRequest webRequest){
+        logger.info("exceptionlanced");
+        return new ResponseEntity<>(new ResponseException(new Date(),webRequest.getDescription(false),exception.getMessage()), HttpStatus.NOT_FOUND);
     }
 }
