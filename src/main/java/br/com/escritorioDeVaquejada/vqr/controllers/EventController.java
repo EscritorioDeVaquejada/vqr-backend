@@ -2,6 +2,7 @@ package br.com.escritorioDeVaquejada.vqr.controllers;
 
 import br.com.escritorioDeVaquejada.vqr.services.EventServices;
 import br.com.escritorioDeVaquejada.vqr.vo.eventsVo.EventVo;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ public class EventController {
     @Autowired
     private EventServices eventServices;
     @PostMapping("/{clientId}")
-    public ResponseEntity<EventVo> saveEvent(@RequestBody EventVo newEvent, @PathVariable(value = "clientId")UUID clientId){
+    public ResponseEntity<EventVo> saveEvent(@RequestBody @Valid EventVo newEvent, @PathVariable(value = "clientId")UUID clientId){
         return new ResponseEntity<>(eventServices.saveEvent(newEvent,clientId), HttpStatus.CREATED);
     }
   /*@GetMapping

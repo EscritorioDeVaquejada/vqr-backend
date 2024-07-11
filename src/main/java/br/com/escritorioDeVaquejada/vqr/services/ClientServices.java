@@ -11,4 +11,5 @@ public interface ClientServices {
     public Client saveClient(ClientVo newClient);
     public List<ClientVo> findAll();
     public ClientVo findById(UUID id);
+    public Client findEntityById(UUID id);
 }

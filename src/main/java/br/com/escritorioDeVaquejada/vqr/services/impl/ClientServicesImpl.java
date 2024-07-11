@@ -33,4 +33,7 @@ public class ClientServicesImpl implements ClientServices {
         Client client = clientRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("FUDEU"));
         return ModelMapper.parseObject(client,ClientVo.class);
     }
+    public Client findEntityById(UUID id){
+        return clientRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("FUDEU"));
+    }
 }
