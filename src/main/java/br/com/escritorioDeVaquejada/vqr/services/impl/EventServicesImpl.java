@@ -15,6 +15,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -30,5 +31,10 @@ public class EventServicesImpl implements EventServices {
         Event event = ModelMapper.parseObject(newEvent,Event.class);
         event.setOwner(owner);
         return ( ModelMapper.parseObject(eventRepository.save(event), EventVo.class));
+    }
+    public List<EventVo> findEventsByClientId(UUID clientId){
+        Client owner = clientServices.findEntityById(clientId);
+        List<Event> events = eventRepository.findAllByOwner(owner);
+        return ModelMapper.parseListObjects(events,EventVo.class);
     }
 }

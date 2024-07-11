@@ -1,6 +1,7 @@
 package br.com.escritorioDeVaquejada.vqr.services;
 
 import br.com.escritorioDeVaquejada.vqr.models.Client;
+import br.com.escritorioDeVaquejada.vqr.models.Event;
 import br.com.escritorioDeVaquejada.vqr.vo.ClientVo;
 
 import java.util.List;
@@ -12,4 +13,5 @@ public interface ClientServices {
     public List<ClientVo> findAll();
     public ClientVo findById(UUID id);
     public Client findEntityById(UUID id);
+
 }

@@ -16,12 +16,12 @@ import java.util.UUID;
 public class EventController {
     @Autowired
     private EventServices eventServices;
-    @PostMapping("/{clientId}")
-    public ResponseEntity<EventVo> saveEvent(@RequestBody @Valid EventVo newEvent, @PathVariable(value = "clientId")UUID clientId){
+    @PostMapping()
+    public ResponseEntity<EventVo> saveEvent(@RequestBody @Valid EventVo newEvent, @RequestParam(value = "clientId")UUID clientId){
         return new ResponseEntity<>(eventServices.saveEvent(newEvent,clientId), HttpStatus.CREATED);
     }
-  /*@GetMapping
-   public  ResponseEntity<List<EventVo>> findAll(){
-
-   }*/
+  @GetMapping
+   public  ResponseEntity<List<EventVo>> findEventsByClientId(@RequestParam(value="clientId")UUID clientId){
+        return new ResponseEntity<>(eventServices.findEventsByClientId(clientId),HttpStatus.OK);
+   }
 }
