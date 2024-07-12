@@ -1,7 +1,7 @@
 package br.com.escritorioDeVaquejada.vqr.controllers;
 
 import br.com.escritorioDeVaquejada.vqr.services.EventServices;
-import br.com.escritorioDeVaquejada.vqr.vo.eventsVo.EventVo;
+import br.com.escritorioDeVaquejada.vqr.vo.EventVo;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

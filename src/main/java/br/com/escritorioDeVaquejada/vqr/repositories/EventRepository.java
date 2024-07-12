@@ -8,5 +8,5 @@ import java.util.List;
 import java.util.UUID;
 
 public interface EventRepository extends JpaRepository<Event, UUID> {
-    List<Event> findAllByOwner(Client Owner);
+    List<Event> findAllByOwnerOrderByDateTime(Client Owner);
 }
