@@ -11,7 +11,7 @@ import java.util.UUID;
 @Table(name ="Eventos")
 @Entity
 
-public class Event implements Serializable {
+public class EventModel implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     @Id @GeneratedValue(strategy = GenerationType.UUID) @Column(name = "evento_id")
@@ -24,14 +24,14 @@ public class Event implements Serializable {
     private Address address;
     @ManyToOne
     @JoinColumn(name = "cliente_id")
-    private Client owner;
+    private ClientModel owner;
     @OneToMany(mappedBy = "eventId")
-    List<Ticket> tickets;
+    List<TicketModel> tickets;
     @OneToOne()
     @JoinColumn(name = "financa_id")
-    private Finance financeRelatory;
+    private FinanceModel financeRelatory;
 
-    public Event(String name, int startPasswords, LocalDateTime dateTime, Address address, Client owner, List<Ticket> tickets, Finance financeRelatory) {
+    public EventModel(String name, int startPasswords, LocalDateTime dateTime, Address address, ClientModel owner, List<TicketModel> tickets, FinanceModel financeRelatory) {
         this.name = name;
         this.startPasswords = startPasswords;
         this.dateTime = dateTime;
@@ -41,7 +41,7 @@ public class Event implements Serializable {
         this.financeRelatory = financeRelatory;
     }
 
-    public Event() {
+    public EventModel() {
     }
 
     public UUID getId() {
@@ -80,19 +80,19 @@ public class Event implements Serializable {
         this.address = address;
     }
 
-    public Client getOwner() {
+    public ClientModel getOwner() {
         return owner;
     }
 
-    public void setOwner(Client owner) {
+    public void setOwner(ClientModel owner) {
         this.owner = owner;
     }
 
-    public List<Ticket> getTickets() {
+    public List<TicketModel> getTickets() {
         return tickets;
     }
 
-    public void setTickets(List<Ticket> tickets) {
+    public void setTickets(List<TicketModel> tickets) {
         this.tickets = tickets;
     }
 

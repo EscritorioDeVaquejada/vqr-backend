@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Table(name = "Pagamento")
 @Entity
-public class Payment implements Serializable {
+public class PaymentModel implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -21,16 +21,16 @@ public class Payment implements Serializable {
     private Double value;
     private LocalDateTime dateTime;
     @OneToOne(mappedBy = "paymentId")
-    private Ticket ticketId;
+    private TicketModel ticketId;
 
-    public Payment(PaymentMethod paymentMethod, Double value, LocalDateTime dateTime, Ticket ticketId) {
+    public PaymentModel(PaymentMethod paymentMethod, Double value, LocalDateTime dateTime, TicketModel ticketId) {
         this.paymentMethod = paymentMethod;
         this.value = value;
         this.dateTime = dateTime;
         this.ticketId = ticketId;
     }
 
-    public Payment() {
+    public PaymentModel() {
     }
 
     public UUID getId() {
@@ -61,11 +61,11 @@ public class Payment implements Serializable {
         this.dateTime = dateTime;
     }
 
-    public Ticket getTicketId() {
+    public TicketModel getTicketId() {
         return ticketId;
     }
 
-    public void setTicketId(Ticket ticketId) {
+    public void setTicketId(TicketModel ticketId) {
         this.ticketId = ticketId;
     }
 }

@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.UUID;
 @Entity
 @Table(name="Senhas")
-public class Ticket implements Serializable {
+public class TicketModel implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     @Id @GeneratedValue(strategy = GenerationType.UUID)@Column(name = "ticket_id")
@@ -22,15 +22,15 @@ public class Ticket implements Serializable {
     private Status status;
     @ManyToOne
     @JoinColumn(name = "evento_id")
-    private Event eventId;
+    private EventModel eventId;
     @OneToOne
     @JoinColumn(name = "pagamento_id")
-    private Payment paymentId;
+    private PaymentModel paymentId;
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private UserModel user;
 
-    //todo Criar e colocar user
-
-
-    public Ticket(String cowboy, String cowboyHorse, String suport, String suportHorse, String representation, Boolean boiTv, Status status, Event eventId, Payment paymentId) {
+    public TicketModel(String cowboy, String cowboyHorse, String suport, String suportHorse, String representation, Boolean boiTv, Status status, EventModel eventId, PaymentModel paymentId) {
         this.cowboy = cowboy;
         this.cowboyHorse = cowboyHorse;
         this.suport = suport;
@@ -42,7 +42,7 @@ public class Ticket implements Serializable {
         this.paymentId = paymentId;
     }
 
-    public Ticket() {
+    public TicketModel() {
     }
 
     public UUID getId() {
@@ -105,11 +105,11 @@ public class Ticket implements Serializable {
         this.status = status;
     }
 
-    public Event getEventId() {
+    public EventModel getEventId() {
         return eventId;
     }
 
-    public void setEventId(Event eventId) {
+    public void setEventId(EventModel eventId) {
         this.eventId = eventId;
     }
 }

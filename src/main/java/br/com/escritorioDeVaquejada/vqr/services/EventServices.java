@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface EventServices {
-    public EventVo saveEvent(EventVo newEvent, UUID clientId);
-    public List<EventVo> findEventsByClientId(UUID clientId);
+    EventVo saveEvent(EventVo newEvent, UUID clientId);
+    List<EventVo> findEventsByClientId(UUID clientId);
 }

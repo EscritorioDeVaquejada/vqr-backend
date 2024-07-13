@@ -2,8 +2,8 @@ package br.com.escritorioDeVaquejada.vqr.services.impl;
 
 
 import br.com.escritorioDeVaquejada.vqr.mappers.ModelMapper;
-import br.com.escritorioDeVaquejada.vqr.models.Client;
-import br.com.escritorioDeVaquejada.vqr.models.Event;
+import br.com.escritorioDeVaquejada.vqr.models.ClientModel;
+import br.com.escritorioDeVaquejada.vqr.models.EventModel;
 import br.com.escritorioDeVaquejada.vqr.repositories.EventRepository;
 import br.com.escritorioDeVaquejada.vqr.services.ClientServices;
 import br.com.escritorioDeVaquejada.vqr.services.EventServices;
@@ -27,8 +27,8 @@ public class EventServicesImpl implements EventServices {
 
     @Transactional
     public EventVo saveEvent(EventVo newEvent, UUID clientId) {
-        Client owner = clientServices.findEntityById(clientId);
-        Event event = ModelMapper.parseObject(newEvent,Event.class);
+        ClientModel owner = clientServices.findEntityById(clientId);
+        EventModel event = ModelMapper.parseObject(newEvent, EventModel.class);
         event.setOwner(owner);
         Instant now = Instant.now();
         ZoneId localZone = ZoneId.systemDefault();
@@ -37,8 +37,8 @@ public class EventServicesImpl implements EventServices {
         return ( ModelMapper.parseObject(eventRepository.save(event), EventVo.class));
     }
     public List<EventVo> findEventsByClientId(UUID clientId){
-        Client owner = clientServices.findEntityById(clientId);
-        List<Event> events = eventRepository.findAllByOwnerOrderByDateTime(owner);
+        ClientModel owner = clientServices.findEntityById(clientId);
+        List<EventModel> events = eventRepository.findAllByOwnerOrderByDateTime(owner);
         return ModelMapper.parseListObjects(events,EventVo.class);
     }
 }

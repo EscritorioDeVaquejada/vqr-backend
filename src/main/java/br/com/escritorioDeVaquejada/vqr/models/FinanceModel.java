@@ -8,13 +8,13 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "financas")
-public class Finance implements Serializable {
+public class FinanceModel implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     @Id@Column(name = "financas_id")
     private UUID id;
     @OneToOne(mappedBy = "financeRelatory")
-    private Event eventId;
+    private EventModel eventId;
     private Double totalPix;
     private Double totalCredit;
     private Double totalDebit;
@@ -23,7 +23,7 @@ public class Finance implements Serializable {
     private int totalBoiTv;
     private int totalfree;
 
-    public Finance(Event eventId, Double totalPix, Double totalCredit, Double totalDebit, Double totalCash, int totalSelledTickets, int totalBoiTv, int totalfree) {
+    public FinanceModel(EventModel eventId, Double totalPix, Double totalCredit, Double totalDebit, Double totalCash, int totalSelledTickets, int totalBoiTv, int totalfree) {
         this.eventId = eventId;
         this.totalPix = totalPix;
         this.totalCredit = totalCredit;
@@ -34,14 +34,14 @@ public class Finance implements Serializable {
         this.totalfree = totalfree;
     }
 
-    public Finance() {
+    public FinanceModel() {
     }
 
-    public Event getEventId() {
+    public EventModel getEventId() {
         return eventId;
     }
 
-    public void setEventId(Event eventId) {
+    public void setEventId(EventModel eventId) {
         this.eventId = eventId;
     }
 

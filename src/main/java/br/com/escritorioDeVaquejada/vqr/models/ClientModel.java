@@ -1,6 +1,5 @@
 package br.com.escritorioDeVaquejada.vqr.models;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 
 import java.io.Serial;
@@ -9,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 @Table(name ="Clientes")
 @Entity
-public class Client implements Serializable {
+public class ClientModel implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     @Id @GeneratedValue(strategy = GenerationType.UUID)
@@ -19,11 +18,11 @@ public class Client implements Serializable {
     private String number;
     private String email;
     @OneToMany(mappedBy = "owner")
-    private List<Event> events;
+    private List<EventModel> events;
     @Embedded
     private Address address;
 
-    public Client(String name, String number, String email, List<Event> events, Address address) {
+    public ClientModel(String name, String number, String email, List<EventModel> events, Address address) {
         this.name = name;
         this.number = number;
         this.email = email;
@@ -31,7 +30,7 @@ public class Client implements Serializable {
         this.address = address;
     }
 
-    public Client() {
+    public ClientModel() {
     }
 
     public UUID getId() {
@@ -62,11 +61,11 @@ public class Client implements Serializable {
         this.number = number;
     }
 
-    public List<Event> getEvents() {
+    public List<EventModel> getEvents() {
         return events;
     }
 
-    public void setEvents(List<Event> events) {
+    public void setEvents(List<EventModel> events) {
         this.events = events;
     }
 
