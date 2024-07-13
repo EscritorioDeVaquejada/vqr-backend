@@ -15,31 +15,35 @@ public class TicketModel implements Serializable {
     private UUID id;
     private String cowboy;
     private String cowboyHorse;
-    private String suport;
-    private String suportHorse;
+    private String support;
+    private String supportHorse;
     private String representation;
     private Boolean boiTv;
     private Status status;
     @ManyToOne
     @JoinColumn(name = "evento_id")
-    private EventModel eventId;
+    private EventModel event;
     @OneToOne
     @JoinColumn(name = "pagamento_id")
-    private PaymentModel paymentId;
+    private PaymentModel payment;
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private UserModel user;
 
-    public TicketModel(String cowboy, String cowboyHorse, String suport, String suportHorse, String representation, Boolean boiTv, Status status, EventModel eventId, PaymentModel paymentId) {
-        this.cowboy = cowboy;
-        this.cowboyHorse = cowboyHorse;
-        this.suport = suport;
-        this.suportHorse = suportHorse;
-        this.representation = representation;
-        this.boiTv = boiTv;
-        this.status = status;
-        this.eventId = eventId;
-        this.paymentId = paymentId;
+    public TicketModel(
+            EventModel event
+            /*PaymentModel payment*,/
+            /*UserModel user*/) {
+        this.cowboy = null;
+        this.cowboyHorse = null;
+        this.support = null;
+        this.supportHorse = null;
+        this.representation = null;
+        this.boiTv = false;
+        this.status = Status.LIVRE;
+        this.event = event;
+        this.payment = null;
+        this.user = null;
     }
 
     public TicketModel() {
@@ -66,19 +70,19 @@ public class TicketModel implements Serializable {
     }
 
     public String getSuport() {
-        return suport;
+        return support;
     }
 
-    public void setSuport(String suport) {
-        this.suport = suport;
+    public void setSuport(String support) {
+        this.support = support;
     }
 
     public String getSuportHorse() {
-        return suportHorse;
+        return supportHorse;
     }
 
-    public void setSuportHorse(String suportHorse) {
-        this.suportHorse = suportHorse;
+    public void setSuportHorse(String supportHorse) {
+        this.supportHorse = supportHorse;
     }
 
     public String getRepresentation() {
@@ -105,11 +109,11 @@ public class TicketModel implements Serializable {
         this.status = status;
     }
 
-    public EventModel getEventId() {
-        return eventId;
+    public EventModel getEvent() {
+        return event;
     }
 
-    public void setEventId(EventModel eventId) {
-        this.eventId = eventId;
+    public void setEvent(EventModel event) {
+        this.event = event;
     }
 }

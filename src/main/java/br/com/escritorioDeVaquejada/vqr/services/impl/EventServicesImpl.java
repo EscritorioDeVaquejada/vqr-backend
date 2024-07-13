@@ -7,6 +7,7 @@ import br.com.escritorioDeVaquejada.vqr.models.EventModel;
 import br.com.escritorioDeVaquejada.vqr.repositories.EventRepository;
 import br.com.escritorioDeVaquejada.vqr.services.ClientServices;
 import br.com.escritorioDeVaquejada.vqr.services.EventServices;
+import br.com.escritorioDeVaquejada.vqr.services.TicketServices;
 import br.com.escritorioDeVaquejada.vqr.vo.EventVo;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,21 +25,27 @@ public class EventServicesImpl implements EventServices {
     private EventRepository eventRepository;
     @Autowired
     private ClientServices clientServices;
+    @Autowired
+    private TicketServices ticketServices;
 
     @Transactional
     public EventVo saveEvent(EventVo newEvent, UUID clientId) {
         ClientModel owner = clientServices.findEntityById(clientId);
         EventModel event = ModelMapper.parseObject(newEvent, EventModel.class);
         event.setOwner(owner);
-        Instant now = Instant.now();
-        ZoneId localZone = ZoneId.systemDefault();
-        LocalDateTime localDateTime = now.atZone(localZone).toLocalDateTime();
-        event.setDateTime(localDateTime);
-        return ( ModelMapper.parseObject(eventRepository.save(event), EventVo.class));
+        event.setDateTime(captureCurrentDateAndTime());
+        EventModel eventCreated = eventRepository.save(event);
+        ticketServices.saveEmptyTickets(eventCreated);
+        return ( ModelMapper.parseObject(eventCreated, EventVo.class));
     }
     public List<EventVo> findEventsByClientId(UUID clientId){
         ClientModel owner = clientServices.findEntityById(clientId);
         List<EventModel> events = eventRepository.findAllByOwnerOrderByDateTime(owner);
         return ModelMapper.parseListObjects(events,EventVo.class);
+    }
+    private LocalDateTime captureCurrentDateAndTime(){
+        Instant now = Instant.now();
+        ZoneId localZone = ZoneId.systemDefault();
+        return now.atZone(localZone).toLocalDateTime();
     }
 }

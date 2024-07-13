@@ -11,7 +11,6 @@ import java.util.UUID;
 @Table(name = "Pagamento")
 @Entity
 public class PaymentModel implements Serializable {
-
     @Serial
     private static final long serialVersionUID = 1L;
     @Id
@@ -20,7 +19,7 @@ public class PaymentModel implements Serializable {
     private PaymentMethod paymentMethod;
     private Double value;
     private LocalDateTime dateTime;
-    @OneToOne(mappedBy = "paymentId")
+    @OneToOne(mappedBy = "payment")
     private TicketModel ticketId;
 
     public PaymentModel(PaymentMethod paymentMethod, Double value, LocalDateTime dateTime, TicketModel ticketId) {
@@ -29,6 +28,8 @@ public class PaymentModel implements Serializable {
         this.dateTime = dateTime;
         this.ticketId = ticketId;
     }
+
+
 
     public PaymentModel() {
     }

@@ -16,6 +16,60 @@ public class EventVo {
     private LocalDateTime dateTime;
     @NotNull
     private Address address;
+    @PositiveOrZero
+    private double defaultTicketPrice;
+    @PositiveOrZero
+    private double priceOfBoiTVAnticipated;
+    @PositiveOrZero
+    private double priceOfBoiTvPurchasedOnDemand;
+
+    public double getTicketPrice() {
+        return defaultTicketPrice;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        EventVo eventVo = (EventVo) object;
+        return startPasswords == eventVo.startPasswords && Double.compare(defaultTicketPrice, eventVo.defaultTicketPrice) == 0 && Double.compare(priceOfBoiTVAnticipated, eventVo.priceOfBoiTVAnticipated) == 0 && Double.compare(priceOfBoiTvPurchasedOnDemand, eventVo.priceOfBoiTvPurchasedOnDemand) == 0 && Objects.equals(id, eventVo.id) && Objects.equals(name, eventVo.name) && Objects.equals(dateTime, eventVo.dateTime) && Objects.equals(address, eventVo.address);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, startPasswords, dateTime, address, defaultTicketPrice, priceOfBoiTVAnticipated, priceOfBoiTvPurchasedOnDemand);
+    }
+
+    public EventVo(UUID id, String name, int startPasswords, LocalDateTime dateTime, Address address, double defaultTicketPrice, double priceOfBoiTVAnticipated, double priceOfBoiTvPurchasedOnDemand) {
+        this.id = id;
+        this.name = name;
+        this.startPasswords = startPasswords;
+        this.dateTime = dateTime;
+        this.address = address;
+        this.defaultTicketPrice = defaultTicketPrice;
+        this.priceOfBoiTVAnticipated = priceOfBoiTVAnticipated;
+        this.priceOfBoiTvPurchasedOnDemand = priceOfBoiTvPurchasedOnDemand;
+    }
+
+    public void setTicketPrice(double defaultTicketPrice) {
+        this.defaultTicketPrice = defaultTicketPrice;
+    }
+
+    public double getPriceOfBoiTVAnticipated() {
+        return priceOfBoiTVAnticipated;
+    }
+
+    public void setPriceOfBoiTVAnticipated(double priceOfBoiTVAnticipated) {
+        this.priceOfBoiTVAnticipated = priceOfBoiTVAnticipated;
+    }
+
+    public double getPriceOfBoiTvPurchasedOnDemand() {
+        return priceOfBoiTvPurchasedOnDemand;
+    }
+
+    public void setPriceOfBoiTvPurchasedOnDemand(double priceOfBoiTvPurchasedOnDemand) {
+        this.priceOfBoiTvPurchasedOnDemand = priceOfBoiTvPurchasedOnDemand;
+    }
 
     public EventVo() {
     }
@@ -68,16 +122,4 @@ public class EventVo {
         this.address = address;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        EventVo eventVo = (EventVo) object;
-        return startPasswords == eventVo.startPasswords && Objects.equals(id, eventVo.id) && Objects.equals(name, eventVo.name) && Objects.equals(dateTime, eventVo.dateTime) && Objects.equals(address, eventVo.address);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, startPasswords, dateTime, address);
-    }
 }
