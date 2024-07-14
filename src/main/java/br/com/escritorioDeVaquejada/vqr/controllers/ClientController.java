@@ -2,19 +2,16 @@ package br.com.escritorioDeVaquejada.vqr.controllers;
 
 
 import br.com.escritorioDeVaquejada.vqr.exceptions.ResourceNotFoundException;
-import br.com.escritorioDeVaquejada.vqr.models.Client;
+import br.com.escritorioDeVaquejada.vqr.models.ClientModel;
 import br.com.escritorioDeVaquejada.vqr.services.ClientServices;
 import br.com.escritorioDeVaquejada.vqr.vo.ClientVo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -25,7 +22,7 @@ public class ClientController {
     private ClientServices clientServices;
 
     @PostMapping()
-    public ResponseEntity<Client> saveClient(@RequestBody Client newClient){
+    public ResponseEntity<ClientModel> saveClient(@RequestBody @Valid ClientVo newClient){
         return new ResponseEntity<>(clientServices.saveClient(newClient), HttpStatus.CREATED);
     }
     @GetMapping()

@@ -2,10 +2,13 @@ package br.com.escritorioDeVaquejada.vqr.models;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Entity;
+import jakarta.validation.constraints.NotEmpty;
 
 @Embeddable
 public class Address {
+    @NotEmpty
     private String state;
+    @NotEmpty
     private String city;
 
     public Address(String state, String city) {
@@ -15,6 +18,7 @@ public class Address {
 
     public Address() {
     }
+
 
     public String getState() {
         return state;

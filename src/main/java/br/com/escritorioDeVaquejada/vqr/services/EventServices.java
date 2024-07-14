@@ -1,8 +1,12 @@
 package br.com.escritorioDeVaquejada.vqr.services;
 
 
-import br.com.escritorioDeVaquejada.vqr.models.Event;
+import br.com.escritorioDeVaquejada.vqr.vo.EventVo;
+
+import java.util.List;
+import java.util.UUID;
 
 public interface EventServices {
-    public Event saveEvent(Event newEvent);
+    EventVo saveEvent(EventVo newEvent, UUID clientId);
+    List<EventVo> findEventsByClientId(UUID clientId);
 }
