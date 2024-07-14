@@ -1,7 +1,6 @@
 package br.com.escritorioDeVaquejada.vqr.vo.v1;
 
 import br.com.escritorioDeVaquejada.vqr.models.Address;
-import br.com.escritorioDeVaquejada.vqr.models.Event;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,7 +16,7 @@ public class ClientVO {
     public ClientVO() {
     }
 
-    public ClientVO(UUID id, String name, String number, String email, List<Event> events, Address address) {
+    public ClientVO(UUID id, String name, String number, String email, Address address) {
         this.id = id;
         this.name = name;
         this.number = number;
