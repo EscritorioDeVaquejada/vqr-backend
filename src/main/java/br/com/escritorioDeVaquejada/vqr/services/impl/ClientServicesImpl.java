@@ -19,8 +19,8 @@ public class ClientServicesImpl implements ClientServices {
     @Autowired
     private ClientRepository clientRepository;
 
-    public ClientModel saveClient(ClientVo newClient){
-        return clientRepository.save(ModelMapper.parseObject(newClient, ClientModel.class));
+    public ClientVo saveClient(ClientVo newClient){
+        return ModelMapper.parseObject(clientRepository.save(ModelMapper.parseObject(newClient, ClientModel.class)),ClientVo.class);
     }
 
     public List<ClientVo> findAll() throws RuntimeException{
