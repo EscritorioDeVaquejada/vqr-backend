@@ -1,11 +1,9 @@
 package br.com.escritorioDeVaquejada.vqr.services.impl;
 
-import br.com.escritorioDeVaquejada.vqr.mappers.ModelMapper;
 import br.com.escritorioDeVaquejada.vqr.models.EventModel;
 import br.com.escritorioDeVaquejada.vqr.models.TicketModel;
 import br.com.escritorioDeVaquejada.vqr.repositories.TicketRepository;
 import br.com.escritorioDeVaquejada.vqr.services.TicketServices;
-import br.com.escritorioDeVaquejada.vqr.vo.TicketVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

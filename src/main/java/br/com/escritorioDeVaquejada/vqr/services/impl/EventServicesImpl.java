@@ -1,6 +1,7 @@
 package br.com.escritorioDeVaquejada.vqr.services.impl;
 
 
+import br.com.escritorioDeVaquejada.vqr.exceptions.ResourceNotFoundException;
 import br.com.escritorioDeVaquejada.vqr.mappers.ModelMapper;
 import br.com.escritorioDeVaquejada.vqr.models.ClientModel;
 import br.com.escritorioDeVaquejada.vqr.models.EventModel;
@@ -31,12 +32,12 @@ public class EventServicesImpl implements EventServices {
     @Transactional
     public EventVo saveEvent(EventVo newEvent, UUID clientId) {
         ClientModel owner = clientServices.findEntityById(clientId);
-        EventModel event = ModelMapper.parseObject(newEvent, EventModel.class);
-        event.setOwner(owner);
-        event.setDateTime(captureCurrentDateAndTime());
-        EventModel eventCreated = eventRepository.save(event);
+        EventModel eventToBeSaved = ModelMapper.parseObject(newEvent, EventModel.class);
+        eventToBeSaved.setOwner(owner);
+        eventToBeSaved.setDateTime(captureCurrentDateAndTime());
+        EventModel eventCreated = eventRepository.save(eventToBeSaved);
         ticketServices.saveEmptyTickets(eventCreated);
-        return ( ModelMapper.parseObject(eventCreated, EventVo.class));
+        return ModelMapper.parseObject(eventCreated, EventVo.class);
     }
     public List<EventVo> findEventsByClientId(UUID clientId){
         ClientModel owner = clientServices.findEntityById(clientId);

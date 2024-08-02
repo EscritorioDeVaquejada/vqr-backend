@@ -1,9 +1,6 @@
 package br.com.escritorioDeVaquejada.vqr.controllers;
 
-
 import br.com.escritorioDeVaquejada.vqr.exceptions.BadRequestException;
-import br.com.escritorioDeVaquejada.vqr.exceptions.ResourceNotFoundException;
-import br.com.escritorioDeVaquejada.vqr.models.ClientModel;
 import br.com.escritorioDeVaquejada.vqr.services.ClientServices;
 import br.com.escritorioDeVaquejada.vqr.vo.ClientVo;
 import jakarta.validation.Valid;
@@ -26,8 +23,8 @@ public class ClientController {
     @PostMapping()
     public ResponseEntity<ClientVo> saveClient(
             @RequestBody @Valid ClientVo newClient,
-            BindingResult validationErrors) throws BadRequestException{
-        if(validationErrors.hasErrors()){
+            BindingResult errorsInRequest) throws BadRequestException{
+        if(errorsInRequest.hasErrors()){
             throw new BadRequestException("Invalid data!");
         }
         return new ResponseEntity<>(clientServices.saveClient(newClient), HttpStatus.CREATED);

@@ -1,11 +1,13 @@
 package br.com.escritorioDeVaquejada.vqr.controllers;
 
+import br.com.escritorioDeVaquejada.vqr.exceptions.BadRequestException;
 import br.com.escritorioDeVaquejada.vqr.services.EventServices;
 import br.com.escritorioDeVaquejada.vqr.vo.EventVo;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,11 +21,15 @@ public class EventController {
     @PostMapping()
     public ResponseEntity<EventVo> saveEvent(
             @RequestBody @Valid EventVo newEvent,
-            @RequestParam(value = "clientId")UUID clientId){
+            @RequestParam(value = "clientId") UUID clientId,
+            BindingResult errorsInRequest) throws BadRequestException {
+        if(errorsInRequest.hasErrors()){
+            throw new BadRequestException("Invalid data!");
+        }
         return new ResponseEntity<>(eventServices.saveEvent(newEvent,clientId), HttpStatus.CREATED);
     }
   @GetMapping
-   public  ResponseEntity<List<EventVo>> findEventsByClientId(
+   public ResponseEntity<List<EventVo>> findEventsByClientId(
            @RequestParam(value="clientId")UUID clientId){
         return new ResponseEntity<>(eventServices.findEventsByClientId(clientId),HttpStatus.OK);
    }
