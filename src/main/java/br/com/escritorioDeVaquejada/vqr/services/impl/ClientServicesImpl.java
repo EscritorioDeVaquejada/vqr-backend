@@ -3,6 +3,7 @@ package br.com.escritorioDeVaquejada.vqr.services.impl;
 
 import br.com.escritorioDeVaquejada.vqr.exceptions.ResourceNotFoundException;
 import br.com.escritorioDeVaquejada.vqr.mappers.ModelMapper;
+import br.com.escritorioDeVaquejada.vqr.mappers.ModelMapperInterface;
 import br.com.escritorioDeVaquejada.vqr.models.ClientModel;
 import br.com.escritorioDeVaquejada.vqr.repositories.ClientRepository;
 import br.com.escritorioDeVaquejada.vqr.services.ClientServices;
@@ -18,17 +19,19 @@ public class ClientServicesImpl implements ClientServices {
 
     @Autowired
     private ClientRepository clientRepository;
+    @Autowired
+    private ModelMapperInterface modelMapperInterface;
 
-    public ClientModel saveClient(ClientVo newClient){
-        return clientRepository.save(ModelMapper.parseObject(newClient, ClientModel.class));
+    public ClientVo saveClient(ClientVo newClient){
+        return modelMapperInterface.parseObject(clientRepository.save(modelMapperInterface.parseObject(newClient, ClientModel.class)),ClientVo.class);
     }
 
     public List<ClientVo> findAll() throws RuntimeException{
-        return ModelMapper.parseListObjects(clientRepository.findAll(),ClientVo.class);
+        return modelMapperInterface.parseListObjects(clientRepository.findAll(),ClientVo.class);
     }
     public ClientVo findById(UUID id) {
         ClientModel client = clientRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("FUDEU"));
-        return ModelMapper.parseObject(client,ClientVo.class);
+        return modelMapperInterface.parseObject(client,ClientVo.class);
     }
     public ClientModel findEntityById(UUID id){
         return clientRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("FUDEU"));
