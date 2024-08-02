@@ -1,9 +1,9 @@
-package br.com.escritorioDeVaquejada.vqr.services.impl;
+package br.com.escritorioDeVaquejada.vqr.services.implementations;
 
 
 import br.com.escritorioDeVaquejada.vqr.exceptions.ResourceNotFoundException;
-import br.com.escritorioDeVaquejada.vqr.mappers.ModelMapper;
-import br.com.escritorioDeVaquejada.vqr.mappers.ModelMapperInterface;
+import br.com.escritorioDeVaquejada.vqr.mappers.implementations.ModelMapper;
+import br.com.escritorioDeVaquejada.vqr.mappers.Mapper;
 import br.com.escritorioDeVaquejada.vqr.models.ClientModel;
 import br.com.escritorioDeVaquejada.vqr.models.EventModel;
 import br.com.escritorioDeVaquejada.vqr.repositories.EventRepository;
@@ -19,11 +19,10 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class EventServicesImpl implements EventServices {
+public class EventServicesImplementation implements EventServices {
     @Autowired
     private EventRepository eventRepository;
     @Autowired
@@ -31,25 +30,25 @@ public class EventServicesImpl implements EventServices {
     @Autowired
     private TicketServices ticketServices;
     @Autowired
-    private ModelMapperInterface modelMapperInterface;
+    private Mapper mapper;
     @Transactional
     public EventVo saveEvent(EventVo newEvent, UUID clientId) {
         ClientModel owner = clientServices.findEntityById(clientId);
-        EventModel event = modelMapperInterface.parseObject(newEvent, EventModel.class);
-        event.setOwner(owner);
-        event.setDateTime(captureCurrentDateAndTime());
-        EventModel eventCreated = eventRepository.save(event);
+        EventModel eventToBeSaved = mapper.parseObject(newEvent, EventModel.class);
+        eventToBeSaved.setOwner(owner);
+        eventToBeSaved.setDateTime(captureCurrentDateAndTime());
+        EventModel eventCreated = eventRepository.save(eventToBeSaved);
         ticketServices.saveEmptyTickets(eventCreated);
-        return ( modelMapperInterface.parseObject(eventCreated, EventVo.class));
+        return mapper.parseObject(eventCreated, EventVo.class);
     }
     public List<EventVo> findEventsByClientId(UUID clientId){
         ClientModel owner = clientServices.findEntityById(clientId);
         List<EventModel> events = eventRepository.findAllByOwnerOrderByDateTime(owner);
-        return modelMapperInterface.parseListObjects(events,EventVo.class);
+        return mapper.parseListObjects(events,EventVo.class);
     }
-    public EventVo findEventByID(UUID eventID){
-        EventModel eventModel= eventRepository.findById(eventID).orElseThrow(()->new ResourceNotFoundException("FUDEU"));
-        return modelMapperInterface.parseObject(eventModel,EventVo.class);
+    public EventVo findEventByID(UUID eventID) throws ResourceNotFoundException{
+        EventModel eventModel= eventRepository.findById(eventID).orElseThrow(()-> new ResourceNotFoundException("FUDEU"));
+        return mapper.parseObject(eventModel,EventVo.class);
     }
     private LocalDateTime captureCurrentDateAndTime(){
         Instant now = Instant.now();

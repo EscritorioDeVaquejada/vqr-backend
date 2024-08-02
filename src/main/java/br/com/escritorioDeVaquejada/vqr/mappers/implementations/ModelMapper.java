@@ -1,12 +1,12 @@
-package br.com.escritorioDeVaquejada.vqr.mappers;
+package br.com.escritorioDeVaquejada.vqr.mappers.implementations;
 
-import org.springframework.context.annotation.Bean;
+import br.com.escritorioDeVaquejada.vqr.mappers.Mapper;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 @Component
-public class ModelMapper implements ModelMapperInterface{
+public class ModelMapper implements Mapper {
     private static final org.modelmapper.ModelMapper mapper = new org.modelmapper.ModelMapper();
 
     public <O,D> D parseObject(O origin, Class<D> destination){

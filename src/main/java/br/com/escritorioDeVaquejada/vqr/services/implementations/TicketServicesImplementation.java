@@ -1,11 +1,9 @@
-package br.com.escritorioDeVaquejada.vqr.services.impl;
+package br.com.escritorioDeVaquejada.vqr.services.implementations;
 
-import br.com.escritorioDeVaquejada.vqr.mappers.ModelMapper;
 import br.com.escritorioDeVaquejada.vqr.models.EventModel;
 import br.com.escritorioDeVaquejada.vqr.models.TicketModel;
 import br.com.escritorioDeVaquejada.vqr.repositories.TicketRepository;
 import br.com.escritorioDeVaquejada.vqr.services.TicketServices;
-import br.com.escritorioDeVaquejada.vqr.vo.TicketVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class TicketServicesImpl implements TicketServices {
+public class TicketServicesImplementation implements TicketServices {
 
     @Autowired
     private TicketRepository ticketRepository;

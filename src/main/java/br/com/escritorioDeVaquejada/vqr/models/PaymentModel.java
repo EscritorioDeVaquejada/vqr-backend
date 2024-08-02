@@ -6,15 +6,16 @@ import jakarta.persistence.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
-@Table(name = "Pagamento")
+@Table(name = "Payments")
 @Entity
 public class PaymentModel implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     @Id
-    @Column(name = "pagamento_id")
+    @Column(name = "payment_id")
     private UUID id;
     private PaymentMethod paymentMethod;
     private Double value;
@@ -29,9 +30,20 @@ public class PaymentModel implements Serializable {
         this.ticketId = ticketId;
     }
 
-
-
     public PaymentModel() {
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        PaymentModel that = (PaymentModel) object;
+        return Objects.equals(id, that.id) && paymentMethod == that.paymentMethod && Objects.equals(value, that.value) && Objects.equals(dateTime, that.dateTime) && Objects.equals(ticketId, that.ticketId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, paymentMethod, value, dateTime, ticketId);
     }
 
     public UUID getId() {

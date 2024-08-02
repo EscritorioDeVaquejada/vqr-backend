@@ -5,13 +5,15 @@ import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.UUID;
 @Entity
-@Table(name="Senhas")
+@Table(name="Tickets")
 public class TicketModel implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    @Id @GeneratedValue(strategy = GenerationType.UUID)@Column(name = "ticket_id")
+    @Id @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "ticket_id")
     private UUID id;
     private String cowboy;
     private String cowboyHorse;
@@ -21,19 +23,16 @@ public class TicketModel implements Serializable {
     private Boolean boiTv;
     private Status status;
     @ManyToOne
-    @JoinColumn(name = "evento_id")
+    @JoinColumn(name = "event_id")
     private EventModel event;
     @OneToOne
-    @JoinColumn(name = "pagamento_id")
+    @JoinColumn(name = "payment_id")
     private PaymentModel payment;
     @ManyToOne
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "user_id")
     private UserModel user;
 
-    public TicketModel(
-            EventModel event
-            /*PaymentModel payment*,/
-            /*UserModel user*/) {
+    public TicketModel(EventModel event) {
         this.cowboy = null;
         this.cowboyHorse = null;
         this.support = null;
@@ -47,6 +46,52 @@ public class TicketModel implements Serializable {
     }
 
     public TicketModel() {
+    }
+
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        TicketModel that = (TicketModel) object;
+        return Objects.equals(id, that.id) && Objects.equals(cowboy, that.cowboy) && Objects.equals(cowboyHorse, that.cowboyHorse) && Objects.equals(support, that.support) && Objects.equals(supportHorse, that.supportHorse) && Objects.equals(representation, that.representation) && Objects.equals(boiTv, that.boiTv) && status == that.status && Objects.equals(event, that.event) && Objects.equals(payment, that.payment) && Objects.equals(user, that.user);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, cowboy, cowboyHorse, support, supportHorse, representation, boiTv, status, event, payment, user);
+    }
+
+    public String getSupport() {
+        return support;
+    }
+
+    public void setSupport(String support) {
+        this.support = support;
+    }
+
+    public String getSupportHorse() {
+        return supportHorse;
+    }
+
+    public void setSupportHorse(String supportHorse) {
+        this.supportHorse = supportHorse;
+    }
+
+    public PaymentModel getPayment() {
+        return payment;
+    }
+
+    public void setPayment(PaymentModel payment) {
+        this.payment = payment;
+    }
+
+    public UserModel getUser() {
+        return user;
+    }
+
+    public void setUser(UserModel user) {
+        this.user = user;
     }
 
     public UUID getId() {
@@ -67,22 +112,6 @@ public class TicketModel implements Serializable {
 
     public void setCowboyHorse(String vowboyHorse) {
         this.cowboyHorse = vowboyHorse;
-    }
-
-    public String getSuport() {
-        return support;
-    }
-
-    public void setSuport(String support) {
-        this.support = support;
-    }
-
-    public String getSuportHorse() {
-        return supportHorse;
-    }
-
-    public void setSuportHorse(String supportHorse) {
-        this.supportHorse = supportHorse;
     }
 
     public String getRepresentation() {

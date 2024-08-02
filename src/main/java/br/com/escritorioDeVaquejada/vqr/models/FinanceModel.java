@@ -4,16 +4,17 @@ import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
-@Table(name = "financas")
+@Table(name = "Finances")
 public class FinanceModel implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    @Id@Column(name = "financas_id")
+    @Id@Column(name = "finance_id")
     private UUID id;
-    @OneToOne(mappedBy = "financeRelatory")
+    @OneToOne(mappedBy = "financialReport")
     private EventModel eventId;
     private Double totalPix;
     private Double totalCredit;
@@ -35,6 +36,19 @@ public class FinanceModel implements Serializable {
     }
 
     public FinanceModel() {
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        FinanceModel that = (FinanceModel) object;
+        return totalSelledTickets == that.totalSelledTickets && totalBoiTv == that.totalBoiTv && totalfree == that.totalfree && Objects.equals(id, that.id) && Objects.equals(eventId, that.eventId) && Objects.equals(totalPix, that.totalPix) && Objects.equals(totalCredit, that.totalCredit) && Objects.equals(totalDebit, that.totalDebit) && Objects.equals(totalCash, that.totalCash);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, eventId, totalPix, totalCredit, totalDebit, totalCash, totalSelledTickets, totalBoiTv, totalfree);
     }
 
     public EventModel getEventId() {

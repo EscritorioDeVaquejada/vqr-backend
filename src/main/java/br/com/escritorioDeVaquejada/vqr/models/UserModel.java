@@ -7,13 +7,13 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 @Entity
-@Table(name = "users")
+@Table(name = "Users")
 public class UserModel implements Serializable {
     @Serial
     private static final long serialVersionUID=1L;
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "usuario_id")
+    @Column(name = "user_id")
     private UUID id;
     @Column(unique = true)
     private String login;

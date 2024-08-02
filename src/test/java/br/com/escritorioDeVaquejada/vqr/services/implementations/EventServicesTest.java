@@ -1,8 +1,6 @@
-package br.com.escritorioDeVaquejada.vqr.services.impl;
+package br.com.escritorioDeVaquejada.vqr.services.implementations;
 
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class EventServicesTest {
 

@@ -1,7 +1,7 @@
-package br.com.escritorioDeVaquejada.vqr.services.impl;
+package br.com.escritorioDeVaquejada.vqr.services.implementations;
 
 import br.com.escritorioDeVaquejada.vqr.exceptions.ResourceNotFoundException;
-import br.com.escritorioDeVaquejada.vqr.mappers.ModelMapperInterface;
+import br.com.escritorioDeVaquejada.vqr.mappers.Mapper;
 import br.com.escritorioDeVaquejada.vqr.models.Address;
 import br.com.escritorioDeVaquejada.vqr.models.ClientModel;
 import br.com.escritorioDeVaquejada.vqr.repositories.ClientRepository;
@@ -27,13 +27,13 @@ class ClientServicesTest {
     @Mock
     private Address address;
     @Mock
-    private ModelMapperInterface modelMapperInterface;
+    private Mapper mapper;
 
     @Mock
     private ClientRepository clientRepository;
 //TODO ver se deve utilizar a interface ou a implementação mesmo
     @InjectMocks
-    private ClientServicesImpl clientServices;
+    private ClientServicesImplementation clientServices;
 
     ClientVo clientVo;
     ClientModel clientModel;
@@ -50,9 +50,9 @@ class ClientServicesTest {
         clientVo.setName("joao");
         clientModel= new ClientModel("joao", "123", "String email", null, null);
 
-        when(modelMapperInterface.parseObject(clientVo, ClientModel.class)).thenReturn(clientModel);
+        when(mapper.parseObject(clientVo, ClientModel.class)).thenReturn(clientModel);
         when(clientRepository.save(clientModel)).thenReturn(clientModel);
-        when(modelMapperInterface.parseObject(clientModel,ClientVo.class)).thenReturn(clientVo);
+        when(mapper.parseObject(clientModel,ClientVo.class)).thenReturn(clientVo);
         ClientVo clientVoResult = clientServices.saveClient(clientVo);
         Assertions.assertThat(clientVo).isEqualTo(  clientVoResult);
     }
@@ -65,7 +65,7 @@ class ClientServicesTest {
         clientVoWithoutName.setEmail("String email");
         clientVoWithoutName.setNumber("123");
 
-        when(modelMapperInterface.parseObject(clientVoWithoutName, ClientModel.class)).thenThrow(new ConstraintViolationException(null));
+        when(mapper.parseObject(clientVoWithoutName, ClientModel.class)).thenThrow(new ConstraintViolationException(null));
 
         assertThrows(ConstraintViolationException.class, () -> clientServices.saveClient(clientVoWithoutName));
     }
@@ -76,7 +76,7 @@ class ClientServicesTest {
         clientVoWithoutNumber.setEmail("String email");
         clientVoWithoutNumber.setName("nameExample");
 
-        when(modelMapperInterface.parseObject(clientVoWithoutNumber, ClientModel.class)).thenThrow(new ConstraintViolationException(null));
+        when(mapper.parseObject(clientVoWithoutNumber, ClientModel.class)).thenThrow(new ConstraintViolationException(null));
 
         assertThrows(ConstraintViolationException.class, () -> clientServices.saveClient(clientVoWithoutNumber));
     }
@@ -87,7 +87,7 @@ class ClientServicesTest {
         clientVoWithoutAddress.setEmail("String email");
         clientVoWithoutAddress.setName("nameExample");
 
-        when(modelMapperInterface.parseObject(clientVoWithoutAddress, ClientModel.class)).thenThrow(new ConstraintViolationException(null));
+        when(mapper.parseObject(clientVoWithoutAddress, ClientModel.class)).thenThrow(new ConstraintViolationException(null));
 
         assertThrows(ConstraintViolationException.class, () -> clientServices.saveClient(clientVoWithoutAddress));
 
@@ -107,7 +107,7 @@ class ClientServicesTest {
         ClientVo clientVo3 = new ClientVo();
         List<ClientVo> clientVoListWithClients= new ArrayList<>(Arrays.asList(clientVo1,clientVo2,clientVo3));
         when(clientRepository.findAll()).thenReturn(listWithClients);
-        when(modelMapperInterface.parseListObjects(listWithClients, ClientVo.class)).thenReturn(clientVoListWithClients);
+        when(mapper.parseListObjects(listWithClients, ClientVo.class)).thenReturn(clientVoListWithClients);
         List<ClientVo> clientVoListWithResult = clientServices.findAll();
         assertEquals(clientVoListWithResult,clientVoListWithClients);
     }
@@ -116,7 +116,7 @@ class ClientServicesTest {
         List<ClientModel> clientModels= new ArrayList<>();
         List<ClientVo> clientVos = new ArrayList<>();
         when(clientRepository.findAll()).thenReturn(clientModels);
-        when(modelMapperInterface.parseListObjects(clientModels,ClientVo.class)).thenReturn(clientVos);
+        when(mapper.parseListObjects(clientModels,ClientVo.class)).thenReturn(clientVos);
         List<ClientVo> clientVoResult = clientServices.findAll();
         assertEquals(clientVoResult,clientVos);
     }
@@ -126,7 +126,7 @@ class ClientServicesTest {
         ClientModel clientModel5 = new ClientModel();
         ClientVo clientVo = new ClientVo();
         when(clientRepository.findById(UUID.fromString("d600aa5d-de5e-4446-90fa-c0d15579827e"))).thenReturn(Optional.of(clientModel5));
-        when(modelMapperInterface.parseObject(clientModel5,ClientVo.class)).thenReturn(clientVo);
+        when(mapper.parseObject(clientModel5,ClientVo.class)).thenReturn(clientVo);
         ClientVo test = clientServices.findById(UUID.fromString("d600aa5d-de5e-4446-90fa-c0d15579827e"));
         assertEquals(test,clientServices.findById(UUID.fromString("d600aa5d-de5e-4446-90fa-c0d15579827e")));
     }
