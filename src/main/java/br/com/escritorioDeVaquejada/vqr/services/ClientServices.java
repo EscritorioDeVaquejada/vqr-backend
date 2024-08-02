@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ClientServices {
-    ClientModel saveClient(ClientVo newClient);
+    ClientVo saveClient(ClientVo newClient);
     List<ClientVo> findAll();
     ClientVo findById(UUID id);
     ClientModel findEntityById(UUID id);

@@ -19,18 +19,19 @@ public class ClientServicesImpl implements ClientServices {
     @Autowired
     private ClientRepository clientRepository;
 
-    public ClientModel saveClient(ClientVo newClient){
-        return clientRepository.save(ModelMapper.parseObject(newClient, ClientModel.class));
+    public ClientVo saveClient(ClientVo newClient){
+        ClientModel clientToBeSaved = ModelMapper.parseObject(newClient, ClientModel.class);
+        return ModelMapper.parseObject(clientRepository.save(clientToBeSaved), ClientVo.class);
     }
 
-    public List<ClientVo> findAll() throws RuntimeException{
+    public List<ClientVo> findAll(){
         return ModelMapper.parseListObjects(clientRepository.findAll(),ClientVo.class);
     }
-    public ClientVo findById(UUID id) {
+    public ClientVo findById(UUID id) throws ResourceNotFoundException{
         ClientModel client = clientRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("FUDEU"));
         return ModelMapper.parseObject(client,ClientVo.class);
     }
-    public ClientModel findEntityById(UUID id){
+    public ClientModel findEntityById(UUID id) throws ResourceNotFoundException{
         return clientRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("FUDEU"));
     }
 }
