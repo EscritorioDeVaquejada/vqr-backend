@@ -7,10 +7,10 @@ import br.com.escritorioDeVaquejada.vqr.models.ClientModel;
 import br.com.escritorioDeVaquejada.vqr.repositories.ClientRepository;
 import br.com.escritorioDeVaquejada.vqr.vo.ClientVo;
 import jakarta.validation.ConstraintViolationException;
-import org.assertj.core.api.Assertions;
-
 import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.*;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -18,12 +18,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class ClientServicesTest {
+class ClientServicesImplementationTest {
     @Mock
     private Address address;
     @Mock
@@ -92,8 +93,6 @@ class ClientServicesTest {
         assertThrows(ConstraintViolationException.class, () -> clientServices.saveClient(clientVoWithoutAddress));
 
     }
-
-
 
     @Test
     void findAll() {
