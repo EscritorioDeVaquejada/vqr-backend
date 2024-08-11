@@ -3,11 +3,15 @@ package br.com.escritorioDeVaquejada.vqr.vo;
 import br.com.escritorioDeVaquejada.vqr.models.Address;
 import jakarta.validation.constraints.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-public class EventVo {
+public class EventVo implements Serializable {
+    @Serial
+    private static final long serialVersionUID=1L;
     private UUID id;
     @NotEmpty
     private String name;
@@ -52,6 +56,14 @@ public class EventVo {
     }
 
     public void setTicketPrice(double defaultTicketPrice) {
+        this.defaultTicketPrice = defaultTicketPrice;
+    }
+
+    public double getDefaultTicketPrice() {
+        return defaultTicketPrice;
+    }
+
+    public void setDefaultTicketPrice(double defaultTicketPrice) {
         this.defaultTicketPrice = defaultTicketPrice;
     }
 

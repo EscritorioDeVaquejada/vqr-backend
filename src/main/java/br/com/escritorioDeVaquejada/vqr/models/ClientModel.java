@@ -7,7 +7,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-@Table(name ="Clients")
+
+@Table(name ="clients")
 @Entity
 public class ClientModel implements Serializable {
     @Serial
@@ -17,6 +18,7 @@ public class ClientModel implements Serializable {
     private UUID id;
     private String name;
     private String number;
+    @Column(unique = true)
     private String email;
     @OneToMany(mappedBy = "owner")
     private List<EventModel> events;
@@ -49,6 +51,10 @@ public class ClientModel implements Serializable {
 
     public UUID getId() {
         return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getName() {

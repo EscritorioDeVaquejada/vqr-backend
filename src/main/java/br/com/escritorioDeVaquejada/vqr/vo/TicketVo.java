@@ -8,9 +8,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.UUID;
 
-public class TicketVo {
+public class TicketVo implements Serializable {
+    @Serial
+    private static final long serialVersionUID=1L;
     private UUID id;
     private String cowboy;
     private String cowboyHorse;
