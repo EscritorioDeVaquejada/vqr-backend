@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-@Table(name = "Payments")
+@Table(name = "payments")
 @Entity
 public class PaymentModel implements Serializable {
     @Serial

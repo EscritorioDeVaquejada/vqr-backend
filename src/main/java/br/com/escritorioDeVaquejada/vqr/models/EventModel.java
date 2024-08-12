@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-@Table(name ="Events")
+@Table(name ="events")
 @Entity
 public class EventModel implements Serializable {
     @Serial
@@ -18,6 +18,7 @@ public class EventModel implements Serializable {
     @Column(name = "event_id")
     private UUID id;
     private String name;
+    //todo Alterar o nome do campo de senhas para tickets
     private int startPasswords;
     private LocalDateTime dateTime;
     private Boolean isFinished;

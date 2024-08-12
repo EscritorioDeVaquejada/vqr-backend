@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 @Entity
-@Table(name = "Users")
+@Table(name = "users")
 public class UserModel implements Serializable {
     @Serial
     private static final long serialVersionUID=1L;
@@ -16,7 +16,7 @@ public class UserModel implements Serializable {
     @Column(name = "user_id")
     private UUID id;
     @Column(unique = true)
-    private String login;
+    private String email;
     private String password;
     @OneToMany(mappedBy = "user")
     private List<TicketModel> ticketList;

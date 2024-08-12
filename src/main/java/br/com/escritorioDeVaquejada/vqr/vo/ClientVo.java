@@ -5,10 +5,14 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
-public class ClientVo {
+public class ClientVo implements Serializable {
+    @Serial
+    private static final long serialVersionUID=1L;
     private UUID id;
     @NotEmpty
     private String name;

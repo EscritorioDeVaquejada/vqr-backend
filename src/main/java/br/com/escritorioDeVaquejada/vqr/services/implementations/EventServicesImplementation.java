@@ -31,6 +31,7 @@ public class EventServicesImplementation implements EventServices {
     private TicketServices ticketServices;
     @Autowired
     private Mapper mapper;
+
     @Transactional
     public EventVo saveEvent(EventVo newEvent, UUID clientId) {
         ClientModel owner = clientServices.findEntityById(clientId);
@@ -50,6 +51,7 @@ public class EventServicesImplementation implements EventServices {
         EventModel eventModel= eventRepository.findById(eventID).orElseThrow(()-> new ResourceNotFoundException("FUDEU"));
         return mapper.parseObject(eventModel,EventVo.class);
     }
+    //todo verificar se o método captureCurrentDateAndTime não deveria ser público em uuma classe de utils
     private LocalDateTime captureCurrentDateAndTime(){
         Instant now = Instant.now();
         ZoneId localZone = ZoneId.systemDefault();
