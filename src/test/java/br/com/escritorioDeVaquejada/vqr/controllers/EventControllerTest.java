@@ -5,7 +5,6 @@ import br.com.escritorioDeVaquejada.vqr.exceptions.ResourceNotFoundException;
 import br.com.escritorioDeVaquejada.vqr.models.Address;
 import br.com.escritorioDeVaquejada.vqr.services.EventServices;
 import br.com.escritorioDeVaquejada.vqr.vo.EventVo;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +27,6 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class EventControllerTest {
-
     @Mock
     private EventServices eventServices;
     @Mock
@@ -37,8 +34,8 @@ class EventControllerTest {
     @InjectMocks
     private EventController eventController;
     private static EventVo eventVoMock;
-    private static List<EventVo> eventListMock;
-    private static UUID ownerId;
+    private static List<EventVo> eventVoListMock;
+    private static UUID clientId;
 
     @BeforeEach
     void setupForEachTest(){
@@ -53,41 +50,40 @@ class EventControllerTest {
 
     @BeforeAll
     static void setupForAllTests(){
-        ownerId = UUID.randomUUID();
+        clientId = UUID.randomUUID();
         eventVoMock = new EventVo();
-        eventListMock = List.of(eventVoMock);
+        eventVoListMock = List.of(eventVoMock);
     }
 
-
     @Test
-    @DisplayName("Deve com sucesso salvar um evento, retornando-o junto com o HTTP status code 201")
-    void saveEventCase01() {
+    @DisplayName("Should successfully save an event and return it with HTTP status code 201")
+    void shouldSaveEventSuccessfullyAndReturnWith201() {
         when(errorsInRequest.hasErrors()).thenReturn(false);
-        when(eventServices.saveEvent(eventVoMock, ownerId)).thenReturn(eventVoMock);
+        when(eventServices.saveEvent(eventVoMock, clientId)).thenReturn(eventVoMock);
 
-        ResponseEntity<EventVo> result = eventController.saveEvent(eventVoMock, ownerId, errorsInRequest);
+        ResponseEntity<EventVo> result = eventController.saveEvent(eventVoMock, clientId, errorsInRequest);
 
         assertThat(result.getBody()).isEqualTo(eventVoMock);
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        verify(eventServices, times(1)).saveEvent(eventVoMock, ownerId);
+        verify(eventServices, times(1)).saveEvent(eventVoMock, clientId);
     }
 
     @Test
-    @DisplayName("Não deve conseguir salvar o evento, devido ao proprietário não existir, retornando uma ResourceNotFoundException com HTTP status code 404")
-    void saveEventCase02() {
+    @DisplayName("Should not save the event due to non-existent owner, returning ResourceNotFoundException with HTTP status code 404")
+    void shouldThrowResourceNotFoundExceptionWhenOwnerDoesNotExistWhenSavingEvent() {
         when(errorsInRequest.hasErrors()).thenReturn(false);
-        when(eventServices.saveEvent(eventVoMock, ownerId)).thenThrow(new
-                ResourceNotFoundException("Cliente não existe!"));
+        when(eventServices.saveEvent(eventVoMock, clientId)).thenThrow(new
+                ResourceNotFoundException("Client not found!"));
 
         assertThatThrownBy(() -> {
-            eventController.saveEvent(eventVoMock, ownerId, errorsInRequest);
+            eventController.saveEvent(eventVoMock, clientId, errorsInRequest);
         }).isInstanceOf(ResourceNotFoundException.class);
-        verify(eventServices, times(1)).saveEvent(eventVoMock, ownerId);
+        verify(eventServices, times(1)).saveEvent(eventVoMock, clientId);
     }
 
     @Test
-    @DisplayName("Não deve conseguir salvar o evento, devido a todos os campos validados estarem incorretos, retornando uma BadRequestException com HTTP status code 400")
-    void saveEventCase03() {
+    @DisplayName("Should not save the event due to validation errors on all validated fields, returning BadRequestException with HTTP status code 400")
+    void shouldThrowBadRequestExceptionWhenThereAreValidationErrorsInAllValidatedFields() {
         eventVoMock.setName(null);
         eventVoMock.setStartPasswords(-3);
         eventVoMock.setAddress(null);
@@ -99,135 +95,136 @@ class EventControllerTest {
         when(errorsInRequest.hasErrors()).thenReturn(true);
 
         assertThatThrownBy(() -> {
-            eventController.saveEvent(eventVoMock, ownerId, errorsInRequest);
+            eventController.saveEvent(eventVoMock, clientId, errorsInRequest);
         }).isInstanceOf(BadRequestException.class);
-        verify(eventServices, never()).saveEvent(eventVoMock, ownerId);
+        verify(eventServices, never()).saveEvent(eventVoMock, clientId);
     }
 
     @Test
-    @DisplayName("Não deve conseguir salvar o evento, devido apenas o campo Name está incorreto, retornando uma BadRequestException com HTTP status code 400")
-    void saveEventCase04() {
+    @DisplayName("Should not save the event due to invalid Name field, returning BadRequestException with HTTP status code 400")
+    void shouldThrowBadRequestExceptionWhenNameFieldIsInvalid() {
         eventVoMock.setName(null);
 
         when(errorsInRequest.hasErrors()).thenReturn(true);
 
         assertThatThrownBy(() -> {
-            eventController.saveEvent(eventVoMock, ownerId, errorsInRequest);
+            eventController.saveEvent(eventVoMock, clientId, errorsInRequest);
         }).isInstanceOf(BadRequestException.class);
-        verify(eventServices, never()).saveEvent(eventVoMock, ownerId);
+        verify(eventServices, never()).saveEvent(eventVoMock, clientId);
     }
 
     @Test
-    @DisplayName("Não deve conseguir salvar o evento, devido apenas o campo StartPasswords está incorreto, retornando uma BadRequestException com HTTP status code 400")
-    void saveEventCase05() {
+    @DisplayName("Should not save the event due to invalid StartPasswords field, returning BadRequestException with HTTP status code 400")
+    void shouldThrowBadRequestExceptionWhenStartPasswordsFieldIsInvalid() {
         eventVoMock.setStartPasswords(-3);
 
         when(errorsInRequest.hasErrors()).thenReturn(true);
 
         assertThatThrownBy(() -> {
-            eventController.saveEvent(eventVoMock, ownerId, errorsInRequest);
+            eventController.saveEvent(eventVoMock, clientId, errorsInRequest);
         }).isInstanceOf(BadRequestException.class);
-        verify(eventServices, never()).saveEvent(eventVoMock, ownerId);
+        verify(eventServices, never()).saveEvent(eventVoMock, clientId);
     }
 
     @Test
-    @DisplayName("Should throw a BadRequestException because the address field is null")
-    void saveEventWithOnlyIncorrectAddressData(){
+    @DisplayName("Should not save the event due to invalid address field, returning BadRequestException with HTTP status code 400")
+    void shouldThrowBadRequestExceptionWhenAddressFieldIsNull() {
         eventVoMock.setAddress(null);
 
         when(errorsInRequest.hasErrors()).thenReturn(true);
 
         assertThatThrownBy(() -> {
-            eventController.saveEvent(eventVoMock, ownerId, errorsInRequest);
+            eventController.saveEvent(eventVoMock, clientId, errorsInRequest);
         }).isInstanceOf(BadRequestException.class);
-        verify(eventServices, never()).saveEvent(eventVoMock, ownerId);
+        verify(eventServices, never()).saveEvent(eventVoMock, clientId);
     }
 
     @Test
-    @DisplayName("Should throw a BadRequestException because the city field of the address attribute is null")
-    void saveEventWithOnlyCityAttributeFromIncorrectAddressAttribute(){
+    @DisplayName("Should not save event due to invalid address city field, returning BadRequestException with HTTP status code 400")
+    void shouldThrowBadRequestExceptionWhenCityFieldOfAddressIsNull() {
         eventVoMock.getAddress().setCity(null);
 
         when(errorsInRequest.hasErrors()).thenReturn(true);
 
         assertThatThrownBy(() -> {
-            eventController.saveEvent(eventVoMock, ownerId, errorsInRequest);
+            eventController.saveEvent(eventVoMock, clientId, errorsInRequest);
         }).isInstanceOf(BadRequestException.class);
-        verify(eventServices, never()).saveEvent(eventVoMock, ownerId);
+        verify(eventServices, never()).saveEvent(eventVoMock, clientId);
     }
 
     @Test
-    @DisplayName("Should throw a BadRequestException because the state field of the address attribute is null")
-    void saveEventWithOnlyStateAttributeFromIncorrectAddressAttribute(){
+    @DisplayName("Should not save event due to invalid address state field, returning BadRequestException with HTTP status code 400")
+    void shouldThrowBadRequestExceptionWhenStateFieldOfAddressIsNull() {
         eventVoMock.getAddress().setState(null);
 
         when(errorsInRequest.hasErrors()).thenReturn(true);
 
         assertThatThrownBy(() -> {
-            eventController.saveEvent(eventVoMock, ownerId, errorsInRequest);
+            eventController.saveEvent(eventVoMock, clientId, errorsInRequest);
         }).isInstanceOf(BadRequestException.class);
-        verify(eventServices, never()).saveEvent(eventVoMock, ownerId);
+        verify(eventServices, never()).saveEvent(eventVoMock, clientId);
     }
 
     @Test
-    @DisplayName("Não deve conseguir salvar o evento, devido apenas o campo DefaultTicketPrice está incorreto, retornando uma BadRequestException com HTTP status code 400")
-    void saveEventCase09() {
+    @DisplayName("Should not save the event due to invalid DefaultTicketPrice field, returning BadRequestException with HTTP status code 400")
+    void shouldThrowBadRequestExceptionWhenDefaultTicketPriceFieldIsInvalid() {
         eventVoMock.setDefaultTicketPrice(-2000);
 
         when(errorsInRequest.hasErrors()).thenReturn(true);
 
         assertThatThrownBy(() -> {
-            eventController.saveEvent(eventVoMock, ownerId, errorsInRequest);
+            eventController.saveEvent(eventVoMock, clientId, errorsInRequest);
         }).isInstanceOf(BadRequestException.class);
-        verify(eventServices, never()).saveEvent(eventVoMock, ownerId);
+        verify(eventServices, never()).saveEvent(eventVoMock, clientId);
     }
 
     @Test
-    @DisplayName("Não deve conseguir salvar o evento, devido apenas o campo PriceOfBoiTVAnticipated está incorreto, retornando uma BadRequestException com HTTP status code 400")
-    void saveEventCase10() {
+    @DisplayName("Should not save the event due to invalid PriceOfBoiTVAnticipated field, returning BadRequestException with HTTP status code 400")
+    void shouldThrowBadRequestExceptionWhenPriceOfBoiTVAnticipatedFieldIsInvalid() {
         eventVoMock.setPriceOfBoiTVAnticipated(-3000);
 
         when(errorsInRequest.hasErrors()).thenReturn(true);
 
         assertThatThrownBy(() -> {
-            eventController.saveEvent(eventVoMock, ownerId, errorsInRequest);
+            eventController.saveEvent(eventVoMock, clientId, errorsInRequest);
         }).isInstanceOf(BadRequestException.class);
-        verify(eventServices, never()).saveEvent(eventVoMock, ownerId);
+        verify(eventServices, never()).saveEvent(eventVoMock, clientId);
     }
 
     @Test
-    @DisplayName("Não deve conseguir salvar o evento, devido apenas o campo PriceOfBoiTvPurchasedOnDemand está incorreto, retornando uma BadRequestException com HTTP status code 400")
-    void saveEventCase11() {
+    @DisplayName("Should not save the event due to invalid PriceOfBoiTvPurchasedOnDemand field, returning BadRequestException with HTTP status code 400")
+    void shouldThrowBadRequestExceptionWhenPriceOfBoiTvPurchasedOnDemandFieldIsInvalid() {
         eventVoMock.setPriceOfBoiTvPurchasedOnDemand(-1500);
 
         when(errorsInRequest.hasErrors()).thenReturn(true);
 
         assertThatThrownBy(() -> {
-            eventController.saveEvent(eventVoMock, ownerId, errorsInRequest);
+            eventController.saveEvent(eventVoMock, clientId, errorsInRequest);
         }).isInstanceOf(BadRequestException.class);
-        verify(eventServices, never()).saveEvent(eventVoMock, ownerId);
+        verify(eventServices, never()).saveEvent(eventVoMock, clientId);
     }
 
     @Test
-    @DisplayName("Deve com sucesso obter uma lista de eventos e retorná-la junto com o HTTP Status code 200")
-    void findEventsByClientIdCase01() {
-        when(eventServices.findEventsByClientId(ownerId)).thenReturn(eventListMock);
+    @DisplayName("Should successfully retrieve a list of events and return it with HTTP Status code 200")
+    void shouldFindEventsByClientIdAndReturnListWith200() {
+        when(eventServices.findEventsByClientId(clientId)).thenReturn(eventVoListMock);
 
-        ResponseEntity<List<EventVo>> result = eventController.findEventsByClientId(ownerId);
+        ResponseEntity<List<EventVo>> result = eventController.findEventsByClientId(clientId);
 
-        assertThat(result.getBody()).isEqualTo(eventListMock);
+        assertThat(result.getBody()).isEqualTo(eventVoListMock);
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
-        verify(eventServices, times(1)).findEventsByClientId(ownerId);
+        verify(eventServices, times(1)).findEventsByClientId(clientId);
     }
 
     @Test
-    @DisplayName("Não deve conseguir obter uma lista de eventos, devido ao proprietário não existir, retornando um ResourceNotFoundException junto com o código HTTP 404")
-    void findEventsByClientIdCase02(){
-        when(eventServices.findEventsByClientId(ownerId)).thenThrow(new ResourceNotFoundException("Cliente não existe!"));
+    @DisplayName("Should not retrieve a list of events due to non-existent owner, returning ResourceNotFoundException with HTTP status code 404")
+    void shouldThrowResourceNotFoundExceptionWhenOwnerDoesNotExistWhenSearchingForEvents() {
+        when(eventServices.findEventsByClientId(clientId)).thenThrow(new
+                ResourceNotFoundException("Client not found!"));
 
         assertThatThrownBy(() -> {
-            eventController.findEventsByClientId(ownerId);
+            eventController.findEventsByClientId(clientId);
         }).isInstanceOf(ResourceNotFoundException.class);
-        verify(eventServices, times(1)).findEventsByClientId(ownerId);
+        verify(eventServices, times(1)).findEventsByClientId(clientId);
     }
 }
