@@ -1,7 +1,9 @@
 package br.com.escritorioDeVaquejada.vqr.models;
 
+import br.com.escritorioDeVaquejada.vqr.enums.UserRole;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
@@ -21,13 +23,16 @@ public class UserModel implements Serializable, UserDetails {
     @Column(unique = true)
     private String username;
     private String password;
-    private String role;
+    private UserRole role;
     @OneToMany(mappedBy = "user")
     private List<TicketModel> ticketList;
 
+    //todo verificar a necessidade de outras roles para o sistema
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        if(this.role == UserRole.ADMIN) return List.of(
+                new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
