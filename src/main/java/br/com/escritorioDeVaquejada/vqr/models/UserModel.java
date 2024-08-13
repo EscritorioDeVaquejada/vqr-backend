@@ -21,13 +21,13 @@ public class UserModel implements Serializable, UserDetails {
     @Column(name = "user_id")
     private UUID id;
     @Column(unique = true)
-    private String username;
+    private String login;
     private String password;
     private UserRole role;
     @OneToMany(mappedBy = "user")
     private List<TicketModel> ticketList;
 
-    //todo verificar a necessidade de outras roles para o sistema
+    //todo verificar a necessidade de outros roles para o sistema
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if(this.role == UserRole.ADMIN) return List.of(
@@ -42,7 +42,7 @@ public class UserModel implements Serializable, UserDetails {
 
     @Override
     public String getUsername() {
-        return this.username;
+        return this.login;
     }
 
     @Override
