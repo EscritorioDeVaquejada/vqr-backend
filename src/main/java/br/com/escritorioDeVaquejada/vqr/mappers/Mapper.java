@@ -1,8 +1,0 @@
-package br.com.escritorioDeVaquejada.vqr.mappers;
-
-import java.util.List;
-
-public interface Mapper {
-    <O,D> D parseObject(O origin, Class<D> destination);
-    <O,D> List<D> parseListObjects(List<O> origin, Class<D> destination);
-}

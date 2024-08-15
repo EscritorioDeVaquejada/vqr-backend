@@ -1,6 +1,6 @@
 package br.com.escritorioDeVaquejada.vqr.vo;
 
-import br.com.escritorioDeVaquejada.vqr.models.Address;
+import br.com.escritorioDeVaquejada.vqr.model.Address;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
