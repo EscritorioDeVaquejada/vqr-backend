@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
-public class ClientVo implements Serializable {
+public class ClientVO implements Serializable {
     @Serial
     private static final long serialVersionUID=1L;
     private UUID id;
@@ -22,20 +22,28 @@ public class ClientVo implements Serializable {
     @NotNull @Valid
     private Address address;
 
+    public ClientVO() {
+    }
+
+    public ClientVO(UUID id, String name, String number, String email, Address address) {
+        this.id = id;
+        this.name = name;
+        this.number = number;
+        this.email = email;
+        this.address = address;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ClientVo clientVo = (ClientVo) o;
+        ClientVO clientVo = (ClientVO) o;
         return Objects.equals(id, clientVo.id) && Objects.equals(name, clientVo.name) && Objects.equals(number, clientVo.number) && Objects.equals(email, clientVo.email) && Objects.equals(address, clientVo.address);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, name, number, email, address);
-    }
-
-    public ClientVo() {
     }
 
     public UUID getId() {

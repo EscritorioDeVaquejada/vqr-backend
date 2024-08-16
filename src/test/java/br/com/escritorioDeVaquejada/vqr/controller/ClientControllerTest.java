@@ -3,7 +3,7 @@ package br.com.escritorioDeVaquejada.vqr.controller;
 import br.com.escritorioDeVaquejada.vqr.exception.BadRequestException;
 import br.com.escritorioDeVaquejada.vqr.model.Address;
 import br.com.escritorioDeVaquejada.vqr.service.ClientService;
-import br.com.escritorioDeVaquejada.vqr.vo.ClientVo;
+import br.com.escritorioDeVaquejada.vqr.vo.ClientVO;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ClientControllerTest {
-    private ClientVo newClient;
+    private ClientVO newClient;
     @Mock
     private BindingResult bindingResult;
     @Mock
@@ -32,7 +32,7 @@ class ClientControllerTest {
 
     @BeforeEach
     void setup(){
-        newClient = new ClientVo();
+        newClient = new ClientVO();
 
         newClient.setName("NameTest");
         newClient.setAddress(new Address("StateTest", "CityTest"));
@@ -46,7 +46,7 @@ class ClientControllerTest {
         when(bindingResult.hasErrors()).thenReturn(false);
         when(clientService.saveClient(newClient)).thenReturn(newClient);
 
-        ResponseEntity<ClientVo> result = clientController.saveClient(newClient, bindingResult);
+        ResponseEntity<ClientVO> result = clientController.saveClient(newClient, bindingResult);
 
         Mockito.verify(clientService, times(1)).saveClient(newClient);
         Assertions.assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-public class EventVo implements Serializable {
+public class EventVO implements Serializable {
     @Serial
     private static final long serialVersionUID=1L;
     private UUID id;
@@ -27,10 +27,18 @@ public class EventVo implements Serializable {
     @PositiveOrZero
     private double priceOfBoiTvPurchasedOnDemand;
 
-    public EventVo() {
+    public EventVO() {
     }
 
-    public EventVo(UUID id, String name, int numberOfInitialTickets, LocalDateTime dateTime, Address address, double defaultTicketPrice, double priceOfBoiTVAnticipated, double priceOfBoiTvPurchasedOnDemand) {
+    public EventVO(
+            UUID id,
+            String name,
+            int numberOfInitialTickets,
+            LocalDateTime dateTime,
+            Address address,
+            double defaultTicketPrice,
+            double priceOfBoiTVAnticipated,
+            double priceOfBoiTvPurchasedOnDemand) {
         this.id = id;
         this.name = name;
         this.numberOfInitialTickets = numberOfInitialTickets;
@@ -42,14 +50,13 @@ public class EventVo implements Serializable {
     }
 
     /*
-    public EventVo(UUID id, String name, int numberOfInitialTickets, LocalDateTime dateTime, Address address) {
+    public EventVO(UUID id, String name, int numberOfInitialTickets, LocalDateTime dateTime, Address address) {
         this.id = id;
         this.name = name;
         this.numberOfInitialTickets = numberOfInitialTickets;
         this.dateTime = dateTime;
         this.address = address;
     }
-
      */
 
     public double getTicketPrice() {
@@ -128,7 +135,7 @@ public class EventVo implements Serializable {
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
-        EventVo eventVo = (EventVo) object;
+        EventVO eventVo = (EventVO) object;
         return numberOfInitialTickets == eventVo.numberOfInitialTickets && Double.compare(defaultTicketPrice, eventVo.defaultTicketPrice) == 0 && Double.compare(priceOfBoiTVAnticipated, eventVo.priceOfBoiTVAnticipated) == 0 && Double.compare(priceOfBoiTvPurchasedOnDemand, eventVo.priceOfBoiTvPurchasedOnDemand) == 0 && Objects.equals(id, eventVo.id) && Objects.equals(name, eventVo.name) && Objects.equals(dateTime, eventVo.dateTime) && Objects.equals(address, eventVo.address);
     }
 

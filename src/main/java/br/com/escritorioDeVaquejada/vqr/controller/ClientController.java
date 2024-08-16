@@ -2,7 +2,7 @@ package br.com.escritorioDeVaquejada.vqr.controller;
 
 import br.com.escritorioDeVaquejada.vqr.exception.BadRequestException;
 import br.com.escritorioDeVaquejada.vqr.service.ClientService;
-import br.com.escritorioDeVaquejada.vqr.vo.ClientVo;
+import br.com.escritorioDeVaquejada.vqr.vo.ClientVO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,8 +21,8 @@ public class ClientController {
     private ClientService clientService;
 
     @PostMapping()
-    public ResponseEntity<ClientVo> saveClient(
-            @RequestBody @Valid ClientVo newClient,
+    public ResponseEntity<ClientVO> saveClient(
+            @RequestBody @Valid ClientVO newClient,
             BindingResult errorsInRequest) throws BadRequestException{
         if(errorsInRequest.hasErrors()){
             throw new BadRequestException("Invalid data!");
@@ -30,11 +30,11 @@ public class ClientController {
         return new ResponseEntity<>(clientService.saveClient(newClient), HttpStatus.CREATED);
     }
     @GetMapping()
-    public ResponseEntity<List<ClientVo>> findAll(){
+    public ResponseEntity<List<ClientVO>> findAll(){
         return new ResponseEntity<>(clientService.findAll(), HttpStatus.OK);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<ClientVo> findById(
+    public ResponseEntity<ClientVO> findById(
             @PathVariable(value = "id") UUID id){
         return new ResponseEntity<>(clientService.findById(id),HttpStatus.OK);
     }

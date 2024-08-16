@@ -2,7 +2,7 @@ package br.com.escritorioDeVaquejada.vqr.controller;
 
 import br.com.escritorioDeVaquejada.vqr.exception.BadRequestException;
 import br.com.escritorioDeVaquejada.vqr.service.EventService;
-import br.com.escritorioDeVaquejada.vqr.vo.EventVo;
+import br.com.escritorioDeVaquejada.vqr.vo.EventVO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,8 +19,8 @@ public class EventController {
     @Autowired
     private EventService eventService;
     @PostMapping()
-    public ResponseEntity<EventVo> saveEvent(
-            @RequestBody @Valid EventVo newEvent,
+    public ResponseEntity<EventVO> saveEvent(
+            @RequestBody @Valid EventVO newEvent,
             @RequestParam(value = "clientId") UUID clientId,
             BindingResult errorsInRequest) throws BadRequestException {
         if(errorsInRequest.hasErrors()){
@@ -29,7 +29,7 @@ public class EventController {
         return new ResponseEntity<>(eventService.saveEvent(newEvent,clientId), HttpStatus.CREATED);
     }
   @GetMapping
-   public ResponseEntity<List<EventVo>> findEventsByClientId(
+   public ResponseEntity<List<EventVO>> findEventsByClientId(
            @RequestParam(value="clientId")UUID clientId){
         return new ResponseEntity<>(eventService.findEventsByClientId(clientId),HttpStatus.OK);
    }

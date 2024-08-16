@@ -5,20 +5,20 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
-public class ResponseExceptionVo implements Serializable {
+public class ResponseExceptionVO implements Serializable {
     @Serial
     static private final long serialVersionUID = 1L;
     private Date timestamp;
     private String details;
     private String message;
 
-    public ResponseExceptionVo(Date timestamp, String details, String message) {
+    public ResponseExceptionVO(Date timestamp, String details, String message) {
         this.timestamp = timestamp;
         this.details = details;
         this.message = message;
     }
 
-    public ResponseExceptionVo() {
+    public ResponseExceptionVO() {
     }
 
     public Date getTimestamp() {
@@ -49,7 +49,7 @@ public class ResponseExceptionVo implements Serializable {
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
-        ResponseExceptionVo that = (ResponseExceptionVo) object;
+        ResponseExceptionVO that = (ResponseExceptionVO) object;
         return Objects.equals(timestamp, that.timestamp) && Objects.equals(details, that.details) && Objects.equals(message, that.message);
     }
 

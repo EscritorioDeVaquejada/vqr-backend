@@ -1,9 +1,7 @@
 package br.com.escritorioDeVaquejada.vqr.model;
 
-import br.com.escritorioDeVaquejada.vqr.enums.UserRole;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
