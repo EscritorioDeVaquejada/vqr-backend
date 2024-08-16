@@ -17,7 +17,7 @@ public class TicketServiceImplementation implements TicketService {
     private TicketRepository ticketRepository;
 
     public List<TicketModel> saveEmptyTickets(EventModel event){
-        int totalNumberOfTickets = event.getStartPasswords();
+        int totalNumberOfTickets = event.getNumberOfInitialTickets();
         List<TicketModel> tickets = new ArrayList<>();
         for(int index = 0; index < totalNumberOfTickets; index++){
             tickets.add(new TicketModel(event));

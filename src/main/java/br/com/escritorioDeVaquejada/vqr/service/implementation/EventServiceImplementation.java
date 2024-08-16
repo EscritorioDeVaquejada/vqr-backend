@@ -31,6 +31,7 @@ public class EventServiceImplementation implements EventService {
     @Autowired
     private Mapper mapper;
 
+    //todo verificar necessiade de adicionar um valor para isFinished na criação de um evento, para não deixá-lo como null no banco de dados
     @Transactional
     public EventVo saveEvent(EventVo newEvent, UUID clientId) {
         ClientModel owner = clientService.findEntityById(clientId);

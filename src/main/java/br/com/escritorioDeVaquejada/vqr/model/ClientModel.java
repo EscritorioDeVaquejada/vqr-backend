@@ -13,16 +13,17 @@ import java.util.UUID;
 public class ClientModel implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    @Id @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name="client_id")
+    @Id @GeneratedValue(strategy = GenerationType.UUID) @Column(name="client_id")
     private UUID id;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String number;
     @Column(unique = true)
     private String email;
     @OneToMany(mappedBy = "owner")
     private List<EventModel> events;
-    @Embedded
+    @Embedded @Column(nullable = false)
     private Address address;
 
     public ClientModel(String name, String number, String email, List<EventModel> events, Address address) {

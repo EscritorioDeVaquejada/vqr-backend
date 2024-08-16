@@ -57,7 +57,7 @@ class EventServiceImplementationTest {
         clientMock = new ClientModel();
 
         eventVoMock.setName("Evento Teste");
-        eventVoMock.setStartPasswords(3);
+        eventVoMock.setNumberOfInitialTickets(3);
         eventVoMock.setAddress(new Address("Estado teste","Cidade Teste"));
         eventVoMock.setDefaultTicketPrice(2000);
         eventVoMock.setDateTime(LocalDateTime.of(1998, 12, 12, 10, 50));
@@ -65,7 +65,7 @@ class EventServiceImplementationTest {
         eventVoMock.setPriceOfBoiTvPurchasedOnDemand(1500);
 
         eventModelMock.setName(eventVoMock.getName());
-        eventModelMock.setStartPasswords(eventVoMock.getStartPasswords());
+        eventModelMock.setNumberOfInitialTickets(eventVoMock.getNumberOfInitialTickets());
         eventModelMock.setAddress(eventVoMock.getAddress());
         eventModelMock.setDefaultTicketPrice(eventVoMock.getDefaultTicketPrice());
         eventModelMock.setDateTime(eventVoMock.getDateTime());

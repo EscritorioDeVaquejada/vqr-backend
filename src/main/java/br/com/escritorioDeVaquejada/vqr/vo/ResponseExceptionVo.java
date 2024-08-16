@@ -1,9 +1,13 @@
 package br.com.escritorioDeVaquejada.vqr.vo;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
-public class ResponseExceptionVo{
+public class ResponseExceptionVo implements Serializable {
+    @Serial
+    static private final long serialVersionUID = 1L;
     private Date timestamp;
     private String details;
     private String message;

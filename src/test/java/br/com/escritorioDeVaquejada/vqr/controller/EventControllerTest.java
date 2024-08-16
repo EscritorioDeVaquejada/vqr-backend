@@ -40,7 +40,7 @@ class EventControllerTest {
     @BeforeEach
     void setupForEachTest(){
         eventVoMock.setName("Evento Teste");
-        eventVoMock.setStartPasswords(3);
+        eventVoMock.setNumberOfInitialTickets(3);
         eventVoMock.setAddress(new Address("Estado teste","Cidade Teste"));
         eventVoMock.setDefaultTicketPrice(2000);
         eventVoMock.setDateTime(LocalDateTime.of(1998, 12, 12, 10, 50));
@@ -85,7 +85,7 @@ class EventControllerTest {
     @DisplayName("Should not save the event due to validation errors on all validated fields, returning BadRequestException with HTTP status code 400")
     void shouldThrowBadRequestExceptionWhenThereAreValidationErrorsInAllValidatedFields() {
         eventVoMock.setName(null);
-        eventVoMock.setStartPasswords(-3);
+        eventVoMock.setNumberOfInitialTickets(-3);
         eventVoMock.setAddress(null);
         eventVoMock.setDefaultTicketPrice(-2000);
         eventVoMock.setDateTime(null);
@@ -114,9 +114,9 @@ class EventControllerTest {
     }
 
     @Test
-    @DisplayName("Should not save the event due to invalid StartPasswords field, returning BadRequestException with HTTP status code 400")
-    void shouldThrowBadRequestExceptionWhenStartPasswordsFieldIsInvalid() {
-        eventVoMock.setStartPasswords(-3);
+    @DisplayName("Should not save the event due to invalid NumberOfInitialTickets field, returning BadRequestException with HTTP status code 400")
+    void shouldThrowBadRequestExceptionWhenNumberOfInitialTicketsFieldIsInvalid() {
+        eventVoMock.setNumberOfInitialTickets(-3);
 
         when(errorsInRequest.hasErrors()).thenReturn(true);
 
