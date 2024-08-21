@@ -31,6 +31,10 @@ public class PermissionModel implements Serializable, GrantedAuthority {
         this.users = users;
     }
 
+    public PermissionModel(String description) {
+        this.description = description;
+    }
+
     public PermissionModel() {
     }
 

@@ -6,10 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -23,6 +20,8 @@ public class UserModel implements Serializable, UserDetails {
     private String username;
     @Column(name = "password")
     private String password;
+    @Column(unique = true)
+    private String cpf;
     @Column(name = "account_non_expired")
     private Boolean accountNonExpired;
     @Column(name = "account_non_locked")
@@ -39,10 +38,21 @@ public class UserModel implements Serializable, UserDetails {
     @OneToMany(mappedBy = "user")
     private List<TicketModel> ticketList;
 
-    public UserModel(UUID id, String username, String password, Boolean accountNonExpired, Boolean accountNonLocked, Boolean credentialsNonExpired, Boolean enabled, List<PermissionModel> permissions, List<TicketModel> ticketList) {
+    public UserModel(
+            UUID id,
+            String username,
+            String password,
+            String cpf,
+            Boolean accountNonExpired,
+            Boolean accountNonLocked,
+            Boolean credentialsNonExpired,
+            Boolean enabled,
+            List<PermissionModel> permissions,
+            List<TicketModel> ticketList) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.cpf = cpf;
         this.accountNonExpired = accountNonExpired;
         this.accountNonLocked = accountNonLocked;
         this.credentialsNonExpired = credentialsNonExpired;
@@ -136,5 +146,26 @@ public class UserModel implements Serializable, UserDetails {
 
     public void setTicketList(List<TicketModel> ticketList) {
         this.ticketList = ticketList;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        UserModel userModel = (UserModel) object;
+        return Objects.equals(id, userModel.id) && Objects.equals(username, userModel.username) && Objects.equals(password, userModel.password) && Objects.equals(cpf, userModel.cpf) && Objects.equals(accountNonExpired, userModel.accountNonExpired) && Objects.equals(accountNonLocked, userModel.accountNonLocked) && Objects.equals(credentialsNonExpired, userModel.credentialsNonExpired) && Objects.equals(enabled, userModel.enabled) && Objects.equals(permissions, userModel.permissions) && Objects.equals(ticketList, userModel.ticketList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, password, cpf, accountNonExpired, accountNonLocked, credentialsNonExpired, enabled, permissions, ticketList);
     }
 }
