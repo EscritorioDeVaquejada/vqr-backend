@@ -54,7 +54,7 @@ public class AuthServiceImplementation implements AuthService {
                 throw new UsernameNotFoundException("Username "+data.getUsername()+" not found!");
             }
             return tokenResponse;
-        }catch (Exception e){
+        }catch (BadCredentialsException e){
             throw new BadCredentialsException("Invalid username/password supplied!");
         }
     }
@@ -66,7 +66,7 @@ public class AuthServiceImplementation implements AuthService {
         if(userWithTheSameNameOrCPF.isPresent()){
             throw new BadRequestException("Invalid username/cpf supplied!");
         }
-        List<String> permissions = List.of("ADMIN");
+        List<String> permissions = List.of("ROLE_ADMIN");
         newUser.setPermissions(permissions);
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         return userService.saveUser(newUser);

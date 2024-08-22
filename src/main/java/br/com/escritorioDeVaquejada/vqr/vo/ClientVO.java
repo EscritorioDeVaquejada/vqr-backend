@@ -2,6 +2,7 @@ package br.com.escritorioDeVaquejada.vqr.vo;
 
 import br.com.escritorioDeVaquejada.vqr.model.Address;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
@@ -14,9 +15,9 @@ public class ClientVO implements Serializable {
     @Serial
     private static final long serialVersionUID=1L;
     private UUID id;
-    @NotEmpty
+    @NotBlank
     private String name;
-    @NotEmpty
+    @NotBlank
     private String number;
     private String email;
     @NotNull @Valid

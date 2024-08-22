@@ -1,13 +1,14 @@
 package br.com.escritorioDeVaquejada.vqr.model;
 
 import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 
 @Embeddable
 public class Address {
-    @NotEmpty
+    @NotBlank
     private String state;
-    @NotEmpty
+    @NotBlank
     private String city;
 
     public Address(String state, String city) {

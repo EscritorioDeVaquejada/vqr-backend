@@ -1,5 +1,6 @@
 package br.com.escritorioDeVaquejada.vqr.vo;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -14,11 +15,12 @@ public class UserRegistrationVO implements Serializable {
     @Serial
     static private final long serialVersionUID = 1L;
     private UUID id;
-    @NotEmpty
+    @NotBlank
     private String username;
-    @NotEmpty
+    //todo verificar eficiência do pattern para geração de senhas seguras
+    @NotBlank @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!_*]).{6,}$")
     private String password;
-    @NotNull @Pattern(regexp = "^([0-9]{3}\\.[0-9]{3}\\.[0-9]{3}-[0-9]{2})$")
+    @NotBlank @Pattern(regexp = "^([0-9]{3}\\.[0-9]{3}\\.[0-9]{3}-[0-9]{2})$")
     private String cpf;
     private List<String> permissions;
 

@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -41,25 +45,34 @@ public class AuthController {
     public ResponseEntity<UserResponseVO> register(
             @RequestBody @Valid UserRegistrationVO newUser,
             BindingResult errorsInTheRequest) throws BadRequestException {
-        if(errorsInTheRequest.hasErrors() || !cpfIsValid(newUser.getCpf())){
+        if(errorsInTheRequest.hasErrors() || !lastTwoDigitsOfTheCpfAreValid(newUser.getCpf())){
             throw new BadRequestException("Invalid data!");
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(newUser));
     }
 
-    //todo terminar a implementação do método de verificação dos dois últimos dígitos do cpf
-    private boolean cpfIsValid(String cpf){
-        /*
-        String[] cpfFragments = cpf.split("(\\.)|(-)");
-
-        String unformattedCpf = Arrays.stream(cpfFragments).reduce("", (str1, str2) -> str1 + str2);
-
-        List<Integer> individualCpfNumbers = new ArrayList<>();
-
-        for(int index=0; index<9; index++){
-           individualCpfNumbers.add(Integer.parseInt(unformattedCpf.charAt(index)+""));
+    private boolean lastTwoDigitsOfTheCpfAreValid(String cpf) {
+        String unformattedCpf = cpf.replaceAll("[^\\d]", "");
+        if (unformattedCpf.length() != 11) {
+            return false;
         }
-        */
-        return true;
+        int penultimateDigit = calculateCpfDigit(unformattedCpf, 10);
+        int lastDigit = calculateCpfDigit(unformattedCpf, 11, penultimateDigit);
+        return unformattedCpf.charAt(9) - '0' == penultimateDigit &&
+                unformattedCpf.charAt(10) - '0' == lastDigit;
+    }
+
+    private int calculateCpfDigit(String cpf, int factor) {
+        return calculateCpfDigit(cpf, factor, 0);
+    }
+
+    private int calculateCpfDigit(String cpf, int factor, int previousDigit) {
+        int sum = 0;
+        for (int i = 0; i < factor - 1; i++) {
+            sum += (cpf.charAt(i) - '0') * (factor - i);
+        }
+        sum += previousDigit * factor;
+        int remainder = sum % 11;
+        return remainder < 2 ? 0 : 11 - remainder;
     }
 }

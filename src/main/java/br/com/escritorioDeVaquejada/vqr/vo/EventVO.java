@@ -13,7 +13,7 @@ public class EventVO implements Serializable {
     @Serial
     private static final long serialVersionUID=1L;
     private UUID id;
-    @NotEmpty
+    @NotBlank
     private String name;
     @PositiveOrZero
     private int numberOfInitialTickets;

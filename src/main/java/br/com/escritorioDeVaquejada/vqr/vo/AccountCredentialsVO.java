@@ -1,5 +1,6 @@
 package br.com.escritorioDeVaquejada.vqr.vo;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 
 import java.io.Serial;
@@ -9,9 +10,9 @@ import java.util.Objects;
 public class AccountCredentialsVO implements Serializable {
     @Serial
     static private final long serialVersionUID = 1L;
-    @NotEmpty
+    @NotBlank
     private String username;
-    @NotEmpty
+    @NotBlank
     private String password;
 
     public AccountCredentialsVO(String username, String password) {

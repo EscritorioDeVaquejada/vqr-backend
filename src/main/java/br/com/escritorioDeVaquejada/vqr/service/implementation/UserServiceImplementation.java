@@ -56,7 +56,6 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
         for(String permission: newUser.getPermissions()){
             Optional<PermissionModel> registeredPermission =
                     permissionService.findByDescription(permission);
-
             if(registeredPermission.isEmpty()){
                 PermissionModel newPermission = permissionService.savePermission(
                         new PermissionModel(permission));
@@ -66,6 +65,10 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
             }
         }
         userToBeSaved.setPermissions(registeredUserPermissions);
+        userToBeSaved.setAccountNonExpired(true);
+        userToBeSaved.setAccountNonLocked(true);
+        userToBeSaved.setCredentialsNonExpired(true);
+        userToBeSaved.setEnabled(true);
         UserModel savedUser = userRepository.save(userToBeSaved);
         return mapper.parseObject(savedUser, UserResponseVO.class);
     }
