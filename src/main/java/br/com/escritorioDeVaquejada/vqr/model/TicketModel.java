@@ -12,15 +12,17 @@ import java.util.UUID;
 public class TicketModel implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    @Id @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "ticket_id")
+    @Id @GeneratedValue(strategy = GenerationType.UUID) @Column(name = "ticket_id")
     private UUID id;
     private String cowboy;
+    @Column(name = "cowboy_horse")
     private String cowboyHorse;
     private String support;
+    @Column(name = "support_horse")
     private String supportHorse;
     private String representation;
-    private Boolean boiTv;
+    @Column(name = "boi_tv")
+    private Boolean boiTV;
     private Status status;
     @ManyToOne
     @JoinColumn(name = "event_id")
@@ -38,7 +40,7 @@ public class TicketModel implements Serializable {
         this.support = null;
         this.supportHorse = null;
         this.representation = null;
-        this.boiTv = false;
+        this.boiTV = false;
         this.status = Status.LIVRE;
         this.event = event;
         this.payment = null;
@@ -46,20 +48,6 @@ public class TicketModel implements Serializable {
     }
 
     public TicketModel() {
-    }
-
-
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        TicketModel that = (TicketModel) object;
-        return Objects.equals(id, that.id) && Objects.equals(cowboy, that.cowboy) && Objects.equals(cowboyHorse, that.cowboyHorse) && Objects.equals(support, that.support) && Objects.equals(supportHorse, that.supportHorse) && Objects.equals(representation, that.representation) && Objects.equals(boiTv, that.boiTv) && status == that.status && Objects.equals(event, that.event) && Objects.equals(payment, that.payment) && Objects.equals(user, that.user);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, cowboy, cowboyHorse, support, supportHorse, representation, boiTv, status, event, payment, user);
     }
 
     public String getSupport() {
@@ -122,12 +110,12 @@ public class TicketModel implements Serializable {
         this.representation = representation;
     }
 
-    public Boolean getBoiTv() {
-        return boiTv;
+    public Boolean getBoiTV() {
+        return boiTV;
     }
 
-    public void setBoiTv(Boolean boiTv) {
-        this.boiTv = boiTv;
+    public void setBoiTV(Boolean boiTV) {
+        this.boiTV = boiTV;
     }
 
     public Status getStatus() {
@@ -144,5 +132,18 @@ public class TicketModel implements Serializable {
 
     public void setEvent(EventModel event) {
         this.event = event;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        TicketModel that = (TicketModel) object;
+        return Objects.equals(id, that.id) && Objects.equals(cowboy, that.cowboy) && Objects.equals(cowboyHorse, that.cowboyHorse) && Objects.equals(support, that.support) && Objects.equals(supportHorse, that.supportHorse) && Objects.equals(representation, that.representation) && Objects.equals(boiTV, that.boiTV) && status == that.status && Objects.equals(event, that.event) && Objects.equals(payment, that.payment) && Objects.equals(user, that.user);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, cowboy, cowboyHorse, support, supportHorse, representation, boiTV, status, event, payment, user);
     }
 }

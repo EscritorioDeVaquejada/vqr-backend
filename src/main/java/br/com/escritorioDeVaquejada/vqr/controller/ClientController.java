@@ -16,9 +16,12 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/clients")
 public class ClientController {
+    private final ClientService clientService;
 
     @Autowired
-    private ClientService clientService;
+    public ClientController(ClientService clientService) {
+        this.clientService = clientService;
+    }
 
     @PostMapping()
     public ResponseEntity<ClientVO> saveClient(

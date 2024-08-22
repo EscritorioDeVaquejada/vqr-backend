@@ -12,9 +12,12 @@ import java.util.List;
 
 @Service
 public class TicketServiceImplementation implements TicketService {
+    private final TicketRepository ticketRepository;
 
     @Autowired
-    private TicketRepository ticketRepository;
+    public TicketServiceImplementation(TicketRepository ticketRepository) {
+        this.ticketRepository = ticketRepository;
+    }
 
     public List<TicketModel> saveEmptyTickets(EventModel event){
         int totalNumberOfTickets = event.getNumberOfInitialTickets();

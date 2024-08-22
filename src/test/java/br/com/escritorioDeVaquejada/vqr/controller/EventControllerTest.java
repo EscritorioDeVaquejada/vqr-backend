@@ -45,7 +45,7 @@ class EventControllerTest {
         eventVOMock.setDefaultTicketPrice(2000);
         eventVOMock.setDateTime(LocalDateTime.of(1998, 12, 12, 10, 50));
         eventVOMock.setPriceOfBoiTVAnticipated(3000);
-        eventVOMock.setPriceOfBoiTvPurchasedOnDemand(1500);
+        eventVOMock.setPriceOfBoiTVPurchasedOnDemand(1500);
     }
 
     @BeforeAll
@@ -90,7 +90,7 @@ class EventControllerTest {
         eventVOMock.setDefaultTicketPrice(-2000);
         eventVOMock.setDateTime(null);
         eventVOMock.setPriceOfBoiTVAnticipated(-3000);
-        eventVOMock.setPriceOfBoiTvPurchasedOnDemand(-1500);
+        eventVOMock.setPriceOfBoiTVPurchasedOnDemand(-1500);
 
         when(errorsInRequest.hasErrors()).thenReturn(true);
 
@@ -192,9 +192,9 @@ class EventControllerTest {
     }
 
     @Test
-    @DisplayName("Should not save the event due to invalid PriceOfBoiTvPurchasedOnDemand field, returning BadRequestException with HTTP status code 400")
-    void shouldThrowBadRequestExceptionWhenPriceOfBoiTvPurchasedOnDemandFieldIsInvalid() {
-        eventVOMock.setPriceOfBoiTvPurchasedOnDemand(-1500);
+    @DisplayName("Should not save the event due to invalid PriceOfBoiTVPurchasedOnDemand field, returning BadRequestException with HTTP status code 400")
+    void shouldThrowBadRequestExceptionWhenPriceOfBoiTVPurchasedOnDemandFieldIsInvalid() {
+        eventVOMock.setPriceOfBoiTVPurchasedOnDemand(-1500);
 
         when(errorsInRequest.hasErrors()).thenReturn(true);
 

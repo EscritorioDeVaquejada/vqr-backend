@@ -22,16 +22,24 @@ import java.util.UUID;
 
 @Service
 public class EventServiceImplementation implements EventService {
-    @Autowired
-    private EventRepository eventRepository;
-    @Autowired
-    private ClientService clientService;
-    @Autowired
-    private TicketService ticketService;
-    @Autowired
-    private Mapper mapper;
+    private final EventRepository eventRepository;
+    private final ClientService clientService;
+    private final TicketService ticketService;
+    private final Mapper mapper;
 
-    //todo verificar necessiade de adicionar um valor para isFinished na criação de um evento, para não deixá-lo como null no banco de dados
+    @Autowired
+    public EventServiceImplementation(
+            EventRepository eventRepository,
+            ClientService clientService,
+            TicketService ticketService,
+            Mapper mapper) {
+        this.eventRepository = eventRepository;
+        this.clientService = clientService;
+        this.ticketService = ticketService;
+        this.mapper = mapper;
+    }
+
+    //todo verificar necessiade de adicionar um valor para isFinished na criação de um evento, não deixando-o como null no banco de dados
     @Transactional
     public EventVO saveEvent(EventVO newEvent, UUID clientId) {
         ClientModel owner = clientService.findEntityById(clientId);
@@ -48,9 +56,11 @@ public class EventServiceImplementation implements EventService {
         return mapper.parseListObjects(events, EventVO.class);
     }
     public EventVO findEventByID(UUID eventID) throws ResourceNotFoundException{
-        EventModel eventModel= eventRepository.findById(eventID).orElseThrow(()-> new ResourceNotFoundException("FUDEU"));
+        EventModel eventModel= eventRepository.findById(eventID).orElseThrow(()->
+                new ResourceNotFoundException("Event not found!"));
         return mapper.parseObject(eventModel, EventVO.class);
     }
+
     //todo verificar se o método captureCurrentDateAndTime não deveria ser público em uuma classe de utils
     private LocalDateTime captureCurrentDateAndTime(){
         Instant now = Instant.now();

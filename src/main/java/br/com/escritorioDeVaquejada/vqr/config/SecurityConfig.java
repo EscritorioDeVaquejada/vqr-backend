@@ -22,15 +22,17 @@ import java.util.Map;
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
-
+    private final JwtTokenProvider tokenProvider;
     @Autowired
-    private JwtTokenProvider tokenProvider;
+    public SecurityConfig(JwtTokenProvider tokenProvider) {
+        this.tokenProvider = tokenProvider;
+    }
 
     @Bean
     PasswordEncoder passwordEncoder() {
         Map<String, PasswordEncoder> encoders = new HashMap<>();
 
-        Pbkdf2PasswordEncoder pbkdf2Encoder = new Pbkdf2PasswordEncoder("", 8, 185000,
+        Pbkdf2PasswordEncoder pbkdf2Encoder = new Pbkdf2PasswordEncoder("", 32, 185000,
                 Pbkdf2PasswordEncoder.SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA256);
         encoders.put("pbkdf2", pbkdf2Encoder);
         DelegatingPasswordEncoder passwordEncoder = new DelegatingPasswordEncoder("pbkdf2", encoders);
@@ -65,11 +67,7 @@ public class SecurityConfig {
                                         "/swagger-ui/**",
                                         "/v3/api-docs/**"
                                 ).permitAll()
-                                .anyRequest().hasRole("USER")
-                                /*
-                                .requestMatchers("/api/**").authenticated()
-                                .requestMatchers("/users").denyAll()
-                                 */
+                                .anyRequest().hasRole("ADMIN")
                 )
                 .cors(cors -> {})
                 .build();

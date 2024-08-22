@@ -25,7 +25,7 @@ public class EventVO implements Serializable {
     @PositiveOrZero
     private double priceOfBoiTVAnticipated;
     @PositiveOrZero
-    private double priceOfBoiTvPurchasedOnDemand;
+    private double priceOfBoiTVPurchasedOnDemand;
 
     public EventVO() {
     }
@@ -38,7 +38,7 @@ public class EventVO implements Serializable {
             Address address,
             double defaultTicketPrice,
             double priceOfBoiTVAnticipated,
-            double priceOfBoiTvPurchasedOnDemand) {
+            double priceOfBoiTVPurchasedOnDemand) {
         this.id = id;
         this.name = name;
         this.numberOfInitialTickets = numberOfInitialTickets;
@@ -46,7 +46,7 @@ public class EventVO implements Serializable {
         this.address = address;
         this.defaultTicketPrice = defaultTicketPrice;
         this.priceOfBoiTVAnticipated = priceOfBoiTVAnticipated;
-        this.priceOfBoiTvPurchasedOnDemand = priceOfBoiTvPurchasedOnDemand;
+        this.priceOfBoiTVPurchasedOnDemand = priceOfBoiTVPurchasedOnDemand;
     }
 
     /*
@@ -83,12 +83,12 @@ public class EventVO implements Serializable {
         this.priceOfBoiTVAnticipated = priceOfBoiTVAnticipated;
     }
 
-    public double getPriceOfBoiTvPurchasedOnDemand() {
-        return priceOfBoiTvPurchasedOnDemand;
+    public double getPriceOfBoiTVPurchasedOnDemand() {
+        return priceOfBoiTVPurchasedOnDemand;
     }
 
-    public void setPriceOfBoiTvPurchasedOnDemand(double priceOfBoiTvPurchasedOnDemand) {
-        this.priceOfBoiTvPurchasedOnDemand = priceOfBoiTvPurchasedOnDemand;
+    public void setPriceOfBoiTVPurchasedOnDemand(double priceOfBoiTVPurchasedOnDemand) {
+        this.priceOfBoiTVPurchasedOnDemand = priceOfBoiTVPurchasedOnDemand;
     }
 
     public UUID getId() {
@@ -136,11 +136,11 @@ public class EventVO implements Serializable {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         EventVO eventVo = (EventVO) object;
-        return numberOfInitialTickets == eventVo.numberOfInitialTickets && Double.compare(defaultTicketPrice, eventVo.defaultTicketPrice) == 0 && Double.compare(priceOfBoiTVAnticipated, eventVo.priceOfBoiTVAnticipated) == 0 && Double.compare(priceOfBoiTvPurchasedOnDemand, eventVo.priceOfBoiTvPurchasedOnDemand) == 0 && Objects.equals(id, eventVo.id) && Objects.equals(name, eventVo.name) && Objects.equals(dateTime, eventVo.dateTime) && Objects.equals(address, eventVo.address);
+        return numberOfInitialTickets == eventVo.numberOfInitialTickets && Double.compare(defaultTicketPrice, eventVo.defaultTicketPrice) == 0 && Double.compare(priceOfBoiTVAnticipated, eventVo.priceOfBoiTVAnticipated) == 0 && Double.compare(priceOfBoiTVPurchasedOnDemand, eventVo.priceOfBoiTVPurchasedOnDemand) == 0 && Objects.equals(id, eventVo.id) && Objects.equals(name, eventVo.name) && Objects.equals(dateTime, eventVo.dateTime) && Objects.equals(address, eventVo.address);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, numberOfInitialTickets, dateTime, address, defaultTicketPrice, priceOfBoiTVAnticipated, priceOfBoiTvPurchasedOnDemand);
+        return Objects.hash(id, name, numberOfInitialTickets, dateTime, address, defaultTicketPrice, priceOfBoiTVAnticipated, priceOfBoiTVPurchasedOnDemand);
     }
 }

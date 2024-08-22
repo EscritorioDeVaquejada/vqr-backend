@@ -62,7 +62,7 @@ class EventServiceImplementationTest {
         eventVOMock.setDefaultTicketPrice(2000);
         eventVOMock.setDateTime(LocalDateTime.of(1998, 12, 12, 10, 50));
         eventVOMock.setPriceOfBoiTVAnticipated(3000);
-        eventVOMock.setPriceOfBoiTvPurchasedOnDemand(1500);
+        eventVOMock.setPriceOfBoiTVPurchasedOnDemand(1500);
 
         eventModelMock.setName(eventVOMock.getName());
         eventModelMock.setNumberOfInitialTickets(eventVOMock.getNumberOfInitialTickets());
@@ -70,7 +70,7 @@ class EventServiceImplementationTest {
         eventModelMock.setDefaultTicketPrice(eventVOMock.getDefaultTicketPrice());
         eventModelMock.setDateTime(eventVOMock.getDateTime());
         eventModelMock.setPriceOfBoiTVAnticipated(eventVOMock.getPriceOfBoiTVAnticipated());
-        eventModelMock.setPriceOfBoiTvPurchasedOnDemand(eventVOMock.getPriceOfBoiTvPurchasedOnDemand());
+        eventModelMock.setPriceOfBoiTVPurchasedOnDemand(eventVOMock.getPriceOfBoiTVPurchasedOnDemand());
 
         clientMock.setId(clientId);
 

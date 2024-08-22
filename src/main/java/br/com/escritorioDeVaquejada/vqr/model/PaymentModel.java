@@ -14,11 +14,12 @@ import java.util.UUID;
 public class PaymentModel implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    @Id
-    @Column(name = "payment_id")
+    @Id @GeneratedValue(strategy = GenerationType.UUID) @Column(name = "payment_id")
     private UUID id;
+    @Column(name = "payment_method")
     private PaymentMethod paymentMethod;
     private Double value;
+    @Column(name = "date_time")
     private LocalDateTime dateTime;
     @OneToOne(mappedBy = "payment")
     private TicketModel ticketId;
@@ -31,19 +32,6 @@ public class PaymentModel implements Serializable {
     }
 
     public PaymentModel() {
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        PaymentModel that = (PaymentModel) object;
-        return Objects.equals(id, that.id) && paymentMethod == that.paymentMethod && Objects.equals(value, that.value) && Objects.equals(dateTime, that.dateTime) && Objects.equals(ticketId, that.ticketId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, paymentMethod, value, dateTime, ticketId);
     }
 
     public UUID getId() {
@@ -81,4 +69,18 @@ public class PaymentModel implements Serializable {
     public void setTicketId(TicketModel ticketId) {
         this.ticketId = ticketId;
     }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        PaymentModel that = (PaymentModel) object;
+        return Objects.equals(id, that.id) && paymentMethod == that.paymentMethod && Objects.equals(value, that.value) && Objects.equals(dateTime, that.dateTime) && Objects.equals(ticketId, that.ticketId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, paymentMethod, value, dateTime, ticketId);
+    }
+
 }

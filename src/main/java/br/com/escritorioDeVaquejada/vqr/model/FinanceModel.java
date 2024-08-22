@@ -12,26 +12,34 @@ import java.util.UUID;
 public class FinanceModel implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    @Id@Column(name = "finance_id")
+    @Id @GeneratedValue(strategy = GenerationType.UUID) @Column(name = "finance_id")
     private UUID id;
     @OneToOne(mappedBy = "financialReport")
     private EventModel eventId;
+    @Column(name = "total_pix")
     private Double totalPix;
+    @Column(name = "total_credti")
     private Double totalCredit;
+    @Column(name = "total_debit")
     private Double totalDebit;
+    @Column(name = "total_cash")
     private Double totalCash;
-    private int totalSelledTickets;
-    private int totalBoiTv;
+    @Column(name = "total_tickets_sold")
+    private int totalTicketsSold;
+    @Column(name = "total_boi_tv")
+    private int totalBoiTV;
+    //todo qual a finalidade do campo totalFree
+    @Column(name = "total_free")
     private int totalfree;
 
-    public FinanceModel(EventModel eventId, Double totalPix, Double totalCredit, Double totalDebit, Double totalCash, int totalSelledTickets, int totalBoiTv, int totalfree) {
+    public FinanceModel(EventModel eventId, Double totalPix, Double totalCredit, Double totalDebit, Double totalCash, int totalTicketsSold, int totalBoiTV, int totalfree) {
         this.eventId = eventId;
         this.totalPix = totalPix;
         this.totalCredit = totalCredit;
         this.totalDebit = totalDebit;
         this.totalCash = totalCash;
-        this.totalSelledTickets = totalSelledTickets;
-        this.totalBoiTv = totalBoiTv;
+        this.totalTicketsSold = totalTicketsSold;
+        this.totalBoiTV = totalBoiTV;
         this.totalfree = totalfree;
     }
 
@@ -43,12 +51,12 @@ public class FinanceModel implements Serializable {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         FinanceModel that = (FinanceModel) object;
-        return totalSelledTickets == that.totalSelledTickets && totalBoiTv == that.totalBoiTv && totalfree == that.totalfree && Objects.equals(id, that.id) && Objects.equals(eventId, that.eventId) && Objects.equals(totalPix, that.totalPix) && Objects.equals(totalCredit, that.totalCredit) && Objects.equals(totalDebit, that.totalDebit) && Objects.equals(totalCash, that.totalCash);
+        return totalTicketsSold == that.totalTicketsSold && totalBoiTV == that.totalBoiTV && totalfree == that.totalfree && Objects.equals(id, that.id) && Objects.equals(eventId, that.eventId) && Objects.equals(totalPix, that.totalPix) && Objects.equals(totalCredit, that.totalCredit) && Objects.equals(totalDebit, that.totalDebit) && Objects.equals(totalCash, that.totalCash);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, eventId, totalPix, totalCredit, totalDebit, totalCash, totalSelledTickets, totalBoiTv, totalfree);
+        return Objects.hash(id, eventId, totalPix, totalCredit, totalDebit, totalCash, totalTicketsSold, totalBoiTV, totalfree);
     }
 
     public EventModel getEventId() {
@@ -91,20 +99,20 @@ public class FinanceModel implements Serializable {
         this.totalCash = totalCash;
     }
 
-    public int getTotalSelledTickets() {
-        return totalSelledTickets;
+    public int getTotalTicketsSold() {
+        return totalTicketsSold;
     }
 
-    public void setTotalSelledTickets(int totalSelledTickets) {
-        this.totalSelledTickets = totalSelledTickets;
+    public void setTotalTicketsSold(int totalTicketsSold) {
+        this.totalTicketsSold = totalTicketsSold;
     }
 
-    public int getTotalBoiTv() {
-        return totalBoiTv;
+    public int getTotalBoiTV() {
+        return totalBoiTV;
     }
 
-    public void setTotalBoiTv(int totalBoiTv) {
-        this.totalBoiTv = totalBoiTv;
+    public void setTotalBoiTV(int totalBoiTV) {
+        this.totalBoiTV = totalBoiTV;
     }
 
     public int getTotalfree() {

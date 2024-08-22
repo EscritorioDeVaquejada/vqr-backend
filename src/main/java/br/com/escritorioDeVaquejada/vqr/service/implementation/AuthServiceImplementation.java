@@ -59,7 +59,7 @@ public class AuthServiceImplementation implements AuthService {
         }
     }
 
-    //todo verificar a necessidade de uma condição mais robusta para a atribuição de roles para um novo user
+    //todo verificar a necessidade de suporte a mais roles no sistema
     public UserResponseVO register(UserRegistrationVO newUser) throws BadRequestException{
         Optional<UserModel> userWithTheSameNameOrCPF =
                 userService.findByUsernameOrCpf(newUser.getUsername(), newUser.getCpf());

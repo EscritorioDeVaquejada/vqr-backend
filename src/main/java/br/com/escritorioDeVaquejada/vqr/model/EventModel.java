@@ -29,7 +29,7 @@ public class EventModel implements Serializable {
     @Column(name="price_of_boi_tv_anticipated", nullable = false)
     private double priceOfBoiTVAnticipated;
     @Column(name="price_of_boi_tv_purchased_on_demand", nullable = false)
-    private double priceOfBoiTvPurchasedOnDemand;
+    private double priceOfBoiTVPurchasedOnDemand;
     @Embedded @Column(nullable = false)
     private Address address;
     @ManyToOne @JoinColumn(name = "client_id")
@@ -39,7 +39,7 @@ public class EventModel implements Serializable {
     @OneToOne() @JoinColumn(name = "financa_id")
     private FinanceModel financialReport;
 
-    public EventModel(UUID id, String name, int numberOfInitialTickets, LocalDateTime dateTime, Boolean isFinished, double defaultTicketPrice, double priceOfBoiTVAnticipated, double priceOfBoiTvPurchasedOnDemand, Address address, ClientModel owner, List<TicketModel> tickets, FinanceModel financialReport) {
+    public EventModel(UUID id, String name, int numberOfInitialTickets, LocalDateTime dateTime, Boolean isFinished, double defaultTicketPrice, double priceOfBoiTVAnticipated, double priceOfBoiTVPurchasedOnDemand, Address address, ClientModel owner, List<TicketModel> tickets, FinanceModel financialReport) {
         this.id = id;
         this.name = name;
         this.numberOfInitialTickets = numberOfInitialTickets;
@@ -47,7 +47,7 @@ public class EventModel implements Serializable {
         this.isFinished = isFinished;
         this.defaultTicketPrice = defaultTicketPrice;
         this.priceOfBoiTVAnticipated = priceOfBoiTVAnticipated;
-        this.priceOfBoiTvPurchasedOnDemand = priceOfBoiTvPurchasedOnDemand;
+        this.priceOfBoiTVPurchasedOnDemand = priceOfBoiTVPurchasedOnDemand;
         this.address = address;
         this.owner = owner;
         this.tickets = tickets;
@@ -62,12 +62,12 @@ public class EventModel implements Serializable {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         EventModel that = (EventModel) object;
-        return numberOfInitialTickets == that.numberOfInitialTickets && Double.compare(defaultTicketPrice, that.defaultTicketPrice) == 0 && Double.compare(priceOfBoiTVAnticipated, that.priceOfBoiTVAnticipated) == 0 && Double.compare(priceOfBoiTvPurchasedOnDemand, that.priceOfBoiTvPurchasedOnDemand) == 0 && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(dateTime, that.dateTime) && Objects.equals(isFinished, that.isFinished) && Objects.equals(address, that.address) && Objects.equals(owner, that.owner) && Objects.equals(tickets, that.tickets) && Objects.equals(financialReport, that.financialReport);
+        return numberOfInitialTickets == that.numberOfInitialTickets && Double.compare(defaultTicketPrice, that.defaultTicketPrice) == 0 && Double.compare(priceOfBoiTVAnticipated, that.priceOfBoiTVAnticipated) == 0 && Double.compare(priceOfBoiTVPurchasedOnDemand, that.priceOfBoiTVPurchasedOnDemand) == 0 && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(dateTime, that.dateTime) && Objects.equals(isFinished, that.isFinished) && Objects.equals(address, that.address) && Objects.equals(owner, that.owner) && Objects.equals(tickets, that.tickets) && Objects.equals(financialReport, that.financialReport);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, numberOfInitialTickets, dateTime, isFinished, defaultTicketPrice, priceOfBoiTVAnticipated, priceOfBoiTvPurchasedOnDemand, address, owner, tickets, financialReport);
+        return Objects.hash(id, name, numberOfInitialTickets, dateTime, isFinished, defaultTicketPrice, priceOfBoiTVAnticipated, priceOfBoiTVPurchasedOnDemand, address, owner, tickets, financialReport);
     }
 
     public double getDefaultTicketPrice() {
@@ -114,12 +114,12 @@ public class EventModel implements Serializable {
         this.priceOfBoiTVAnticipated = priceOfBoiTVAnticipated;
     }
 
-    public double getPriceOfBoiTvPurchasedOnDemand() {
-        return priceOfBoiTvPurchasedOnDemand;
+    public double getPriceOfBoiTVPurchasedOnDemand() {
+        return priceOfBoiTVPurchasedOnDemand;
     }
 
-    public void setPriceOfBoiTvPurchasedOnDemand(double priceOfBoiTvPurchasedOnDemand) {
-        this.priceOfBoiTvPurchasedOnDemand = priceOfBoiTvPurchasedOnDemand;
+    public void setPriceOfBoiTVPurchasedOnDemand(double priceOfBoiTVPurchasedOnDemand) {
+        this.priceOfBoiTVPurchasedOnDemand = priceOfBoiTVPurchasedOnDemand;
     }
 
     public FinanceModel getFinanceRelatory() {

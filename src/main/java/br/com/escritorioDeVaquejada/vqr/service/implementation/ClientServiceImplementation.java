@@ -15,11 +15,14 @@ import java.util.UUID;
 
 @Service
 public class ClientServiceImplementation implements ClientService {
+    private final ClientRepository clientRepository;
+    private final Mapper mapper;
 
     @Autowired
-    private ClientRepository clientRepository;
-    @Autowired
-    private Mapper mapper;
+    public ClientServiceImplementation(ClientRepository clientRepository, Mapper mapper) {
+        this.clientRepository = clientRepository;
+        this.mapper = mapper;
+    }
 
     public ClientVO saveClient(ClientVO newClient){
         return mapper.parseObject(clientRepository.save(mapper.parseObject(newClient, ClientModel.class)), ClientVO.class);
@@ -30,10 +33,12 @@ public class ClientServiceImplementation implements ClientService {
     }
 
     public ClientVO findById(UUID id) throws ResourceNotFoundException{
-        ClientModel client = clientRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("FUDEU"));
+        ClientModel client = clientRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Client not found!"));
         return mapper.parseObject(client, ClientVO.class);
     }
     public ClientModel findEntityById(UUID id) throws ResourceNotFoundException{
-        return clientRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("FUDEU"));
+        return clientRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Client not found!"));
     }
 }

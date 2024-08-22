@@ -18,7 +18,7 @@ public class TicketVO implements Serializable {
     private String support;
     private String supportHorse;
     private String representation;
-    private Boolean boiTv;
+    private Boolean boiTV;
     private Status status;
     private EventModel event;
     private PaymentModel payment;
