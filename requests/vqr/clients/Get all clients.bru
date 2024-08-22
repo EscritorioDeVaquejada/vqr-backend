@@ -5,7 +5,11 @@ meta {
 }
 
 get {
-  url: http://localhost:8080/clients
+  url: {{baseUrl}}/clients
   body: none
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sImlhdCI6MTcyNDMzNzAxNCwiZXhwIjoxNzI0MzQwNjE0LCJzdWIiOiJqb2FvQHRlc3RlLmNvbSIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODA4MCJ9.7lBcXY1Asz-o4GnBtgiSxJpY15RCjDxOLUK9zuw3Mbs
 }
