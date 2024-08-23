@@ -5,7 +5,7 @@ import br.com.escritorioDeVaquejada.vqr.mapper.Mapper;
 import br.com.escritorioDeVaquejada.vqr.model.Address;
 import br.com.escritorioDeVaquejada.vqr.model.ClientModel;
 import br.com.escritorioDeVaquejada.vqr.repository.ClientRepository;
-import br.com.escritorioDeVaquejada.vqr.vo.ClientVO;
+import br.com.escritorioDeVaquejada.vqr.vo.client.ClientRequestVO;
 import jakarta.validation.ConstraintViolationException;
 import org.aspectj.lang.annotation.Before;
 import org.assertj.core.api.Assertions;
@@ -36,7 +36,7 @@ class ClientServiceImplementationTest {
     @InjectMocks
     private ClientServiceImplementation clientServices;
 
-    ClientVO clientVo;
+    ClientRequestVO clientRequestVo;
     ClientModel clientModel;
     @Before("saveClientOk")
     public void setup(){
@@ -44,53 +44,53 @@ class ClientServiceImplementationTest {
     @Test
     @DisplayName("Deve salvar o usuário com sucesso")
     void saveClientOk() {
-        clientVo = new ClientVO();
-        clientVo.setAddress(address);
-        clientVo.setEmail("String email");
-        clientVo.setNumber("123");
-        clientVo.setName("joao");
+        clientRequestVo = new ClientRequestVO();
+        clientRequestVo.setAddress(address);
+        clientRequestVo.setEmail("String email");
+        clientRequestVo.setNumber("123");
+        clientRequestVo.setName("joao");
         clientModel= new ClientModel("joao", "123", "String email", null, null);
 
-        when(mapper.parseObject(clientVo, ClientModel.class)).thenReturn(clientModel);
+        when(mapper.parseObject(clientRequestVo, ClientModel.class)).thenReturn(clientModel);
         when(clientRepository.save(clientModel)).thenReturn(clientModel);
-        when(mapper.parseObject(clientModel, ClientVO.class)).thenReturn(clientVo);
-        ClientVO clientVOResult = clientServices.saveClient(clientVo);
-        Assertions.assertThat(clientVo).isEqualTo(clientVOResult);
+        when(mapper.parseObject(clientModel, ClientRequestVO.class)).thenReturn(clientRequestVo);
+        ClientRequestVO clientRequestVOResult = clientServices.saveClient(clientRequestVo);
+        Assertions.assertThat(clientRequestVo).isEqualTo(clientRequestVOResult);
     }
     @Test
     @DisplayName("Deve lançar uma exceção quando tentar salvar")
     void saveClientBadRequestWithoutName(){
         //without Name test
-        ClientVO clientVOWithoutName = new ClientVO();
-        clientVOWithoutName.setAddress(address);
-        clientVOWithoutName.setEmail("String email");
-        clientVOWithoutName.setNumber("123");
+        ClientRequestVO clientRequestVOWithoutName = new ClientRequestVO();
+        clientRequestVOWithoutName.setAddress(address);
+        clientRequestVOWithoutName.setEmail("String email");
+        clientRequestVOWithoutName.setNumber("123");
 
-        when(mapper.parseObject(clientVOWithoutName, ClientModel.class)).thenThrow(new ConstraintViolationException(null));
+        when(mapper.parseObject(clientRequestVOWithoutName, ClientModel.class)).thenThrow(new ConstraintViolationException(null));
 
-        assertThrows(ConstraintViolationException.class, () -> clientServices.saveClient(clientVOWithoutName));
+        assertThrows(ConstraintViolationException.class, () -> clientServices.saveClient(clientRequestVOWithoutName));
     }
     @Test
     void saveClientBadRequestWithoutNumber(){
-        ClientVO clientVOWithoutNumber = new ClientVO();
-        clientVOWithoutNumber.setAddress(address);
-        clientVOWithoutNumber.setEmail("String email");
-        clientVOWithoutNumber.setName("nameExample");
+        ClientRequestVO clientRequestVOWithoutNumber = new ClientRequestVO();
+        clientRequestVOWithoutNumber.setAddress(address);
+        clientRequestVOWithoutNumber.setEmail("String email");
+        clientRequestVOWithoutNumber.setName("nameExample");
 
-        when(mapper.parseObject(clientVOWithoutNumber, ClientModel.class)).thenThrow(new ConstraintViolationException(null));
+        when(mapper.parseObject(clientRequestVOWithoutNumber, ClientModel.class)).thenThrow(new ConstraintViolationException(null));
 
-        assertThrows(ConstraintViolationException.class, () -> clientServices.saveClient(clientVOWithoutNumber));
+        assertThrows(ConstraintViolationException.class, () -> clientServices.saveClient(clientRequestVOWithoutNumber));
     }
     @Test
     void saveClientBadRequestWithoutAddress(){
-        ClientVO clientVOWithoutAddress = new ClientVO();
-        clientVOWithoutAddress.setAddress(null);
-        clientVOWithoutAddress.setEmail("String email");
-        clientVOWithoutAddress.setName("nameExample");
+        ClientRequestVO clientRequestVOWithoutAddress = new ClientRequestVO();
+        clientRequestVOWithoutAddress.setAddress(null);
+        clientRequestVOWithoutAddress.setEmail("String email");
+        clientRequestVOWithoutAddress.setName("nameExample");
 
-        when(mapper.parseObject(clientVOWithoutAddress, ClientModel.class)).thenThrow(new ConstraintViolationException(null));
+        when(mapper.parseObject(clientRequestVOWithoutAddress, ClientModel.class)).thenThrow(new ConstraintViolationException(null));
 
-        assertThrows(ConstraintViolationException.class, () -> clientServices.saveClient(clientVOWithoutAddress));
+        assertThrows(ConstraintViolationException.class, () -> clientServices.saveClient(clientRequestVOWithoutAddress));
 
     }
 
@@ -101,32 +101,32 @@ class ClientServiceImplementationTest {
         ClientModel clientModel3 = new ClientModel();
         List<ClientModel> listWithClients = new ArrayList<>(Arrays.asList(clientModel1, clientModel2, clientModel3));
 
-        ClientVO clientVO1 = new ClientVO();
-        ClientVO clientVO2 = new ClientVO();
-        ClientVO clientVO3 = new ClientVO();
-        List<ClientVO> clientVoListWithClients= new ArrayList<>(Arrays.asList(clientVO1, clientVO2, clientVO3));
+        ClientRequestVO clientRequestVO1 = new ClientRequestVO();
+        ClientRequestVO clientRequestVO2 = new ClientRequestVO();
+        ClientRequestVO clientRequestVO3 = new ClientRequestVO();
+        List<ClientRequestVO> clientVoListWithClientRequests = new ArrayList<>(Arrays.asList(clientRequestVO1, clientRequestVO2, clientRequestVO3));
         when(clientRepository.findAll()).thenReturn(listWithClients);
-        when(mapper.parseListObjects(listWithClients, ClientVO.class)).thenReturn(clientVoListWithClients);
-        List<ClientVO> clientVOListWithResult = clientServices.findAll();
-        assertEquals(clientVOListWithResult,clientVoListWithClients);
+        when(mapper.parseListObjects(listWithClients, ClientRequestVO.class)).thenReturn(clientVoListWithClientRequests);
+        List<ClientRequestVO> clientRequestVOListWithResult = clientServices.findAll();
+        assertEquals(clientRequestVOListWithResult, clientVoListWithClientRequests);
     }
     @Test
     void findAllEmpty(){
         List<ClientModel> clientModels= new ArrayList<>();
-        List<ClientVO> clientVOS = new ArrayList<>();
+        List<ClientRequestVO> clientRequestVOS = new ArrayList<>();
         when(clientRepository.findAll()).thenReturn(clientModels);
-        when(mapper.parseListObjects(clientModels, ClientVO.class)).thenReturn(clientVOS);
-        List<ClientVO> clientVOResult = clientServices.findAll();
-        assertEquals(clientVOResult, clientVOS);
+        when(mapper.parseListObjects(clientModels, ClientRequestVO.class)).thenReturn(clientRequestVOS);
+        List<ClientRequestVO> clientRequestVOResult = clientServices.findAll();
+        assertEquals(clientRequestVOResult, clientRequestVOS);
     }
 
     @Test
     void findById() {
         ClientModel clientModel5 = new ClientModel();
-        ClientVO clientVo = new ClientVO();
+        ClientRequestVO clientRequestVo = new ClientRequestVO();
         when(clientRepository.findById(UUID.fromString("d600aa5d-de5e-4446-90fa-c0d15579827e"))).thenReturn(Optional.of(clientModel5));
-        when(mapper.parseObject(clientModel5, ClientVO.class)).thenReturn(clientVo);
-        ClientVO test = clientServices.findById(UUID.fromString("d600aa5d-de5e-4446-90fa-c0d15579827e"));
+        when(mapper.parseObject(clientModel5, ClientRequestVO.class)).thenReturn(clientRequestVo);
+        ClientRequestVO test = clientServices.findById(UUID.fromString("d600aa5d-de5e-4446-90fa-c0d15579827e"));
         assertEquals(test,clientServices.findById(UUID.fromString("d600aa5d-de5e-4446-90fa-c0d15579827e")));
     }
     @Test
@@ -141,7 +141,7 @@ class ClientServiceImplementationTest {
     void findEntityById() {
         ClientModel clientModel5 = new ClientModel();
         when(clientRepository.findById(UUID.fromString("d600aa5d-de5e-4446-90fa-c0d15579827e"))).thenReturn(Optional.of(clientModel5));
-        ClientVO test = clientServices.findById(UUID.fromString("d600aa5d-de5e-4446-90fa-c0d15579827e"));
+        ClientRequestVO test = clientServices.findById(UUID.fromString("d600aa5d-de5e-4446-90fa-c0d15579827e"));
         assertEquals(test,clientServices.findById(UUID.fromString("d600aa5d-de5e-4446-90fa-c0d15579827e")));
     }
     @Test

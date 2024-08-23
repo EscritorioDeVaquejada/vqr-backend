@@ -1,7 +1,6 @@
-package br.com.escritorioDeVaquejada.vqr.vo;
+package br.com.escritorioDeVaquejada.vqr.vo.auth;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 
 import java.io.Serial;
 import java.io.Serializable;

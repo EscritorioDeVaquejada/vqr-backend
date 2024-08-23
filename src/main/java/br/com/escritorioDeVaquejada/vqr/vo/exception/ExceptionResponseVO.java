@@ -1,4 +1,4 @@
-package br.com.escritorioDeVaquejada.vqr.vo;
+package br.com.escritorioDeVaquejada.vqr.vo.exception;
 
 import java.io.Serial;
 import java.io.Serializable;

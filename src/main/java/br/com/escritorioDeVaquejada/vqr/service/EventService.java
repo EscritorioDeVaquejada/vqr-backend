@@ -1,7 +1,7 @@
 package br.com.escritorioDeVaquejada.vqr.service;
 
 
-import br.com.escritorioDeVaquejada.vqr.vo.EventVO;
+import br.com.escritorioDeVaquejada.vqr.vo.event.EventVO;
 
 import java.util.List;
 import java.util.UUID;

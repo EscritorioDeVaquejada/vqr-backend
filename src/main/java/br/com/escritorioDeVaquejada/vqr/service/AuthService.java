@@ -1,9 +1,9 @@
 package br.com.escritorioDeVaquejada.vqr.service;
 
-import br.com.escritorioDeVaquejada.vqr.vo.AccountCredentialsVO;
-import br.com.escritorioDeVaquejada.vqr.vo.TokenVO;
-import br.com.escritorioDeVaquejada.vqr.vo.UserRegistrationVO;
-import br.com.escritorioDeVaquejada.vqr.vo.UserResponseVO;
+import br.com.escritorioDeVaquejada.vqr.vo.auth.AccountCredentialsVO;
+import br.com.escritorioDeVaquejada.vqr.vo.auth.TokenVO;
+import br.com.escritorioDeVaquejada.vqr.vo.auth.UserRegistrationVO;
+import br.com.escritorioDeVaquejada.vqr.vo.user.UserResponseVO;
 
 public interface AuthService {
     TokenVO login(AccountCredentialsVO data);

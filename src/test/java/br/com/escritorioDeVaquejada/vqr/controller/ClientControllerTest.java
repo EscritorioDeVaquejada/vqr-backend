@@ -3,7 +3,7 @@ package br.com.escritorioDeVaquejada.vqr.controller;
 import br.com.escritorioDeVaquejada.vqr.exception.BadRequestException;
 import br.com.escritorioDeVaquejada.vqr.model.Address;
 import br.com.escritorioDeVaquejada.vqr.service.ClientService;
-import br.com.escritorioDeVaquejada.vqr.vo.ClientVO;
+import br.com.escritorioDeVaquejada.vqr.vo.client.ClientRequestVO;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ClientControllerTest {
-    private ClientVO newClient;
+    private ClientRequestVO newClient;
     @Mock
     private BindingResult bindingResult;
     @Mock
@@ -31,8 +31,8 @@ class ClientControllerTest {
     ClientController clientController;
 
     @BeforeEach
-    void setup(){
-        newClient = new ClientVO();
+    void setup() {
+        newClient = new ClientRequestVO();
 
         newClient.setName("NameTest");
         newClient.setAddress(new Address("StateTest", "CityTest"));
@@ -42,11 +42,11 @@ class ClientControllerTest {
 
     @Test
     @DisplayName("Should successfully save a client to the database and return the saved client with HTTP status code 201")
-    void saveClientWithAllCorrectData(){
+    void saveClientWithAllCorrectData() {
         when(bindingResult.hasErrors()).thenReturn(false);
         when(clientService.saveClient(newClient)).thenReturn(newClient);
 
-        ResponseEntity<ClientVO> result = clientController.saveClient(newClient, bindingResult);
+        ResponseEntity<ClientRequestVO> result = clientController.saveClient(newClient, bindingResult);
 
         Mockito.verify(clientService, times(1)).saveClient(newClient);
         Assertions.assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
@@ -66,7 +66,7 @@ class ClientControllerTest {
 
     @Test
     @DisplayName("Should throw a BadRequestException because the address field is null")
-    void saveClientWithOnlyIncorrectAddressData(){
+    void saveClientWithOnlyIncorrectAddressData() {
         newClient.setAddress(null);
 
         when(bindingResult.hasErrors()).thenReturn(true);
@@ -78,7 +78,7 @@ class ClientControllerTest {
 
     @Test
     @DisplayName("Should throw a BadRequestException because the city field of the address attribute is null")
-    void saveClientWithOnlyCityAttributeFromIncorrectAddressAttribute(){
+    void saveClientWithOnlyCityAttributeFromIncorrectAddressAttribute() {
         newClient.getAddress().setCity(null);
 
         when(bindingResult.hasErrors()).thenReturn(true);
@@ -90,7 +90,7 @@ class ClientControllerTest {
 
     @Test
     @DisplayName("Should throw a BadRequestException because the state field of the address attribute is null")
-    void saveClientWithOnlyStateAttributeFromIncorrectAddressAttribute(){
+    void saveClientWithOnlyStateAttributeFromIncorrectAddressAttribute() {
         newClient.getAddress().setState(null);
 
         when(bindingResult.hasErrors()).thenReturn(true);
@@ -102,7 +102,7 @@ class ClientControllerTest {
 
     @Test
     @DisplayName("Should throw a BadRequestException because the number field is null")
-    void saveClientWithOnlyIncorrectNumberAttribute(){
+    void saveClientWithOnlyIncorrectNumberAttribute() {
         newClient.setNumber(null);
 
         when(bindingResult.hasErrors()).thenReturn(true);
@@ -114,7 +114,7 @@ class ClientControllerTest {
 
     @Test
     @DisplayName("Should throw a BadRequestException because all fields with validation are null")
-    void saveClientWithAllIncorrectData(){
+    void saveClientWithAllIncorrectData() {
         newClient.setNumber(null);
         newClient.setName(null);
         newClient.setAddress(null);

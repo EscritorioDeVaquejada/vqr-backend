@@ -9,7 +9,7 @@ import br.com.escritorioDeVaquejada.vqr.model.TicketModel;
 import br.com.escritorioDeVaquejada.vqr.repository.EventRepository;
 import br.com.escritorioDeVaquejada.vqr.service.ClientService;
 import br.com.escritorioDeVaquejada.vqr.service.TicketService;
-import br.com.escritorioDeVaquejada.vqr.vo.EventVO;
+import br.com.escritorioDeVaquejada.vqr.vo.event.EventVO;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -2,24 +2,20 @@ package br.com.escritorioDeVaquejada.vqr.controller;
 
 import br.com.escritorioDeVaquejada.vqr.exception.BadRequestException;
 import br.com.escritorioDeVaquejada.vqr.service.AuthService;
-import br.com.escritorioDeVaquejada.vqr.vo.AccountCredentialsVO;
-import br.com.escritorioDeVaquejada.vqr.vo.UserRegistrationVO;
-import br.com.escritorioDeVaquejada.vqr.vo.TokenVO;
-import br.com.escritorioDeVaquejada.vqr.vo.UserResponseVO;
+import br.com.escritorioDeVaquejada.vqr.vo.auth.AccountCredentialsVO;
+import br.com.escritorioDeVaquejada.vqr.vo.auth.UserRegistrationVO;
+import br.com.escritorioDeVaquejada.vqr.vo.auth.TokenVO;
+import br.com.escritorioDeVaquejada.vqr.vo.user.UserResponseVO;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/auth")
@@ -31,28 +27,39 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<Object> login(
+    @PostMapping(
+            value = "/login",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<TokenVO> login(
             @RequestBody @Valid AccountCredentialsVO data,
             BindingResult errorsInTheRequestBody){
         if(errorsInTheRequestBody.hasErrors()){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request");
+            throw new BadRequestException("Invalid client request");
         }
         TokenVO token = authService.login(data);
+        //todo verificar se o token pode chegar até este ponto sendo null
         if(token == null){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request");
+            throw new RuntimeException("Server cannot generate access token");
         }
-        return ResponseEntity.ok().body(token);
+        return ResponseEntity
+                .ok()
+                .body(token);
     }
 
-    @PostMapping("/register")
+    @PostMapping(
+            value = "/register",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserResponseVO> register(
             @RequestBody @Valid UserRegistrationVO newUser,
             BindingResult errorsInTheRequest) throws BadRequestException {
         if(errorsInTheRequest.hasErrors() || !lastTwoDigitsOfTheCpfAreValid(newUser.getCpf())){
             throw new BadRequestException("Invalid data!");
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(newUser));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(authService.register(newUser));
     }
 
     private boolean lastTwoDigitsOfTheCpfAreValid(String cpf) {

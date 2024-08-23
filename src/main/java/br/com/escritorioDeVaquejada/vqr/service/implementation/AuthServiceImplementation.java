@@ -5,10 +5,10 @@ import br.com.escritorioDeVaquejada.vqr.model.UserModel;
 import br.com.escritorioDeVaquejada.vqr.security.jwt.JwtTokenProvider;
 import br.com.escritorioDeVaquejada.vqr.service.AuthService;
 import br.com.escritorioDeVaquejada.vqr.service.UserService;
-import br.com.escritorioDeVaquejada.vqr.vo.AccountCredentialsVO;
-import br.com.escritorioDeVaquejada.vqr.vo.TokenVO;
-import br.com.escritorioDeVaquejada.vqr.vo.UserRegistrationVO;
-import br.com.escritorioDeVaquejada.vqr.vo.UserResponseVO;
+import br.com.escritorioDeVaquejada.vqr.vo.auth.AccountCredentialsVO;
+import br.com.escritorioDeVaquejada.vqr.vo.auth.TokenVO;
+import br.com.escritorioDeVaquejada.vqr.vo.auth.UserRegistrationVO;
+import br.com.escritorioDeVaquejada.vqr.vo.user.UserResponseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -47,7 +47,7 @@ public class AuthServiceImplementation implements AuthService {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(data.getUsername(), data.getPassword()));
             UserModel user = userService.loadUserByUsername(data.getUsername());
-            TokenVO tokenResponse = new TokenVO();
+            TokenVO tokenResponse;
             if(user != null){
                 tokenResponse = tokenProvider.createAccessToken(data.getUsername(), user.getRoles());
             }else{

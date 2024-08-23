@@ -1,8 +1,8 @@
 package br.com.escritorioDeVaquejada.vqr.service;
 
 import br.com.escritorioDeVaquejada.vqr.model.UserModel;
-import br.com.escritorioDeVaquejada.vqr.vo.UserRegistrationVO;
-import br.com.escritorioDeVaquejada.vqr.vo.UserResponseVO;
+import br.com.escritorioDeVaquejada.vqr.vo.auth.UserRegistrationVO;
+import br.com.escritorioDeVaquejada.vqr.vo.user.UserResponseVO;
 
 import java.util.Optional;
 

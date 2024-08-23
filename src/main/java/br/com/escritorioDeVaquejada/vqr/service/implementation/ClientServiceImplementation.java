@@ -6,7 +6,8 @@ import br.com.escritorioDeVaquejada.vqr.mapper.Mapper;
 import br.com.escritorioDeVaquejada.vqr.model.ClientModel;
 import br.com.escritorioDeVaquejada.vqr.repository.ClientRepository;
 import br.com.escritorioDeVaquejada.vqr.service.ClientService;
-import br.com.escritorioDeVaquejada.vqr.vo.ClientVO;
+import br.com.escritorioDeVaquejada.vqr.vo.client.ClientRequestVO;
+import br.com.escritorioDeVaquejada.vqr.vo.client.ClientResponseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,18 +25,18 @@ public class ClientServiceImplementation implements ClientService {
         this.mapper = mapper;
     }
 
-    public ClientVO saveClient(ClientVO newClient){
-        return mapper.parseObject(clientRepository.save(mapper.parseObject(newClient, ClientModel.class)), ClientVO.class);
+    public ClientResponseVO saveClient(ClientRequestVO newClient){
+        return mapper.parseObject(clientRepository.save(mapper.parseObject(newClient, ClientModel.class)), ClientResponseVO.class);
     }
 
-    public List<ClientVO> findAll(){
-        return mapper.parseListObjects(clientRepository.findAll(), ClientVO.class);
+    public List<ClientResponseVO> findAll(){
+        return mapper.parseListObjects(clientRepository.findAll(), ClientResponseVO.class);
     }
 
-    public ClientVO findById(UUID id) throws ResourceNotFoundException{
+    public ClientResponseVO findById(UUID id) throws ResourceNotFoundException{
         ClientModel client = clientRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("Client not found!"));
-        return mapper.parseObject(client, ClientVO.class);
+        return mapper.parseObject(client, ClientResponseVO.class);
     }
     public ClientModel findEntityById(UUID id) throws ResourceNotFoundException{
         return clientRepository.findById(id).orElseThrow(() ->
