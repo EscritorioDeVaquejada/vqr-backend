@@ -1,7 +1,10 @@
-package br.com.escritorioDeVaquejada.vqr.vo;
+package br.com.escritorioDeVaquejada.vqr.vo.event;
 
 import br.com.escritorioDeVaquejada.vqr.model.Address;
-import jakarta.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -9,28 +12,32 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-public class EventVO implements Serializable {
+@Schema(description = "Represents the data returned in HTTP responses for event-related operations. " +
+        "This object is used to send event information in HTTP responses.")
+public class EventResponseVO implements Serializable {
     @Serial
-    private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
+    @Schema(description = "Unique identifier of the event.",
+            example = "123e4567-e89b-12d3-a456-426614174000")
     private UUID id;
-    @NotBlank
+    @Schema(description = "Name of the event.", example = "Summer Rodeo")
     private String name;
-    @PositiveOrZero
+    @Schema(description = "Initial number of tickets available for the event.", example = "100")
     private int numberOfInitialTickets;
+    @Schema(description = "Scheduled date and time for the event.", example = "2024-12-12T10:50:00")
     private LocalDateTime dateTime;
-    @NotNull
     private Address address;
-    @PositiveOrZero
+    @Schema(description = "Standard price of a ticket for the event.", example = "1000.00")
     private double defaultTicketPrice;
-    @PositiveOrZero
+    @Schema(description = "Payment amount for BoiTV in advance.", example = "300.00")
     private double priceOfBoiTVAnticipated;
-    @PositiveOrZero
+    @Schema(description = "Payment amount for BoiTV made on demand.", example = "400.00")
     private double priceOfBoiTVPurchasedOnDemand;
 
-    public EventVO() {
+    public EventResponseVO() {
     }
 
-    public EventVO(
+    public EventResponseVO(
             UUID id,
             String name,
             int numberOfInitialTickets,
@@ -47,24 +54,6 @@ public class EventVO implements Serializable {
         this.defaultTicketPrice = defaultTicketPrice;
         this.priceOfBoiTVAnticipated = priceOfBoiTVAnticipated;
         this.priceOfBoiTVPurchasedOnDemand = priceOfBoiTVPurchasedOnDemand;
-    }
-
-    /*
-    public EventVO(UUID id, String name, int numberOfInitialTickets, LocalDateTime dateTime, Address address) {
-        this.id = id;
-        this.name = name;
-        this.numberOfInitialTickets = numberOfInitialTickets;
-        this.dateTime = dateTime;
-        this.address = address;
-    }
-     */
-
-    public double getTicketPrice() {
-        return defaultTicketPrice;
-    }
-
-    public void setTicketPrice(double defaultTicketPrice) {
-        this.defaultTicketPrice = defaultTicketPrice;
     }
 
     public double getDefaultTicketPrice() {
@@ -135,8 +124,8 @@ public class EventVO implements Serializable {
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
-        EventVO eventVo = (EventVO) object;
-        return numberOfInitialTickets == eventVo.numberOfInitialTickets && Double.compare(defaultTicketPrice, eventVo.defaultTicketPrice) == 0 && Double.compare(priceOfBoiTVAnticipated, eventVo.priceOfBoiTVAnticipated) == 0 && Double.compare(priceOfBoiTVPurchasedOnDemand, eventVo.priceOfBoiTVPurchasedOnDemand) == 0 && Objects.equals(id, eventVo.id) && Objects.equals(name, eventVo.name) && Objects.equals(dateTime, eventVo.dateTime) && Objects.equals(address, eventVo.address);
+        EventResponseVO eventResponseVo = (EventResponseVO) object;
+        return numberOfInitialTickets == eventResponseVo.numberOfInitialTickets && Double.compare(defaultTicketPrice, eventResponseVo.defaultTicketPrice) == 0 && Double.compare(priceOfBoiTVAnticipated, eventResponseVo.priceOfBoiTVAnticipated) == 0 && Double.compare(priceOfBoiTVPurchasedOnDemand, eventResponseVo.priceOfBoiTVPurchasedOnDemand) == 0 && Objects.equals(id, eventResponseVo.id) && Objects.equals(name, eventResponseVo.name) && Objects.equals(dateTime, eventResponseVo.dateTime) && Objects.equals(address, eventResponseVo.address);
     }
 
     @Override

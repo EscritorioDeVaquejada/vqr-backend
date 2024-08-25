@@ -2,27 +2,30 @@ package br.com.escritorioDeVaquejada.vqr.controller;
 
 import br.com.escritorioDeVaquejada.vqr.exception.BadRequestException;
 import br.com.escritorioDeVaquejada.vqr.service.AuthService;
-import br.com.escritorioDeVaquejada.vqr.vo.AccountCredentialsVO;
-import br.com.escritorioDeVaquejada.vqr.vo.UserRegistrationVO;
-import br.com.escritorioDeVaquejada.vqr.vo.TokenVO;
-import br.com.escritorioDeVaquejada.vqr.vo.UserResponseVO;
+import br.com.escritorioDeVaquejada.vqr.vo.auth.AccountCredentialsVO;
+import br.com.escritorioDeVaquejada.vqr.vo.auth.TokenVO;
+import br.com.escritorioDeVaquejada.vqr.vo.auth.UserRegistrationVO;
+import br.com.escritorioDeVaquejada.vqr.vo.user.UserResponseVO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
-
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Authentication and Registration",
+        description = "Endpoints for user authentication and registration operations.")
 public class AuthController {
     private final AuthService authService;
 
@@ -31,28 +34,74 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<Object> login(
+    //todo verificar se há necessidade de configurar uma saída 404 ou similar para um user não encontrado
+    @PostMapping(
+            value = "/login",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(
+            summary = "Get access token",
+            description = "Signs in a user by validating their credentials and returning an " +
+                    "access token if the authentication is successful.",
+            tags = "Authentication and Registration",
+            responses = {
+                    @ApiResponse(
+                            description = "Ok",
+                            responseCode = "200",
+                            content = @Content(schema = @Schema(implementation = TokenVO.class)
+                    )),
+                    @ApiResponse(description = "Bad Request", responseCode = "400",
+                            content = @Content),
+                    @ApiResponse(description = "Forbidden", responseCode = "403",
+                            content = @Content),
+                    @ApiResponse(description = "Internal Sever Error", responseCode = "500",
+                            content = @Content)
+            })
+    public ResponseEntity<TokenVO> login(
             @RequestBody @Valid AccountCredentialsVO data,
-            BindingResult errorsInTheRequestBody){
-        if(errorsInTheRequestBody.hasErrors()){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request");
+            BindingResult errorsInTheRequestBody) {
+        if (errorsInTheRequestBody.hasErrors()) {
+            throw new BadRequestException("Invalid client request");
         }
         TokenVO token = authService.login(data);
-        if(token == null){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid client request");
+        //todo verificar se o token pode chegar até este ponto sendo null
+        if (token == null) {
+            throw new RuntimeException("Server cannot generate access token");
         }
-        return ResponseEntity.ok().body(token);
+        return ResponseEntity
+                .ok()
+                .body(token);
     }
 
-    @PostMapping("/register")
+    @PostMapping(
+            value = "/register",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(
+            summary = "Register a user",
+            description = "Registers a new user by creating an account with the provided " +
+                    "information. If successful, returns the details of the newly created user",
+            tags = "Authentication and Registration",
+            responses = {
+                    @ApiResponse(
+                            description = "Created",
+                            responseCode = "204",
+                            content = @Content(
+                                    schema = @Schema(implementation = UserResponseVO.class))),
+                    @ApiResponse(description = "Bad Request", responseCode = "400",
+                            content = @Content),
+                    @ApiResponse(description = "Bad Request", responseCode = "500",
+                            content = @Content)
+            })
     public ResponseEntity<UserResponseVO> register(
             @RequestBody @Valid UserRegistrationVO newUser,
             BindingResult errorsInTheRequest) throws BadRequestException {
-        if(errorsInTheRequest.hasErrors() || !lastTwoDigitsOfTheCpfAreValid(newUser.getCpf())){
+        if (errorsInTheRequest.hasErrors() || !lastTwoDigitsOfTheCpfAreValid(newUser.getCpf())) {
             throw new BadRequestException("Invalid data!");
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(newUser));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(authService.register(newUser));
     }
 
     private boolean lastTwoDigitsOfTheCpfAreValid(String cpf) {

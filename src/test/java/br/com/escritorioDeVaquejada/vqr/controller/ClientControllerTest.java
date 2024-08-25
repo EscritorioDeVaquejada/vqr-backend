@@ -3,8 +3,9 @@ package br.com.escritorioDeVaquejada.vqr.controller;
 import br.com.escritorioDeVaquejada.vqr.exception.BadRequestException;
 import br.com.escritorioDeVaquejada.vqr.model.Address;
 import br.com.escritorioDeVaquejada.vqr.service.ClientService;
-import br.com.escritorioDeVaquejada.vqr.vo.ClientVO;
-import org.assertj.core.api.Assertions;
+import br.com.escritorioDeVaquejada.vqr.vo.client.ClientRequestVO;
+import br.com.escritorioDeVaquejada.vqr.vo.client.ClientResponseVO;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,112 +18,126 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ClientControllerTest {
-    private ClientVO newClient;
+    private static ClientResponseVO clientResponse;
+    private static ClientRequestVO clientRequest;
     @Mock
     private BindingResult bindingResult;
     @Mock
-    ClientService clientService;
+    private ClientService clientService;
     @InjectMocks
-    ClientController clientController;
+    private ClientController clientController;
+
+    @BeforeAll
+    static void setupForAllTests() {
+        clientRequest = new ClientRequestVO();
+        clientResponse = new ClientResponseVO();
+    }
 
     @BeforeEach
-    void setup(){
-        newClient = new ClientVO();
+    void setupForEachTest() {
+        clientRequest.setName("NameTest");
+        clientRequest.setAddress(new Address("StateTest", "CityTest"));
+        clientRequest.setEmail("teste@gmail.com");
+        clientRequest.setNumber("99999999999");
 
-        newClient.setName("NameTest");
-        newClient.setAddress(new Address("StateTest", "CityTest"));
-        newClient.setEmail("teste@gmail.com");
-        newClient.setNumber("99999999999");
+        clientResponse.setId(UUID.randomUUID());
+        clientResponse.setName(clientRequest.getName());
+        clientResponse.setAddress(clientRequest.getAddress());
+        clientResponse.setEmail(clientRequest.getEmail());
+        clientResponse.setNumber(clientRequest.getNumber());
     }
 
     @Test
     @DisplayName("Should successfully save a client to the database and return the saved client with HTTP status code 201")
-    void saveClientWithAllCorrectData(){
+    void saveClientWithAllCorrectData() {
         when(bindingResult.hasErrors()).thenReturn(false);
-        when(clientService.saveClient(newClient)).thenReturn(newClient);
+        when(clientService.saveClient(clientRequest)).thenReturn(clientResponse);
 
-        ResponseEntity<ClientVO> result = clientController.saveClient(newClient, bindingResult);
+        ResponseEntity<ClientResponseVO> result = clientController.saveClient(clientRequest, bindingResult);
 
-        Mockito.verify(clientService, times(1)).saveClient(newClient);
-        Assertions.assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        Assertions.assertThat(result.getBody()).isEqualTo(newClient);
+        verify(clientService, times(1)).saveClient(clientRequest);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(result.getBody()).isEqualTo(clientResponse);
     }
 
     @Test
     @DisplayName("Should throw a BadRequestException because the name field is null")
     void saveClientWithOnlyIncorrectNameAttribute() {
-        newClient.setName(null);
+        clientRequest.setName(null);
 
         when(bindingResult.hasErrors()).thenReturn(true);
-        Assertions.assertThatThrownBy(() -> clientController.saveClient(newClient, bindingResult))
+        assertThatThrownBy(() -> clientController.saveClient(clientRequest, bindingResult))
                 .isInstanceOf(BadRequestException.class);
-        Mockito.verify(clientService, Mockito.never()).saveClient(newClient);
+        verify(clientService, Mockito.never()).saveClient(clientRequest);
     }
 
     @Test
     @DisplayName("Should throw a BadRequestException because the address field is null")
-    void saveClientWithOnlyIncorrectAddressData(){
-        newClient.setAddress(null);
+    void saveClientWithOnlyIncorrectAddressData() {
+        clientRequest.setAddress(null);
 
         when(bindingResult.hasErrors()).thenReturn(true);
 
-        Assertions.assertThatThrownBy(() -> clientController.saveClient(newClient, bindingResult))
+        assertThatThrownBy(() -> clientController.saveClient(clientRequest, bindingResult))
                 .isInstanceOf(BadRequestException.class);
-        Mockito.verify(clientService, Mockito.never()).saveClient(newClient);
+        verify(clientService, Mockito.never()).saveClient(clientRequest);
     }
 
     @Test
     @DisplayName("Should throw a BadRequestException because the city field of the address attribute is null")
-    void saveClientWithOnlyCityAttributeFromIncorrectAddressAttribute(){
-        newClient.getAddress().setCity(null);
+    void saveClientWithOnlyCityAttributeFromIncorrectAddressAttribute() {
+        clientRequest.getAddress().setCity(null);
 
         when(bindingResult.hasErrors()).thenReturn(true);
 
-        Assertions.assertThatThrownBy(() -> clientController.saveClient(newClient, bindingResult))
+        assertThatThrownBy(() -> clientController.saveClient(clientRequest, bindingResult))
                 .isInstanceOf(BadRequestException.class);
-        Mockito.verify(clientService, Mockito.never()).saveClient(newClient);
+        verify(clientService, Mockito.never()).saveClient(clientRequest);
     }
 
     @Test
     @DisplayName("Should throw a BadRequestException because the state field of the address attribute is null")
-    void saveClientWithOnlyStateAttributeFromIncorrectAddressAttribute(){
-        newClient.getAddress().setState(null);
+    void saveClientWithOnlyStateAttributeFromIncorrectAddressAttribute() {
+        clientRequest.getAddress().setState(null);
 
         when(bindingResult.hasErrors()).thenReturn(true);
 
-        Assertions.assertThatThrownBy(() -> clientController.saveClient(newClient, bindingResult))
+        assertThatThrownBy(() -> clientController.saveClient(clientRequest, bindingResult))
                 .isInstanceOf(BadRequestException.class);
-        Mockito.verify(clientService, Mockito.never()).saveClient(newClient);
+        verify(clientService, Mockito.never()).saveClient(clientRequest);
     }
 
     @Test
     @DisplayName("Should throw a BadRequestException because the number field is null")
-    void saveClientWithOnlyIncorrectNumberAttribute(){
-        newClient.setNumber(null);
+    void saveClientWithOnlyIncorrectNumberAttribute() {
+        clientRequest.setNumber(null);
 
         when(bindingResult.hasErrors()).thenReturn(true);
 
-        Assertions.assertThatThrownBy(() -> clientController.saveClient(newClient, bindingResult))
+        assertThatThrownBy(() -> clientController.saveClient(clientRequest, bindingResult))
                 .isInstanceOf(BadRequestException.class);
-        Mockito.verify(clientService, Mockito.never()).saveClient(newClient);
+        verify(clientService, Mockito.never()).saveClient(clientRequest);
     }
 
     @Test
     @DisplayName("Should throw a BadRequestException because all fields with validation are null")
-    void saveClientWithAllIncorrectData(){
-        newClient.setNumber(null);
-        newClient.setName(null);
-        newClient.setAddress(null);
+    void saveClientWithAllIncorrectData() {
+        clientRequest.setNumber(null);
+        clientRequest.setName(null);
+        clientRequest.setAddress(null);
 
         when(bindingResult.hasErrors()).thenReturn(true);
 
-        Assertions.assertThatThrownBy(() -> clientController.saveClient(newClient, bindingResult))
+        assertThatThrownBy(() -> clientController.saveClient(clientRequest, bindingResult))
                 .isInstanceOf(BadRequestException.class);
-        Mockito.verify(clientService, Mockito.never()).saveClient(newClient);
+        verify(clientService, Mockito.never()).saveClient(clientRequest);
     }
 }

@@ -1,4 +1,4 @@
-package br.com.escritorioDeVaquejada.vqr.vo;
+package br.com.escritorioDeVaquejada.vqr.vo.ticket;
 
 import br.com.escritorioDeVaquejada.vqr.enums.Status;
 import br.com.escritorioDeVaquejada.vqr.model.EventModel;

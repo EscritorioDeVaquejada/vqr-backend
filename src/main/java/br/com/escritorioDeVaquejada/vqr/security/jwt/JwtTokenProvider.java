@@ -1,7 +1,7 @@
 package br.com.escritorioDeVaquejada.vqr.security.jwt;
 
 import br.com.escritorioDeVaquejada.vqr.exception.InvalidJwtAuthenticationException;
-import br.com.escritorioDeVaquejada.vqr.vo.TokenVO;
+import br.com.escritorioDeVaquejada.vqr.vo.auth.TokenVO;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
