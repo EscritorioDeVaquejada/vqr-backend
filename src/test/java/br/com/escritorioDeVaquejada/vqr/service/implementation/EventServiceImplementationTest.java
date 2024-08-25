@@ -9,6 +9,7 @@ import br.com.escritorioDeVaquejada.vqr.model.TicketModel;
 import br.com.escritorioDeVaquejada.vqr.repository.EventRepository;
 import br.com.escritorioDeVaquejada.vqr.service.ClientService;
 import br.com.escritorioDeVaquejada.vqr.service.TicketService;
+import br.com.escritorioDeVaquejada.vqr.vo.event.EventRequestVO;
 import br.com.escritorioDeVaquejada.vqr.vo.event.EventResponseVO;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -40,96 +41,118 @@ class EventServiceImplementationTest {
     @InjectMocks
     private EventServiceImplementation eventServicesImplementation;
     
-    private static ClientModel clientMock;
+    private static ClientModel clientModel;
     private static UUID clientId;
-    private static EventModel eventModelMock;
-    private static EventResponseVO eventResponseVOMock;
-    private static List<EventModel> eventModelListMock;
-    private static List<EventResponseVO> eventResponseVOListMock;
-    private static List<TicketModel> ticketsMock;
+    private static EventModel eventModel;
+    private static List<EventModel> eventModelList;
+    private static EventResponseVO eventResponseVO;
+    private static EventRequestVO eventRequestVO;
+    private static List<EventResponseVO> eventResponseVOList;
+    private static List<TicketModel> ticketModelList;
 
     @BeforeAll
-    static void setup(){
+    static void setupForAllTests(){
         clientId = UUID.randomUUID();
 
-        eventResponseVOMock = new EventResponseVO();
-        eventModelMock = new EventModel();
-        clientMock = new ClientModel();
+        eventResponseVO = new EventResponseVO();
+        eventRequestVO = new EventRequestVO();
+        eventModel = new EventModel();
+        clientModel = new ClientModel();
 
-        eventResponseVOMock.setName("Evento Teste");
-        eventResponseVOMock.setNumberOfInitialTickets(3);
-        eventResponseVOMock.setAddress(new Address("Estado teste","Cidade Teste"));
-        eventResponseVOMock.setDefaultTicketPrice(2000);
-        eventResponseVOMock.setDateTime(LocalDateTime.of(1998, 12, 12, 10, 50));
-        eventResponseVOMock.setPriceOfBoiTVAnticipated(3000);
-        eventResponseVOMock.setPriceOfBoiTVPurchasedOnDemand(1500);
+        eventModel.setId(clientId);
+        eventModel.setName("Evento Teste");
+        eventModel.setNumberOfInitialTickets(3);
+        eventModel.setAddress(
+                new Address("Estado teste","Cidade Teste"));
+        eventModel.setDefaultTicketPrice(2000);
+        eventModel.setDateTime(
+                LocalDateTime.of(1998, 12, 12, 10, 50));
+        eventModel.setPriceOfBoiTVAnticipated(3000);
+        eventModel.setPriceOfBoiTVPurchasedOnDemand(1500);
 
-        eventModelMock.setName(eventResponseVOMock.getName());
-        eventModelMock.setNumberOfInitialTickets(eventResponseVOMock.getNumberOfInitialTickets());
-        eventModelMock.setAddress(eventResponseVOMock.getAddress());
-        eventModelMock.setDefaultTicketPrice(eventResponseVOMock.getDefaultTicketPrice());
-        eventModelMock.setDateTime(eventResponseVOMock.getDateTime());
-        eventModelMock.setPriceOfBoiTVAnticipated(eventResponseVOMock.getPriceOfBoiTVAnticipated());
-        eventModelMock.setPriceOfBoiTVPurchasedOnDemand(eventResponseVOMock.getPriceOfBoiTVPurchasedOnDemand());
+        eventResponseVO.setId(eventModel.getId());
+        eventResponseVO.setName(eventModel.getName());
+        eventResponseVO.setNumberOfInitialTickets(eventModel.getNumberOfInitialTickets());
+        eventResponseVO.setAddress(eventModel.getAddress());
+        eventResponseVO.setDefaultTicketPrice(eventModel.getDefaultTicketPrice());
+        eventResponseVO.setDateTime(eventModel.getDateTime());
+        eventResponseVO.setPriceOfBoiTVAnticipated(eventModel.getPriceOfBoiTVAnticipated());
+        eventResponseVO.setPriceOfBoiTVPurchasedOnDemand(
+                eventModel.getPriceOfBoiTVPurchasedOnDemand());
 
-        clientMock.setId(clientId);
+        eventRequestVO.setName(eventModel.getName());
+        eventRequestVO.setNumberOfInitialTickets(eventModel.getNumberOfInitialTickets());
+        eventRequestVO.setAddress(eventModel.getAddress());
+        eventRequestVO.setDefaultTicketPrice(eventModel.getDefaultTicketPrice());
+        eventRequestVO.setDateTime(eventModel.getDateTime());
+        eventRequestVO.setPriceOfBoiTVAnticipated(eventModel.getPriceOfBoiTVAnticipated());
+        eventRequestVO.setPriceOfBoiTVPurchasedOnDemand(
+                eventModel.getPriceOfBoiTVPurchasedOnDemand());
 
-        eventModelListMock = List.of(eventModelMock);
-        eventResponseVOListMock = List.of(eventResponseVOMock);
+        eventModelList = List.of(eventModel);
+        eventResponseVOList = List.of(eventResponseVO);
 
-        ticketsMock = List.of(
-                new TicketModel(eventModelMock),
-                new TicketModel(eventModelMock),
-                new TicketModel(eventModelMock));
+        ticketModelList = List.of(
+                new TicketModel(eventModel),
+                new TicketModel(eventModel),
+                new TicketModel(eventModel));
     }
     //todo verificar correção para simulação dos métodos: setOwner() e setDateTime()
     //todo descobrir em como deve ser testada a chamada do método captureCurrentDateAndTime()
     @Test
     @DisplayName("Should save a new event and return the corresponding VO")
     void shouldSaveEventSuccessfullyAndReturnEventVo() {
-        when(clientService.findEntityById(clientId)).thenReturn(clientMock);
-        when(mapper.parseObject(eventResponseVOMock, EventModel.class)).thenReturn(eventModelMock);
-        when(eventRepository.save(eventModelMock)).thenReturn(eventModelMock);
-        when(ticketService.saveEmptyTickets(eventModelMock)).thenReturn(ticketsMock);
-        when(mapper.parseObject(eventModelMock, EventResponseVO.class)).thenReturn(eventResponseVOMock);
+        when(clientService.findEntityById(clientId)).thenReturn(clientModel);
+        when(mapper.parseObject(eventRequestVO, EventModel.class)).thenReturn(eventModel);
+        when(eventRepository.save(eventModel)).thenReturn(eventModel);
+        when(ticketService.saveEmptyTickets(eventModel)).thenReturn(ticketModelList);
+        when(mapper.parseObject(eventModel, EventResponseVO.class)).thenReturn(eventResponseVO);
 
-        EventResponseVO result = eventServicesImplementation.saveEvent(eventResponseVOMock, clientId);
+        EventResponseVO result = eventServicesImplementation.saveEvent(eventRequestVO, clientId);
 
-        assertThat(result).isEqualTo(eventResponseVOMock);
-        verify(eventRepository, times(1)).save(eventModelMock);
-        verify(ticketService, times(1)).saveEmptyTickets(eventModelMock);
+        assertThat(result).isEqualTo(eventResponseVO);
+        verify(eventRepository, times(1)).save(eventModel);
+        verify(ticketService, times(1)).saveEmptyTickets(eventModel);
     }
 
     @Test
-    @DisplayName("Should throw ResourceNotFoundException if the client does not exist when saving a new event")
+    @DisplayName("Should throw ResourceNotFoundException if the clientModel does not " +
+            "exist when saving a new event")
     void shouldThrowResourceNotFoundExceptionWhenClientDoesNotExistWhenSavingEvent() {
-        when(clientService.findEntityById(clientId)).thenThrow(new ResourceNotFoundException("Client not found!"));
+        when(clientService.findEntityById(clientId))
+                .thenThrow(new ResourceNotFoundException("Client not found!"));
 
         assertThatThrownBy(() -> {
-            eventServicesImplementation.saveEvent(eventResponseVOMock, clientId);
+            eventServicesImplementation.saveEvent(eventRequestVO, clientId);
         }).isInstanceOf(ResourceNotFoundException.class);
-        verify(eventRepository, never()).save(eventModelMock);
-        verify(ticketService, never()).saveEmptyTickets(eventModelMock);
+        verify(eventRepository, never()).save(eventModel);
+        verify(ticketService, never()).saveEmptyTickets(eventModel);
     }
 
     @Test
-    @DisplayName("Should return a list of events as VO for an existing client")
+    @DisplayName("Should return a list of events as VO for an existing clientModel")
     void shouldFindAllEventsByClientIdAndReturnEventVoList() {
-        when(clientService.findEntityById(clientId)).thenReturn(clientMock);
-        when(eventRepository.findAllByOwnerOrderByDateTime(clientMock)).thenReturn(eventModelListMock);
-        when(mapper.parseListObjects(eventModelListMock, EventResponseVO.class)).thenReturn(eventResponseVOListMock);
+        when(clientService.findEntityById(clientId)).thenReturn(clientModel);
+        when(eventRepository.findAllByOwnerOrderByDateTime(clientModel))
+                .thenReturn(eventModelList);
+        when(mapper.parseListObjects(eventModelList, EventResponseVO.class))
+                .thenReturn(eventResponseVOList);
 
         List<EventResponseVO> result = eventServicesImplementation.findEventsByClientId(clientId);
 
-        assertThat(result).isEqualTo(eventResponseVOListMock);
-        verify(eventRepository, times(1)).findAllByOwnerOrderByDateTime(clientMock);
+        assertThat(result).isEqualTo(eventResponseVOList);
+        verify(eventRepository, times(1))
+                .findAllByOwnerOrderByDateTime(clientModel);
     }
 
     @Test
-    @DisplayName("Should throw ResourceNotFoundException if the client does not exist when retrieving events")
+    @DisplayName("Should throw ResourceNotFoundException if the clientModel does " +
+            "not exist when retrieving events")
     void shouldThrowResourceNotFoundExceptionWhenClientDoesNotExistWhenSearchingForEvents(){
-        when(clientService.findEntityById(clientId)).thenThrow(new ResourceNotFoundException("Client not found!"));
-        assertThatThrownBy(() -> eventServicesImplementation.findEventsByClientId(clientId)).isInstanceOf(ResourceNotFoundException.class);
+        when(clientService.findEntityById(clientId))
+                .thenThrow(new ResourceNotFoundException("Client not found!"));
+        assertThatThrownBy(() -> eventServicesImplementation.findEventsByClientId(clientId))
+                .isInstanceOf(ResourceNotFoundException.class);
        verify(clientService, times(1)).findEntityById(clientId);
     }
 
@@ -138,23 +161,25 @@ class EventServiceImplementationTest {
     void shouldFindEventByIdAndReturnEventVo() {
         UUID eventId = UUID.randomUUID();
 
-        when(eventRepository.findById(eventId)).thenReturn(Optional.ofNullable(eventModelMock));
-        when(mapper.parseObject(eventModelMock, EventResponseVO.class)).thenReturn(eventResponseVOMock);
+        when(eventRepository.findById(eventId)).thenReturn(Optional.ofNullable(eventModel));
+        when(mapper.parseObject(eventModel, EventResponseVO.class)).thenReturn(eventResponseVO);
 
         EventResponseVO event = eventServicesImplementation.findEventByID(eventId);
 
-        assertThat(event).isEqualTo(eventResponseVOMock);
+        assertThat(event).isEqualTo(eventResponseVO);
         verify(eventRepository, times(1)).findById(eventId);
     }
 
     @Test
-    @DisplayName("Should throw ResourceNotFoundException if the event does not exist when finding by ID")
+    @DisplayName("Should throw ResourceNotFoundException if the event does not exist when " +
+            "finding by ID")
     void shouldThrowResourceNotFoundExceptionWhenEventDoesNotExist(){
         UUID eventId = UUID.randomUUID();
 
         when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> eventServicesImplementation.findEventByID(eventId)).isInstanceOf(ResourceNotFoundException.class);
+        assertThatThrownBy(() -> eventServicesImplementation.findEventByID(eventId))
+                .isInstanceOf(ResourceNotFoundException.class);
         verify(eventRepository, times(1)).findById(eventId);
     }
 }
