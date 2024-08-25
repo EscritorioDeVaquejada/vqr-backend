@@ -31,12 +31,12 @@ class ClientControllerTest {
     @Mock
     private BindingResult bindingResult;
     @Mock
-    ClientService clientService;
+    private ClientService clientService;
     @InjectMocks
-    ClientController clientController;
+    private ClientController clientController;
 
     @BeforeAll
-    static void setupForAllTests(){
+    static void setupForAllTests() {
         clientRequest = new ClientRequestVO();
         clientResponse = new ClientResponseVO();
     }

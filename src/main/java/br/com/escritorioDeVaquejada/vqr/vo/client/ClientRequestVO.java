@@ -16,16 +16,16 @@ import java.util.UUID;
 public class ClientRequestVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    @Schema(description = "Full name of the client", example = "John Doe")
+    @Schema(description = "Full name of the client.", example = "John Doe")
     @NotBlank(message = "Name cannot be null or an empty string")
     private String name;
-    @Schema(description = "Client contact number", example = "88999999999")
+    @Schema(description = "Client contact number.", example = "88999999999")
     @NotBlank(message = "Number cannot be null or an empty string")
     private String number;
     @Schema(description = "Client contact email", example = "john_doe@email.com")
     private String email;
     //todo verificar necessidade do endereço do cliente ser obrigatório
-    @Schema(description = "Client address")
+    @Schema(description = "Client address.")
     @NotNull(message = "Address cannot be null")
     @Valid
     private Address address;

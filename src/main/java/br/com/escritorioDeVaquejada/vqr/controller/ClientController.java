@@ -25,7 +25,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/clients/v1")
-@Tag(name = "Clients", description = "Endpoint for managing clients")
+@Tag(name = "Clients", description = "Endpoint for managing clients.")
 public class ClientController {
     private final ClientService clientService;
 
@@ -39,7 +39,7 @@ public class ClientController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             summary = "Save a client",
-            description = "Saves a new client in the database",
+            description = "Saves a new client in the database.",
             tags = "Clients",
             responses = {
                     @ApiResponse(
@@ -65,7 +65,7 @@ public class ClientController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             summary = "Get all clients",
-            description = "Get all clients registered in the database",
+            description = "Get all clients registered in the database.",
             tags = "Clients",
             responses = {
                     @ApiResponse(description = "Ok", responseCode = "200", content = @Content(
@@ -83,7 +83,7 @@ public class ClientController {
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             summary = "Get a client by ID",
-            description = "Returns a client based on their ID",
+            description = "Returns a client based on their ID.",
             tags = "Clients",
             responses = {
                     @ApiResponse(description = "Ok", responseCode = "200", content = @Content(

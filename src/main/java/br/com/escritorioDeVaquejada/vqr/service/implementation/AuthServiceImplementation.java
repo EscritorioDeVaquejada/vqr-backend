@@ -42,33 +42,32 @@ public class AuthServiceImplementation implements AuthService {
     //todo adicionar um método no exception handler para uma BadCredentialsException
     //todo adicionar um método no exception handler para uma UsernameNotFoundException
     public TokenVO login(AccountCredentialsVO data)
-            throws BadCredentialsException, UsernameNotFoundException{
-        try{
+            throws BadCredentialsException, UsernameNotFoundException {
+        try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(data.getUsername(), data.getPassword()));
             UserModel user = userService.loadUserByUsername(data.getUsername());
             TokenVO tokenResponse;
-            if(user != null){
+            if (user != null) {
                 tokenResponse = tokenProvider.createAccessToken(data.getUsername(), user.getRoles());
-            }else{
-                throw new UsernameNotFoundException("Username "+data.getUsername()+" not found!");
+            } else {
+                throw new UsernameNotFoundException("Username " + data.getUsername() + " not found!");
             }
             return tokenResponse;
-        }catch (BadCredentialsException e){
+        } catch (BadCredentialsException e) {
             throw new BadCredentialsException("Invalid username/password supplied!");
         }
     }
 
     //todo verificar a necessidade de suporte a mais roles no sistema
-    public UserResponseVO register(UserRegistrationVO newUser) throws BadRequestException{
+    public UserResponseVO register(UserRegistrationVO newUser) throws BadRequestException {
         Optional<UserModel> userWithTheSameNameOrCPF =
                 userService.findByUsernameOrCpf(newUser.getUsername(), newUser.getCpf());
-        if(userWithTheSameNameOrCPF.isPresent()){
+        if (userWithTheSameNameOrCPF.isPresent()) {
             throw new BadRequestException("Invalid username/cpf supplied!");
         }
         List<String> permissions = List.of("ROLE_ADMIN");
-        newUser.setPermissions(permissions);
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-        return userService.saveUser(newUser);
+        return userService.saveUser(newUser, permissions);
     }
 }

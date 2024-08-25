@@ -13,17 +13,17 @@ import java.util.UUID;
 public class ClientResponseVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    @Schema(description = "Unique identifier of the client",
+    @Schema(description = "Unique identifier of the client.",
             example = "123e4567-e89b-12d3-a456-426614174000")
     private UUID id;
-    @Schema(description = "Full name of the client", example = "John Doe")
+    @Schema(description = "Full name of the client.", example = "John Doe")
     private String name;
-    @Schema(description = "Client contact number", example = "88999999999")
+    @Schema(description = "Client contact number.", example = "88999999999")
     private String number;
-    @Schema(description = "Client contact email", example = "john_doe@email.com")
+    @Schema(description = "Client contact email.", example = "john_doe@email.com")
     private String email;
     //todo verificar necessidade do endereço do cliente ser obrigatório
-    @Schema(description = "Client address")
+    @Schema(description = "Client address.")
     private Address address;
 
     public ClientResponseVO() {

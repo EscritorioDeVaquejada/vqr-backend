@@ -50,10 +50,10 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
     //todo substituir as consultas individuais e o laço de repetição por uma versão mais eficiente e otmizada
     @Override
     @Transactional
-    public UserResponseVO saveUser(UserRegistrationVO newUser) {
+    public UserResponseVO saveUser(UserRegistrationVO newUser, List<String> permissions) {
         UserModel userToBeSaved = mapper.parseObject(newUser, UserModel.class);
         List<PermissionModel> registeredUserPermissions = new ArrayList<>();
-        for(String permission: newUser.getPermissions()){
+        for(String permission: permissions){
             Optional<PermissionModel> registeredPermission =
                     permissionService.findByDescription(permission);
             if(registeredPermission.isEmpty()){
@@ -70,6 +70,8 @@ public class UserServiceImplementation implements UserDetailsService, UserServic
         userToBeSaved.setCredentialsNonExpired(true);
         userToBeSaved.setEnabled(true);
         UserModel savedUser = userRepository.save(userToBeSaved);
-        return mapper.parseObject(savedUser, UserResponseVO.class);
+        UserResponseVO savedUserAsVO = mapper.parseObject(savedUser, UserResponseVO.class);
+        savedUserAsVO.setPermissions(savedUser.getRoles());
+        return savedUserAsVO;
     }
 }
