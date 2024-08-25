@@ -2,7 +2,15 @@ package br.com.escritorioDeVaquejada.vqr.controller;
 
 import br.com.escritorioDeVaquejada.vqr.exception.BadRequestException;
 import br.com.escritorioDeVaquejada.vqr.service.EventService;
-import br.com.escritorioDeVaquejada.vqr.vo.event.EventVO;
+import br.com.escritorioDeVaquejada.vqr.vo.event.EventRequestVO;
+import br.com.escritorioDeVaquejada.vqr.vo.event.EventResponseVO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +24,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/events/v1")
+@Tag(name = "Events", description = "Endpoint for managing events.")
 public class EventController {
     private final EventService eventService;
 
@@ -27,19 +36,49 @@ public class EventController {
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<EventVO> saveEvent(
-            @RequestBody @Valid EventVO newEvent,
+    @Operation(
+            summary = "Save a event",
+            description = "Saves a new event in the database.",
+            tags = "Events",
+            responses = {
+                    @ApiResponse(
+                            description = "Created",
+                            responseCode = "204",
+                            content = @Content(
+                                    schema = @Schema(implementation = EventResponseVO.class))),
+                    @ApiResponse(description = "Bad Request", responseCode = "400",
+                            content = @Content),
+                    @ApiResponse(description = "Forbidden", responseCode = "403",
+                            content = @Content),
+                    @ApiResponse(description = "Internal Sever Error", responseCode = "500",
+                            content = @Content)
+            })
+    public ResponseEntity<EventResponseVO> saveEvent(
+            @RequestBody @Valid EventRequestVO newEvent,
+            @Parameter(
+                    name = "clientId",
+                    in = ParameterIn.QUERY,
+                    description = "Unique identifier for the client associated with the event" +
+                            ". Must be a valid UUID format.")
             @RequestParam(value = "clientId") UUID clientId,
             BindingResult errorsInRequest) throws BadRequestException {
-        if(errorsInRequest.hasErrors()){
+        if (errorsInRequest.hasErrors()) {
             throw new BadRequestException("Invalid data!");
         }
-        return new ResponseEntity<>(eventService.saveEvent(newEvent,clientId), HttpStatus.CREATED);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(eventService.saveEvent(newEvent, clientId));
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<EventVO>> findEventsByClientId(
-            @RequestParam(value="clientId")UUID clientId){
-        return new ResponseEntity<>(eventService.findEventsByClientId(clientId),HttpStatus.OK);
+    @Operation(
+            summary = "",
+            description = "",
+            tags = "",
+            responses = @ApiResponse
+    )
+    public ResponseEntity<List<EventResponseVO>> findEventsByClientId(
+            @RequestParam(value = "clientId") UUID clientId) {
+        return new ResponseEntity<>(eventService.findEventsByClientId(clientId), HttpStatus.OK);
     }
 }

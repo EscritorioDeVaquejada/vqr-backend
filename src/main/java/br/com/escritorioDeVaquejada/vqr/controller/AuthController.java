@@ -81,7 +81,7 @@ public class AuthController {
             summary = "Register a user",
             description = "Registers a new user by creating an account with the provided " +
                     "information. If successful, returns the details of the newly created user",
-            tags = "Authentication and Registration.",
+            tags = "Authentication and Registration",
             responses = {
                     @ApiResponse(
                             description = "Created",

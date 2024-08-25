@@ -2,7 +2,9 @@ package br.com.escritorioDeVaquejada.vqr.vo.event;
 
 import br.com.escritorioDeVaquejada.vqr.model.Address;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -10,10 +12,11 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-@Schema(description = "Event Data Transfer Object")
-public class EventVO implements Serializable {
+@Schema(description = "Represents the data returned in HTTP responses for event-related operations. " +
+        "This object is used to send event information in HTTP responses.")
+public class EventResponseVO implements Serializable {
     @Serial
-    private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
     private UUID id;
     @NotBlank
     private String name;
@@ -29,10 +32,10 @@ public class EventVO implements Serializable {
     @PositiveOrZero
     private double priceOfBoiTVPurchasedOnDemand;
 
-    public EventVO() {
+    public EventResponseVO() {
     }
 
-    public EventVO(
+    public EventResponseVO(
             UUID id,
             String name,
             int numberOfInitialTickets,
@@ -52,7 +55,7 @@ public class EventVO implements Serializable {
     }
 
     /*
-    public EventVO(UUID id, String name, int numberOfInitialTickets, LocalDateTime dateTime, Address address) {
+    public EventResponseVO(UUID id, String name, int numberOfInitialTickets, LocalDateTime dateTime, Address address) {
         this.id = id;
         this.name = name;
         this.numberOfInitialTickets = numberOfInitialTickets;
@@ -137,8 +140,8 @@ public class EventVO implements Serializable {
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
-        EventVO eventVo = (EventVO) object;
-        return numberOfInitialTickets == eventVo.numberOfInitialTickets && Double.compare(defaultTicketPrice, eventVo.defaultTicketPrice) == 0 && Double.compare(priceOfBoiTVAnticipated, eventVo.priceOfBoiTVAnticipated) == 0 && Double.compare(priceOfBoiTVPurchasedOnDemand, eventVo.priceOfBoiTVPurchasedOnDemand) == 0 && Objects.equals(id, eventVo.id) && Objects.equals(name, eventVo.name) && Objects.equals(dateTime, eventVo.dateTime) && Objects.equals(address, eventVo.address);
+        EventResponseVO eventResponseVo = (EventResponseVO) object;
+        return numberOfInitialTickets == eventResponseVo.numberOfInitialTickets && Double.compare(defaultTicketPrice, eventResponseVo.defaultTicketPrice) == 0 && Double.compare(priceOfBoiTVAnticipated, eventResponseVo.priceOfBoiTVAnticipated) == 0 && Double.compare(priceOfBoiTVPurchasedOnDemand, eventResponseVo.priceOfBoiTVPurchasedOnDemand) == 0 && Objects.equals(id, eventResponseVo.id) && Objects.equals(name, eventResponseVo.name) && Objects.equals(dateTime, eventResponseVo.dateTime) && Objects.equals(address, eventResponseVo.address);
     }
 
     @Override

@@ -9,7 +9,8 @@ import br.com.escritorioDeVaquejada.vqr.repository.EventRepository;
 import br.com.escritorioDeVaquejada.vqr.service.ClientService;
 import br.com.escritorioDeVaquejada.vqr.service.EventService;
 import br.com.escritorioDeVaquejada.vqr.service.TicketService;
-import br.com.escritorioDeVaquejada.vqr.vo.event.EventVO;
+import br.com.escritorioDeVaquejada.vqr.vo.event.EventRequestVO;
+import br.com.escritorioDeVaquejada.vqr.vo.event.EventResponseVO;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,24 +42,24 @@ public class EventServiceImplementation implements EventService {
 
     //todo verificar necessiade de adicionar um valor para isFinished na criação de um evento, não deixando-o como null no banco de dados
     @Transactional
-    public EventVO saveEvent(EventVO newEvent, UUID clientId) {
+    public EventResponseVO saveEvent(EventRequestVO newEvent, UUID clientId) {
         ClientModel owner = clientService.findEntityById(clientId);
         EventModel eventToBeSaved = mapper.parseObject(newEvent, EventModel.class);
         eventToBeSaved.setOwner(owner);
         eventToBeSaved.setDateTime(captureCurrentDateAndTime());
         EventModel eventCreated = eventRepository.save(eventToBeSaved);
         ticketService.saveEmptyTickets(eventCreated);
-        return mapper.parseObject(eventCreated, EventVO.class);
+        return mapper.parseObject(eventCreated, EventResponseVO.class);
     }
-    public List<EventVO> findEventsByClientId(UUID clientId){
+    public List<EventResponseVO> findEventsByClientId(UUID clientId){
         ClientModel owner = clientService.findEntityById(clientId);
         List<EventModel> events = eventRepository.findAllByOwnerOrderByDateTime(owner);
-        return mapper.parseListObjects(events, EventVO.class);
+        return mapper.parseListObjects(events, EventResponseVO.class);
     }
-    public EventVO findEventByID(UUID eventID) throws ResourceNotFoundException{
+    public EventResponseVO findEventByID(UUID eventID) throws ResourceNotFoundException{
         EventModel eventModel= eventRepository.findById(eventID).orElseThrow(()->
                 new ResourceNotFoundException("Event not found!"));
-        return mapper.parseObject(eventModel, EventVO.class);
+        return mapper.parseObject(eventModel, EventResponseVO.class);
     }
 
     //todo verificar se o método captureCurrentDateAndTime não deveria ser público em uuma classe de utils

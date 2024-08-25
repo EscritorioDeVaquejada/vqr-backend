@@ -9,7 +9,7 @@ import br.com.escritorioDeVaquejada.vqr.model.TicketModel;
 import br.com.escritorioDeVaquejada.vqr.repository.EventRepository;
 import br.com.escritorioDeVaquejada.vqr.service.ClientService;
 import br.com.escritorioDeVaquejada.vqr.service.TicketService;
-import br.com.escritorioDeVaquejada.vqr.vo.event.EventVO;
+import br.com.escritorioDeVaquejada.vqr.vo.event.EventResponseVO;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,39 +43,39 @@ class EventServiceImplementationTest {
     private static ClientModel clientMock;
     private static UUID clientId;
     private static EventModel eventModelMock;
-    private static EventVO eventVOMock;
+    private static EventResponseVO eventResponseVOMock;
     private static List<EventModel> eventModelListMock;
-    private static List<EventVO> eventVOListMock;
+    private static List<EventResponseVO> eventResponseVOListMock;
     private static List<TicketModel> ticketsMock;
 
     @BeforeAll
     static void setup(){
         clientId = UUID.randomUUID();
 
-        eventVOMock = new EventVO();
+        eventResponseVOMock = new EventResponseVO();
         eventModelMock = new EventModel();
         clientMock = new ClientModel();
 
-        eventVOMock.setName("Evento Teste");
-        eventVOMock.setNumberOfInitialTickets(3);
-        eventVOMock.setAddress(new Address("Estado teste","Cidade Teste"));
-        eventVOMock.setDefaultTicketPrice(2000);
-        eventVOMock.setDateTime(LocalDateTime.of(1998, 12, 12, 10, 50));
-        eventVOMock.setPriceOfBoiTVAnticipated(3000);
-        eventVOMock.setPriceOfBoiTVPurchasedOnDemand(1500);
+        eventResponseVOMock.setName("Evento Teste");
+        eventResponseVOMock.setNumberOfInitialTickets(3);
+        eventResponseVOMock.setAddress(new Address("Estado teste","Cidade Teste"));
+        eventResponseVOMock.setDefaultTicketPrice(2000);
+        eventResponseVOMock.setDateTime(LocalDateTime.of(1998, 12, 12, 10, 50));
+        eventResponseVOMock.setPriceOfBoiTVAnticipated(3000);
+        eventResponseVOMock.setPriceOfBoiTVPurchasedOnDemand(1500);
 
-        eventModelMock.setName(eventVOMock.getName());
-        eventModelMock.setNumberOfInitialTickets(eventVOMock.getNumberOfInitialTickets());
-        eventModelMock.setAddress(eventVOMock.getAddress());
-        eventModelMock.setDefaultTicketPrice(eventVOMock.getDefaultTicketPrice());
-        eventModelMock.setDateTime(eventVOMock.getDateTime());
-        eventModelMock.setPriceOfBoiTVAnticipated(eventVOMock.getPriceOfBoiTVAnticipated());
-        eventModelMock.setPriceOfBoiTVPurchasedOnDemand(eventVOMock.getPriceOfBoiTVPurchasedOnDemand());
+        eventModelMock.setName(eventResponseVOMock.getName());
+        eventModelMock.setNumberOfInitialTickets(eventResponseVOMock.getNumberOfInitialTickets());
+        eventModelMock.setAddress(eventResponseVOMock.getAddress());
+        eventModelMock.setDefaultTicketPrice(eventResponseVOMock.getDefaultTicketPrice());
+        eventModelMock.setDateTime(eventResponseVOMock.getDateTime());
+        eventModelMock.setPriceOfBoiTVAnticipated(eventResponseVOMock.getPriceOfBoiTVAnticipated());
+        eventModelMock.setPriceOfBoiTVPurchasedOnDemand(eventResponseVOMock.getPriceOfBoiTVPurchasedOnDemand());
 
         clientMock.setId(clientId);
 
         eventModelListMock = List.of(eventModelMock);
-        eventVOListMock = List.of(eventVOMock);
+        eventResponseVOListMock = List.of(eventResponseVOMock);
 
         ticketsMock = List.of(
                 new TicketModel(eventModelMock),
@@ -88,14 +88,14 @@ class EventServiceImplementationTest {
     @DisplayName("Should save a new event and return the corresponding VO")
     void shouldSaveEventSuccessfullyAndReturnEventVo() {
         when(clientService.findEntityById(clientId)).thenReturn(clientMock);
-        when(mapper.parseObject(eventVOMock, EventModel.class)).thenReturn(eventModelMock);
+        when(mapper.parseObject(eventResponseVOMock, EventModel.class)).thenReturn(eventModelMock);
         when(eventRepository.save(eventModelMock)).thenReturn(eventModelMock);
         when(ticketService.saveEmptyTickets(eventModelMock)).thenReturn(ticketsMock);
-        when(mapper.parseObject(eventModelMock, EventVO.class)).thenReturn(eventVOMock);
+        when(mapper.parseObject(eventModelMock, EventResponseVO.class)).thenReturn(eventResponseVOMock);
 
-        EventVO result = eventServicesImplementation.saveEvent(eventVOMock, clientId);
+        EventResponseVO result = eventServicesImplementation.saveEvent(eventResponseVOMock, clientId);
 
-        assertThat(result).isEqualTo(eventVOMock);
+        assertThat(result).isEqualTo(eventResponseVOMock);
         verify(eventRepository, times(1)).save(eventModelMock);
         verify(ticketService, times(1)).saveEmptyTickets(eventModelMock);
     }
@@ -106,7 +106,7 @@ class EventServiceImplementationTest {
         when(clientService.findEntityById(clientId)).thenThrow(new ResourceNotFoundException("Client not found!"));
 
         assertThatThrownBy(() -> {
-            eventServicesImplementation.saveEvent(eventVOMock, clientId);
+            eventServicesImplementation.saveEvent(eventResponseVOMock, clientId);
         }).isInstanceOf(ResourceNotFoundException.class);
         verify(eventRepository, never()).save(eventModelMock);
         verify(ticketService, never()).saveEmptyTickets(eventModelMock);
@@ -117,11 +117,11 @@ class EventServiceImplementationTest {
     void shouldFindAllEventsByClientIdAndReturnEventVoList() {
         when(clientService.findEntityById(clientId)).thenReturn(clientMock);
         when(eventRepository.findAllByOwnerOrderByDateTime(clientMock)).thenReturn(eventModelListMock);
-        when(mapper.parseListObjects(eventModelListMock, EventVO.class)).thenReturn(eventVOListMock);
+        when(mapper.parseListObjects(eventModelListMock, EventResponseVO.class)).thenReturn(eventResponseVOListMock);
 
-        List<EventVO> result = eventServicesImplementation.findEventsByClientId(clientId);
+        List<EventResponseVO> result = eventServicesImplementation.findEventsByClientId(clientId);
 
-        assertThat(result).isEqualTo(eventVOListMock);
+        assertThat(result).isEqualTo(eventResponseVOListMock);
         verify(eventRepository, times(1)).findAllByOwnerOrderByDateTime(clientMock);
     }
 
@@ -139,11 +139,11 @@ class EventServiceImplementationTest {
         UUID eventId = UUID.randomUUID();
 
         when(eventRepository.findById(eventId)).thenReturn(Optional.ofNullable(eventModelMock));
-        when(mapper.parseObject(eventModelMock, EventVO.class)).thenReturn(eventVOMock);
+        when(mapper.parseObject(eventModelMock, EventResponseVO.class)).thenReturn(eventResponseVOMock);
 
-        EventVO event = eventServicesImplementation.findEventByID(eventId);
+        EventResponseVO event = eventServicesImplementation.findEventByID(eventId);
 
-        assertThat(event).isEqualTo(eventVOMock);
+        assertThat(event).isEqualTo(eventResponseVOMock);
         verify(eventRepository, times(1)).findById(eventId);
     }
 

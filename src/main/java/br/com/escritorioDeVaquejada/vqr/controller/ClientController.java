@@ -95,7 +95,7 @@ public class ClientController {
             })
     public ResponseEntity<ClientResponseVO> findById(
             @Parameter(
-                    description = "ID of the client to be retrieved, must be a valid UUID format",
+                    description = "ID of the client to be retrieved. Must be a valid UUID format.",
                     in = ParameterIn.PATH,
                     required = true)
             @PathVariable(value = "id")

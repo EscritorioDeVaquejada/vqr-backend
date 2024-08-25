@@ -1,13 +1,14 @@
 package br.com.escritorioDeVaquejada.vqr.service;
 
 
-import br.com.escritorioDeVaquejada.vqr.vo.event.EventVO;
+import br.com.escritorioDeVaquejada.vqr.vo.event.EventRequestVO;
+import br.com.escritorioDeVaquejada.vqr.vo.event.EventResponseVO;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface EventService {
-    EventVO saveEvent(EventVO newEvent, UUID clientId);
-    List<EventVO> findEventsByClientId(UUID clientId);
-    EventVO findEventByID(UUID eventId);
+    EventResponseVO saveEvent(EventRequestVO newEvent, UUID clientId);
+    List<EventResponseVO> findEventsByClientId(UUID clientId);
+    EventResponseVO findEventByID(UUID eventId);
 }
