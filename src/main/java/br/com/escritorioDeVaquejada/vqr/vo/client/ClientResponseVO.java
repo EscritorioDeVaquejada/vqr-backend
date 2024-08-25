@@ -23,7 +23,6 @@ public class ClientResponseVO implements Serializable {
     @Schema(description = "Client contact email.", example = "john_doe@email.com")
     private String email;
     //todo verificar necessidade do endereço do cliente ser obrigatório
-    @Schema(description = "Client address.")
     private Address address;
 
     public ClientResponseVO() {

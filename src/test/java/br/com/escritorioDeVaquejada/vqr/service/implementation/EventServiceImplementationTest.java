@@ -40,7 +40,7 @@ class EventServiceImplementationTest {
     private TicketService ticketService;
     @InjectMocks
     private EventServiceImplementation eventServicesImplementation;
-    
+
     private static ClientModel clientModel;
     private static UUID clientId;
     private static EventModel eventModel;
@@ -51,7 +51,7 @@ class EventServiceImplementationTest {
     private static List<TicketModel> ticketModelList;
 
     @BeforeAll
-    static void setupForAllTests(){
+    static void setupForAllTests() {
         clientId = UUID.randomUUID();
 
         eventResponseVO = new EventResponseVO();
@@ -63,10 +63,9 @@ class EventServiceImplementationTest {
         eventModel.setName("Evento Teste");
         eventModel.setNumberOfInitialTickets(3);
         eventModel.setAddress(
-                new Address("Estado teste","Cidade Teste"));
+                new Address("Estado teste", "Cidade Teste"));
         eventModel.setDefaultTicketPrice(2000);
-        eventModel.setDateTime(
-                LocalDateTime.of(1998, 12, 12, 10, 50));
+        eventModel.setDateTime(LocalDateTime.now());
         eventModel.setPriceOfBoiTVAnticipated(3000);
         eventModel.setPriceOfBoiTVPurchasedOnDemand(1500);
 
@@ -84,7 +83,6 @@ class EventServiceImplementationTest {
         eventRequestVO.setNumberOfInitialTickets(eventModel.getNumberOfInitialTickets());
         eventRequestVO.setAddress(eventModel.getAddress());
         eventRequestVO.setDefaultTicketPrice(eventModel.getDefaultTicketPrice());
-        eventRequestVO.setDateTime(eventModel.getDateTime());
         eventRequestVO.setPriceOfBoiTVAnticipated(eventModel.getPriceOfBoiTVAnticipated());
         eventRequestVO.setPriceOfBoiTVPurchasedOnDemand(
                 eventModel.getPriceOfBoiTVPurchasedOnDemand());
@@ -97,6 +95,7 @@ class EventServiceImplementationTest {
                 new TicketModel(eventModel),
                 new TicketModel(eventModel));
     }
+
     //todo verificar correção para simulação dos métodos: setOwner() e setDateTime()
     //todo descobrir em como deve ser testada a chamada do método captureCurrentDateAndTime()
     @Test
@@ -148,12 +147,12 @@ class EventServiceImplementationTest {
     @Test
     @DisplayName("Should throw ResourceNotFoundException if the clientModel does " +
             "not exist when retrieving events")
-    void shouldThrowResourceNotFoundExceptionWhenClientDoesNotExistWhenSearchingForEvents(){
+    void shouldThrowResourceNotFoundExceptionWhenClientDoesNotExistWhenSearchingForEvents() {
         when(clientService.findEntityById(clientId))
                 .thenThrow(new ResourceNotFoundException("Client not found!"));
         assertThatThrownBy(() -> eventServicesImplementation.findEventsByClientId(clientId))
                 .isInstanceOf(ResourceNotFoundException.class);
-       verify(clientService, times(1)).findEntityById(clientId);
+        verify(clientService, times(1)).findEntityById(clientId);
     }
 
     @Test
@@ -173,7 +172,7 @@ class EventServiceImplementationTest {
     @Test
     @DisplayName("Should throw ResourceNotFoundException if the event does not exist when " +
             "finding by ID")
-    void shouldThrowResourceNotFoundExceptionWhenEventDoesNotExist(){
+    void shouldThrowResourceNotFoundExceptionWhenEventDoesNotExist() {
         UUID eventId = UUID.randomUUID();
 
         when(eventRepository.findById(eventId)).thenReturn(Optional.empty());

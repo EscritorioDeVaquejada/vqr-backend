@@ -22,37 +22,45 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
     private ResponseEntity<ExceptionResponseVO> handlerAllExceptions(
             Exception exception, WebRequest webRequest){
         logger.info("Exception lanced");
-        return new ResponseEntity<>(new ExceptionResponseVO(
-                new Date(),
-                webRequest.getDescription(false),
-                exception.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ExceptionResponseVO(
+                        new Date(),
+                        webRequest.getDescription(false),
+                        exception.getMessage()));
     }
     @ExceptionHandler(ResourceNotFoundException.class)
     private ResponseEntity<ExceptionResponseVO> handlerResourceNotFoundExceptions(
             Exception exception, WebRequest webRequest){
         logger.info("Exception lanced");
-        return new ResponseEntity<>(new ExceptionResponseVO(
-                new Date(),
-                webRequest.getDescription(false),
-                exception.getMessage()), HttpStatus.NOT_FOUND);
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ExceptionResponseVO(
+                        new Date(),
+                        webRequest.getDescription(false),
+                        exception.getMessage()));
     }
     @ExceptionHandler(BadRequestException.class)
     private ResponseEntity<ExceptionResponseVO> handlerBadRequestExceptions(
             Exception exception, WebRequest webRequest){
         logger.info("Exception lanced");
-        return new ResponseEntity<>(new ExceptionResponseVO(
-                new Date(),
-                webRequest.getDescription(false),
-                exception.getMessage()), HttpStatus.BAD_REQUEST);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ExceptionResponseVO(
+                        new Date(),
+                        webRequest.getDescription(false),
+                        exception.getMessage()));
     }
     @ExceptionHandler(InvalidJwtAuthenticationException.class)
     private ResponseEntity<ExceptionResponseVO> handlerInvalidJwtAuthenticationExceptions(
             Exception exception, WebRequest webRequest){
         logger.info("Exception lanced");
-        return new ResponseEntity<>(new ExceptionResponseVO(
-                new Date(),
-                webRequest.getDescription(false),
-                exception.getMessage()), HttpStatus.FORBIDDEN);
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(new ExceptionResponseVO(
+                        new Date(),
+                        webRequest.getDescription(false),
+                        exception.getMessage()));
     }
     @ExceptionHandler(UsernameNotFoundException.class)
     private ResponseEntity<ExceptionResponseVO> handlerUsernameNotFoundExceptions(
@@ -60,8 +68,8 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(new ExceptionResponseVO(
-                    new Date(),
-                    webRequest.getDescription(false),
-                    exception.getMessage()));
+                        new Date(),
+                        webRequest.getDescription(false),
+                        exception.getMessage()));
     }
 }

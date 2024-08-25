@@ -45,11 +45,15 @@ public class ClientController {
                     @ApiResponse(
                             description = "Created",
                             responseCode = "201",
-                            content = @Content(schema = @Schema(implementation = ClientResponseVO.class))
+                            content = @Content(
+                                    schema = @Schema(implementation = ClientResponseVO.class))
                     ),
-                    @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
-                    @ApiResponse(description = "Forbidden", responseCode = "403", content = @Content),
-                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
+                    @ApiResponse(description = "Bad Request", responseCode = "400",
+                            content = @Content),
+                    @ApiResponse(description = "Forbidden", responseCode = "403",
+                            content = @Content),
+                    @ApiResponse(description = "Internal Server Error", responseCode = "500",
+                            content = @Content)
             })
     public ResponseEntity<ClientResponseVO> saveClient(
             @Valid @RequestBody ClientRequestVO newClient,
@@ -69,10 +73,13 @@ public class ClientController {
             tags = "Clients",
             responses = {
                     @ApiResponse(description = "Ok", responseCode = "200", content = @Content(
-                            array = @ArraySchema(schema = @Schema(implementation = ClientResponseVO.class))
+                            array = @ArraySchema(
+                                    schema = @Schema(implementation = ClientResponseVO.class))
                     )),
-                    @ApiResponse(description = "Forbidden", responseCode = "403", content = @Content),
-                    @ApiResponse(description = "Internal Sever Error", responseCode = "500", content = @Content)
+                    @ApiResponse(description = "Forbidden", responseCode = "403",
+                            content = @Content),
+                    @ApiResponse(description = "Internal Sever Error", responseCode = "500",
+                            content = @Content)
             })
     public ResponseEntity<List<ClientResponseVO>> findAll() {
         return ResponseEntity
@@ -89,9 +96,12 @@ public class ClientController {
                     @ApiResponse(description = "Ok", responseCode = "200", content = @Content(
                             schema = @Schema(implementation = ClientResponseVO.class)
                     )),
-                    @ApiResponse(description = "Forbidden", responseCode = "403", content = @Content),
-                    @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
-                    @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
+                    @ApiResponse(description = "Forbidden", responseCode = "403",
+                            content = @Content),
+                    @ApiResponse(description = "Not Found", responseCode = "404",
+                            content = @Content),
+                    @ApiResponse(description = "Internal Server Error", responseCode = "500",
+                            content = @Content)
             })
     public ResponseEntity<ClientResponseVO> findById(
             @Parameter(
@@ -100,7 +110,9 @@ public class ClientController {
                     required = true)
             @PathVariable(value = "id")
             UUID id) {
-        return new ResponseEntity<>(clientService.findById(id), HttpStatus.OK);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(clientService.findById(id));
     }
 }
 

@@ -7,6 +7,7 @@ import br.com.escritorioDeVaquejada.vqr.vo.event.EventResponseVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -58,6 +59,7 @@ public class EventController {
             @Parameter(
                     name = "clientId",
                     in = ParameterIn.QUERY,
+                    required = true,
                     description = "Unique identifier for the client associated with the event" +
                             ". Must be a valid UUID format.")
             @RequestParam(value = "clientId") UUID clientId,
@@ -72,12 +74,30 @@ public class EventController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
-            summary = "",
-            description = "",
-            tags = "",
-            responses = @ApiResponse
+            summary = "Get events by client ID",
+            description = "Returns a list of events associated with a specific client.",
+            tags = "Events",
+            responses = {
+                    @ApiResponse(
+                            description = "Ok",
+                            responseCode = "200",
+                            content = @Content(
+                                    array = @ArraySchema(
+                                            schema = @Schema(
+                                                    implementation = EventResponseVO.class)))),
+                    @ApiResponse(description = "Forbidden", responseCode = "403",
+                            content = @Content),
+                    @ApiResponse(description = "Internal Sever Error", responseCode = "500",
+                            content = @Content)
+            }
     )
     public ResponseEntity<List<EventResponseVO>> findEventsByClientId(
+            @Parameter(
+                    name = "clientId",
+                    in = ParameterIn.QUERY,
+                    required = true,
+                    description = "Unique identifier for the client associated with the event" +
+                            ". Must be a valid UUID format.")
             @RequestParam(value = "clientId") UUID clientId) {
         return new ResponseEntity<>(eventService.findEventsByClientId(clientId), HttpStatus.OK);
     }

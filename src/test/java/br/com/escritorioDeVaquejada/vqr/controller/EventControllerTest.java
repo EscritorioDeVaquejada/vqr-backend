@@ -54,8 +54,6 @@ class EventControllerTest {
         eventRequestVO.setNumberOfInitialTickets(3);
         eventRequestVO.setAddress(new Address("Estado teste", "Cidade Teste"));
         eventRequestVO.setDefaultTicketPrice(2000);
-        eventRequestVO.setDateTime(
-                LocalDateTime.of(1998, 12, 12, 10, 50));
         eventRequestVO.setPriceOfBoiTVAnticipated(3000);
         eventRequestVO.setPriceOfBoiTVPurchasedOnDemand(1500);
 
@@ -64,7 +62,7 @@ class EventControllerTest {
         eventResponseVO.setNumberOfInitialTickets(eventRequestVO.getNumberOfInitialTickets());
         eventResponseVO.setAddress(eventRequestVO.getAddress());
         eventResponseVO.setDefaultTicketPrice(eventRequestVO.getDefaultTicketPrice());
-        eventResponseVO.setDateTime(eventRequestVO.getDateTime());
+        eventResponseVO.setDateTime(LocalDateTime.now());
         eventResponseVO.setPriceOfBoiTVAnticipated(eventRequestVO.getPriceOfBoiTVAnticipated());
         eventResponseVO.setPriceOfBoiTVPurchasedOnDemand(eventRequestVO
                 .getPriceOfBoiTVPurchasedOnDemand());
@@ -106,7 +104,6 @@ class EventControllerTest {
         eventRequestVO.setNumberOfInitialTickets(-3);
         eventRequestVO.setAddress(null);
         eventRequestVO.setDefaultTicketPrice(-2000);
-        eventRequestVO.setDateTime(null);
         eventRequestVO.setPriceOfBoiTVAnticipated(-3000);
         eventRequestVO.setPriceOfBoiTVPurchasedOnDemand(-1500);
 

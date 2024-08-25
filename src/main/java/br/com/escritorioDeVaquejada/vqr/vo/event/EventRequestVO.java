@@ -2,6 +2,7 @@ package br.com.escritorioDeVaquejada.vqr.vo.event;
 
 import br.com.escritorioDeVaquejada.vqr.model.Address;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -10,24 +11,28 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
-
+//todo verificar se as anotações @NotNull em conjunto com @Min(0) substituem @PositiveOrZero(), na classe de testes
 @Schema(description = "Represents the data needed to create or update a event. " +
         "This object is used to receive event information in HTTP requests.")
 public class EventRequestVO implements Serializable {
     @Serial
     static private final long serialVersionUID = 1L;
     @NotBlank
+    @Schema(description = "Name of the event.", example = "Summer Rodeo")
     private String name;
-    @PositiveOrZero
+    @NotNull @Min(0)
+    @Schema(description = "Initial number of tickets available for the event.", example = "100")
     private int numberOfInitialTickets;
-    private LocalDateTime dateTime;
     @NotNull
     private Address address;
-    @PositiveOrZero
+    @NotNull @Min(0)
+    @Schema(description = "Standard price of a ticket for the event.", example = "1000.00")
     private double defaultTicketPrice;
-    @PositiveOrZero
+    @NotNull @Min(0)
+    @Schema(description = "Payment amount for BoiTV in advance.", example = "300.00")
     private double priceOfBoiTVAnticipated;
-    @PositiveOrZero
+    @NotNull @Min(0)
+    @Schema(description = "Payment amount for BoiTV made on demand.", example = "400.00")
     private double priceOfBoiTVPurchasedOnDemand;
 
     public EventRequestVO() {
@@ -36,26 +41,16 @@ public class EventRequestVO implements Serializable {
     public EventRequestVO(
             String name,
             int numberOfInitialTickets,
-            LocalDateTime dateTime,
             Address address,
             double defaultTicketPrice,
             double priceOfBoiTVAnticipated,
             double priceOfBoiTVPurchasedOnDemand) {
         this.name = name;
         this.numberOfInitialTickets = numberOfInitialTickets;
-        this.dateTime = dateTime;
         this.address = address;
         this.defaultTicketPrice = defaultTicketPrice;
         this.priceOfBoiTVAnticipated = priceOfBoiTVAnticipated;
         this.priceOfBoiTVPurchasedOnDemand = priceOfBoiTVPurchasedOnDemand;
-    }
-
-    public double getTicketPrice() {
-        return defaultTicketPrice;
-    }
-
-    public void setTicketPrice(double defaultTicketPrice) {
-        this.defaultTicketPrice = defaultTicketPrice;
     }
 
     public double getDefaultTicketPrice() {
@@ -98,14 +93,6 @@ public class EventRequestVO implements Serializable {
         this.numberOfInitialTickets = numberOfInitialTickets;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
-    }
-
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
-    }
-
     public Address getAddress() {
         return address;
     }
@@ -119,11 +106,11 @@ public class EventRequestVO implements Serializable {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         EventRequestVO that = (EventRequestVO) object;
-        return numberOfInitialTickets == that.numberOfInitialTickets && Double.compare(defaultTicketPrice, that.defaultTicketPrice) == 0 && Double.compare(priceOfBoiTVAnticipated, that.priceOfBoiTVAnticipated) == 0 && Double.compare(priceOfBoiTVPurchasedOnDemand, that.priceOfBoiTVPurchasedOnDemand) == 0 && Objects.equals(name, that.name) && Objects.equals(dateTime, that.dateTime) && Objects.equals(address, that.address);
+        return numberOfInitialTickets == that.numberOfInitialTickets && Double.compare(defaultTicketPrice, that.defaultTicketPrice) == 0 && Double.compare(priceOfBoiTVAnticipated, that.priceOfBoiTVAnticipated) == 0 && Double.compare(priceOfBoiTVPurchasedOnDemand, that.priceOfBoiTVPurchasedOnDemand) == 0 && Objects.equals(name, that.name) && Objects.equals(address, that.address);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, numberOfInitialTickets, dateTime, address, defaultTicketPrice, priceOfBoiTVAnticipated, priceOfBoiTVPurchasedOnDemand);
+        return Objects.hash(name, numberOfInitialTickets, address, defaultTicketPrice, priceOfBoiTVAnticipated, priceOfBoiTVPurchasedOnDemand);
     }
 }

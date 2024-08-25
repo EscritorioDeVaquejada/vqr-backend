@@ -17,19 +17,21 @@ import java.util.UUID;
 public class EventResponseVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
+    @Schema(description = "Unique identifier of the event.",
+            example = "123e4567-e89b-12d3-a456-426614174000")
     private UUID id;
-    @NotBlank
+    @Schema(description = "Name of the event.", example = "Summer Rodeo")
     private String name;
-    @PositiveOrZero
+    @Schema(description = "Initial number of tickets available for the event.", example = "100")
     private int numberOfInitialTickets;
+    @Schema(description = "Scheduled date and time for the event.", example = "2024-12-12T10:50:00")
     private LocalDateTime dateTime;
-    @NotNull
     private Address address;
-    @PositiveOrZero
+    @Schema(description = "Standard price of a ticket for the event.", example = "1000.00")
     private double defaultTicketPrice;
-    @PositiveOrZero
+    @Schema(description = "Payment amount for BoiTV in advance.", example = "300.00")
     private double priceOfBoiTVAnticipated;
-    @PositiveOrZero
+    @Schema(description = "Payment amount for BoiTV made on demand.", example = "400.00")
     private double priceOfBoiTVPurchasedOnDemand;
 
     public EventResponseVO() {
@@ -52,24 +54,6 @@ public class EventResponseVO implements Serializable {
         this.defaultTicketPrice = defaultTicketPrice;
         this.priceOfBoiTVAnticipated = priceOfBoiTVAnticipated;
         this.priceOfBoiTVPurchasedOnDemand = priceOfBoiTVPurchasedOnDemand;
-    }
-
-    /*
-    public EventResponseVO(UUID id, String name, int numberOfInitialTickets, LocalDateTime dateTime, Address address) {
-        this.id = id;
-        this.name = name;
-        this.numberOfInitialTickets = numberOfInitialTickets;
-        this.dateTime = dateTime;
-        this.address = address;
-    }
-     */
-
-    public double getTicketPrice() {
-        return defaultTicketPrice;
-    }
-
-    public void setTicketPrice(double defaultTicketPrice) {
-        this.defaultTicketPrice = defaultTicketPrice;
     }
 
     public double getDefaultTicketPrice() {
