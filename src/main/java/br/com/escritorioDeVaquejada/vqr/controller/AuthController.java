@@ -52,8 +52,6 @@ public class AuthController {
                     )),
                     @ApiResponse(description = "Bad Request", responseCode = "400",
                             content = @Content),
-                    @ApiResponse(description = "Forbidden", responseCode = "403",
-                            content = @Content),
                     @ApiResponse(description = "Internal Sever Error", responseCode = "500",
                             content = @Content)
             })
@@ -90,7 +88,9 @@ public class AuthController {
                                     schema = @Schema(implementation = UserResponseVO.class))),
                     @ApiResponse(description = "Bad Request", responseCode = "400",
                             content = @Content),
-                    @ApiResponse(description = "Bad Request", responseCode = "500",
+                    @ApiResponse(description = "Forbidden", responseCode = "403",
+                            content = @Content),
+                    @ApiResponse(description = "Internal Server Error", responseCode = "500",
                             content = @Content)
             })
     public ResponseEntity<UserResponseVO> register(
