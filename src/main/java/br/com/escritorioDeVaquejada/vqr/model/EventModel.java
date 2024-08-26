@@ -36,7 +36,7 @@ public class EventModel implements Serializable {
     private ClientModel owner;
     @OneToMany(mappedBy = "event")
     List<TicketModel> tickets;
-    @OneToOne() @JoinColumn(name = "financa_id")
+    @OneToOne() @JoinColumn(name = "finance_id")
     private FinanceModel financialReport;
 
     public EventModel(UUID id, String name, int numberOfInitialTickets, LocalDateTime dateTime, Boolean isFinished, double defaultTicketPrice, double priceOfBoiTVAnticipated, double priceOfBoiTVPurchasedOnDemand, Address address, ClientModel owner, List<TicketModel> tickets, FinanceModel financialReport) {

@@ -18,7 +18,7 @@ public class FinanceModel implements Serializable {
     private EventModel eventId;
     @Column(name = "total_pix")
     private Double totalPix;
-    @Column(name = "total_credti")
+    @Column(name = "total_credit")
     private Double totalCredit;
     @Column(name = "total_debit")
     private Double totalDebit;
@@ -30,9 +30,9 @@ public class FinanceModel implements Serializable {
     private int totalBoiTV;
     //todo qual a finalidade do campo totalFree
     @Column(name = "total_free")
-    private int totalfree;
+    private int totalFree;
 
-    public FinanceModel(EventModel eventId, Double totalPix, Double totalCredit, Double totalDebit, Double totalCash, int totalTicketsSold, int totalBoiTV, int totalfree) {
+    public FinanceModel(EventModel eventId, Double totalPix, Double totalCredit, Double totalDebit, Double totalCash, int totalTicketsSold, int totalBoiTV, int totalFree) {
         this.eventId = eventId;
         this.totalPix = totalPix;
         this.totalCredit = totalCredit;
@@ -40,7 +40,7 @@ public class FinanceModel implements Serializable {
         this.totalCash = totalCash;
         this.totalTicketsSold = totalTicketsSold;
         this.totalBoiTV = totalBoiTV;
-        this.totalfree = totalfree;
+        this.totalFree = totalFree;
     }
 
     public FinanceModel() {
@@ -51,12 +51,12 @@ public class FinanceModel implements Serializable {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         FinanceModel that = (FinanceModel) object;
-        return totalTicketsSold == that.totalTicketsSold && totalBoiTV == that.totalBoiTV && totalfree == that.totalfree && Objects.equals(id, that.id) && Objects.equals(eventId, that.eventId) && Objects.equals(totalPix, that.totalPix) && Objects.equals(totalCredit, that.totalCredit) && Objects.equals(totalDebit, that.totalDebit) && Objects.equals(totalCash, that.totalCash);
+        return totalTicketsSold == that.totalTicketsSold && totalBoiTV == that.totalBoiTV && totalFree == that.totalFree && Objects.equals(id, that.id) && Objects.equals(eventId, that.eventId) && Objects.equals(totalPix, that.totalPix) && Objects.equals(totalCredit, that.totalCredit) && Objects.equals(totalDebit, that.totalDebit) && Objects.equals(totalCash, that.totalCash);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, eventId, totalPix, totalCredit, totalDebit, totalCash, totalTicketsSold, totalBoiTV, totalfree);
+        return Objects.hash(id, eventId, totalPix, totalCredit, totalDebit, totalCash, totalTicketsSold, totalBoiTV, totalFree);
     }
 
     public EventModel getEventId() {
@@ -115,12 +115,12 @@ public class FinanceModel implements Serializable {
         this.totalBoiTV = totalBoiTV;
     }
 
-    public int getTotalfree() {
-        return totalfree;
+    public int getTotalFree() {
+        return totalFree;
     }
 
-    public void setTotalfree(int totalfree) {
-        this.totalfree = totalfree;
+    public void setTotalFree(int totalFree) {
+        this.totalFree = totalFree;
     }
 
     public UUID getId() {
