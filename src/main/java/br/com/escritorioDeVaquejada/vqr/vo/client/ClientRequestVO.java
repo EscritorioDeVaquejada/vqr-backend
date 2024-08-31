@@ -25,8 +25,7 @@ public class ClientRequestVO implements Serializable {
     @Schema(description = "Client contact email", example = "john_doe@email.com")
     private String email;
     //todo verificar necessidade do endereço do cliente ser obrigatório
-    @NotNull(message = "Address cannot be null")
-    @Valid
+    @NotNull(message = "Address cannot be null") @Valid
     private Address address;
 
     public ClientRequestVO() {
