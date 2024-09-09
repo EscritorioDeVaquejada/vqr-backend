@@ -2,11 +2,15 @@ package br.com.escritorioDeVaquejada.vqr.models;
 
 import jakarta.persistence.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.UUID;
 
 @Entity
 @Table(name = "financas")
-public class Finances {
+public class Finance implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     @Id@Column(name = "financas_id")
     private UUID id;
     @OneToOne(mappedBy = "financeRelatory")
@@ -19,7 +23,7 @@ public class Finances {
     private int totalBoiTv;
     private int totalfree;
 
-    public Finances(Event eventId, Double totalPix, Double totalCredit, Double totalDebit, Double totalCash, int totalSelledTickets, int totalBoiTv, int totalfree) {
+    public Finance(Event eventId, Double totalPix, Double totalCredit, Double totalDebit, Double totalCash, int totalSelledTickets, int totalBoiTv, int totalfree) {
         this.eventId = eventId;
         this.totalPix = totalPix;
         this.totalCredit = totalCredit;
@@ -30,7 +34,7 @@ public class Finances {
         this.totalfree = totalfree;
     }
 
-    public Finances() {
+    public Finance() {
     }
 
     public Event getEventId() {

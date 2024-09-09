@@ -3,10 +3,14 @@ package br.com.escritorioDeVaquejada.vqr.models;
 import br.com.escritorioDeVaquejada.vqr.enums.Status;
 import jakarta.persistence.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.UUID;
 @Entity
 @Table(name="Senhas")
-public class Ticket {
+public class Ticket implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     @Id @GeneratedValue(strategy = GenerationType.UUID)@Column(name = "ticket_id")
     private UUID id;
     private String cowboy;

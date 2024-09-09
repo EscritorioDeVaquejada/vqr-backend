@@ -2,11 +2,15 @@ package br.com.escritorioDeVaquejada.vqr.models;
 
 import jakarta.persistence.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 @Table(name ="Clientes")
 @Entity
-public class Client {
+public class Client implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     @Id @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name="cliente_id")
     private UUID id;

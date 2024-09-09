@@ -3,13 +3,17 @@ package br.com.escritorioDeVaquejada.vqr.models;
 import br.com.escritorioDeVaquejada.vqr.enums.PaymentMethod;
 import jakarta.persistence.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Table(name = "Pagamento")
 @Entity
-public class Payment {
+public class Payment implements Serializable {
 
+    @Serial
+    private static final long serialVersionUID = 1L;
     @Id
     @Column(name = "pagamento_id")
     private UUID id;
