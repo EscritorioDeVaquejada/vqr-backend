@@ -26,7 +26,12 @@ public class ClientModel implements Serializable {
     @Embedded @Column(nullable = false)
     private Address address;
 
-    public ClientModel(String name, String number, String email, List<EventModel> events, Address address) {
+    public ClientModel(
+            String name,
+            String number,
+            String email,
+            List<EventModel> events,
+            Address address) {
         this.name = name;
         this.number = number;
         this.email = email;

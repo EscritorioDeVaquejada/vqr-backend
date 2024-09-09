@@ -3,7 +3,6 @@ package br.com.escritorioDeVaquejada.vqr.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 
 @Embeddable
 @Schema(description = "Represents an address with a state and city.")
