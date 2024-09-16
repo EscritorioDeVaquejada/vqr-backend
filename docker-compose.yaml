@@ -1,28 +1,32 @@
-# Use postgres/example user/password credentials
-version: '3.9'
-
 services:
+  app:
+    image: 'vaquejada-pro-backend:latest'
+    build:
+      context: .
+    container_name: api
+    restart: always
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=${DATASOURCE_URL:-jdbc:postgresql://db:${DB_PORT:-5432}/${POSTGRES_DB:-db}}
+      - SPRING_DATASOURCE_USERNAME=${DATASOURCE_USERNAME:-${POSTGRES_USER:-postgres}}
+      - SPRING_DATASOURCE_PASSWORD=${DATASOURCE_PASSWORD:-${POSTGRES_PASSWORD:-admin}}
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=${JPA_HIBERNATE_DDL_AUTO:-none}
+      - SPRING_OPEN_IN_VIEW=${OPEN_IN_VIEW:-false}
+      - SECURITY_JWT_TOKEN_SECRET_KEY=${TOKEN_SECRET_KEY:-secret}
+      - SECURITY_JWT_TOKEN_EXPIRE_LENGTH=${TOKEN_EXPIRE_LENGTH:-3600000}
+      - SECURITY_JWT_REFRESH_TOKEN_EXPIRE_LENGTH=${REFRESH_TOKEN_EXPIRE_LENGTH:-10800000}
+    ports:
+      - ${API_PORT:-8080}:8080
 
   db:
     image: postgres
+    container_name: database
     restart: always
-    # set shared memory limit when using docker-compose
     shm_size: 128mb
-    # or set shared memory limit when deploy via swarm stack
-    #volumes:
-    #  - type: tmpfs
-    #    target: /dev/shm
-    #    tmpfs:
-    #      size: 134217728 # 128*2^20 bytes = 128Mb
-    ports:
-      - 3030:5432
     environment:
-      POSTGRES_PASSWORD: 1234
-      POSTGRES_USER: postgres
-      POSTGRES_DB: db
-
-  adminer:
-    image: adminer
-    restart: always
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-admin}
+      - POSTGRES_DB=${POSTGRES_DB:-db}
     ports:
-      - 3000:8080
+      - ${DB_PORT:-5432}:5432
