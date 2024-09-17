@@ -137,7 +137,7 @@ You can also use a graphical tool like [pgAdmin](https://www.pgadmin.org/) for a
 
 In the `src/main/resources` directory, create a file named `application-dev.yml` containing the following properties:
 
-```properties
+```yml
 # Example connection URL: jdbc:postgresql://localhost:5432/your-database
 spring:
   datasource:
@@ -178,9 +178,9 @@ mvn spring-boot:run
 
 ```json
    {
-       "username": "original_admin_user",
-       "password": "sfsf_34mdv@45_df23gk390d_df@S23%¨#@dfFF"
-   }
+  "username": "original_admin_user",
+  "password": "sfsf_34mdv@45_df23gk390d_df@S23%¨#@dfFF"
+}
 ```
 If the application has not been set up, you will need to:
 
@@ -191,8 +191,9 @@ If the application has not been set up, you will need to:
 - **Allow access to the `/register` endpoint** for unauthenticated users by configuring the `SecurityConfig.java` file located at `src/main/java/br/com/escritorioDeVaquejada/vqr/config/SecurityConfig.java`.
 
 3. When sending requests to the API, include the access token in the `Authorization` header using the following format:
+   `Authorization: Bearer ACCESS_TOKEN`
+4. When accessing the API, it's important to ensure that the `Origin` header in your requests matches one of the allowed values defined in the application's CORS configuration: `http://localhost:3000, http://localhost:8080, https://vaquejada-pro.com.br`
 
-`Authorization: Bearer ACCESS_TOKEN`
 
 ## Documentation
 
