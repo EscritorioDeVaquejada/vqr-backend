@@ -85,66 +85,28 @@ In the root directory of your application, use the following command to launch t
 ```bash
 docker-compose up
 ```
-## 2. Running the Application via Maven with a Local Database
-
-Ensure the following tools are installed on your system before proceeding:
-
-### Prerequisites
-
-- **Java** [JDK 21.0.4](https://www.oracle.com/br/java/technologies/downloads/#java21)
-- **Apache Maven** [3.9.9](https://maven.apache.org/download.cgi)
-- **PostgreSQL** [14.13](https://www.postgresql.org/download/)
-
-> **Note:** You can use any SQL database supported by [Hibernate](https://github.com/hibernate/hibernate-orm/blob/main/dialects.adoc). However, the migrations located in the `src/main/resources/db/migration` directory were written specifically for PostgreSQL and may cause errors during application startup if used with another database. If you encounter issues, it is recommended to adjust the `spring.jpa.hibernate.ddl-auto` setting in the `application-dev.properties` file to a value other than `none`, which shifts the responsibility for creating tables from Flyway to JPA. Alternatively, you can choose to delete the `db` directory.
+## 2. Running the Application via Maven or IDE
 
 ### Installation Steps
 
-#### 1. Creating a PostgreSQL Database
+#### 1. Starting the PostgreSQL Database
 
-Below are the steps to create a PostgreSQL database via the command line on different operating systems:
-
-- **On Ubuntu**
-
-Open a terminal and execute the following commands:
+In the root directory of the application, run the following command to start a Docker container for the PostgreSQL database, as defined in the `docker-compose.yml`:
 
 ```bash
-sudo -i -u postgres
-psql
-CREATE DATABASE my_database;
-CREATE USER my_user WITH PASSWORD 'my_password';
-GRANT ALL PRIVILEGES ON DATABASE my_database TO my_user;
-\q
-exit
+docker-compose up db
 ```
-
-- **On Windows**
-
-Open Command Prompt or PowerShell and run the following commands:
-```bash
-psql -U postgres
-# You may need to provide the password for the postgres user if prompted.
-CREATE DATABASE my_database;
-CREATE USER my_user WITH PASSWORD 'my_password';
-GRANT ALL PRIVILEGES ON DATABASE my_database TO my_user;
-\q
-```
-> Note: You might need to run Command Prompt or PowerShell as an Administrator if you encounter permission issues.
-
-- **Alternative Method**
-
-You can also use a graphical tool like [pgAdmin](https://www.pgadmin.org/) for an easier database setup experience.
 
 #### 2. Configuring Environment Variables
 
 In the `src/main/resources` directory, create a file named `application-dev.yml` containing the following properties:
 
 ```yml
-# Example connection URL: jdbc:postgresql://localhost:5432/your-database
 spring:
   datasource:
-    url: your-database-url
-    username: your-database-username
-    password: your-database-password
+    url: jdbc:postgresql://localhost:5432/db # Your database url
+    username: postgres # Your database username
+    password: admin # Your database password
 
   jpa:
     hibernate:
@@ -161,24 +123,33 @@ security:
 
 server:
   port: 8080
-```
 
-#### 3. Running
-To run the application, use the following commands:
+cors:
+  origin-patterns:
+    http://localhost:3000,http://localhost:8080,https://vaquejada-pro.com.br
+```
+>Note: The file above provides a default, functional configuration. Altering it is optional unless the specified configurations cause compatibility issues, similar problems, or if specific adjustments are needed for your application’s requirements.
+
+
+#### 3. Running the application
+
+- To run the application via maven, use the following commands:
 
 ```bash
 mvn clean install -DskipTests
 mvn spring-boot:run
 ```
+- Alternatively, you can open the project in an IDE or development tool of your choice that supports Java development with Spring Boot, such as Eclipse, IntelliJ IDEA, or Visual Studio Code.
+
 
 ## Usage Instructions
 
 1. Access `localhost` on the specified port.
 
-2. To obtain an access token, send a `POST` request to the `/auth/login` endpoint with the following credentials (if the application has been set up to allow Flyway to create migrations):
+2. To obtain an access token, send a `POST` request to the `/auth/login` endpoint with the following credentials. This assumes the application is configured to allow Flyway to create migrations, which is the default behavior as defined in the configuration files.
 
 ```json
-   {
+{
   "username": "original_admin_user",
   "password": "sfsf_34mdv@45_df23gk390d_df@S23%¨#@dfFF"
 }
@@ -187,7 +158,7 @@ If the application has not been set up, you will need to:
 
 - **Register a new user directly in the database** with the `ROLE_ADMIN` permission.
 
-  - Alternatively, you can:
+    - Alternatively, you can:
 
 - **Allow access to the `/register` endpoint** for unauthenticated users by configuring the `SecurityConfig.java` file located at `src/main/java/br/com/escritorioDeVaquejada/vqr/config/SecurityConfig.java`.
 
