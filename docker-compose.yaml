@@ -1,0 +1,33 @@
+services:
+  app:
+    image: 'vaquejada-pro-backend:latest'
+    build:
+      context: .
+    container_name: api
+    restart: always
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=${DATASOURCE_URL:-jdbc:postgresql://db:${DB_PORT:-5432}/${POSTGRES_DB:-db}}
+      - SPRING_DATASOURCE_USERNAME=${DATASOURCE_USERNAME:-${POSTGRES_USER:-postgres}}
+      - SPRING_DATASOURCE_PASSWORD=${DATASOURCE_PASSWORD:-${POSTGRES_PASSWORD:-admin}}
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=${SPRING_JPA_HIBERNATE_DDL_AUTO:-none}
+      - SPRING_JPA_OPEN_IN_VIEW=${SPRING_JPA_OPEN_IN_VIEW:-false}
+      - SECURITY_JWT_TOKEN_SECRET_KEY=${SECURITY_TOKEN_SECRET_KEY:-fQzvKofPe1erX4xLqt9f/UL15vi2PQh54QJoBT2QGO0=}
+      - SECURITY_JWT_TOKEN_EXPIRE_LENGTH=${SECURITY_TOKEN_EXPIRE_LENGTH:-10800000}
+      - SECURITY_JWT_REFRESH_TOKEN_EXPIRE_LENGTH=${SECURITY_REFRESH_TOKEN_EXPIRE_LENGTH:-14400000}
+      - CORS_ORIGIN_PATTERNS=${CORS_ORIGIN_PATTERNS:-http://localhost:3000,http://localhost:8080,https://vaquejada-pro.com.br}
+    ports:
+      - ${API_PORT:-8080}:8080
+
+  db:
+    image: postgres
+    container_name: database
+    restart: always
+    shm_size: 128mb
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-admin}
+      - POSTGRES_DB=${POSTGRES_DB:-db}
+    ports:
+      - ${DB_PORT:-5432}:5432

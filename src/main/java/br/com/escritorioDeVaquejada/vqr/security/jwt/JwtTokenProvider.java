@@ -23,12 +23,12 @@ import java.util.List;
 
 @Service
 public class JwtTokenProvider {
-    @Value("${security.jwt.token.secret-key:secret}")
-    private String secretKey = "secret";
+    @Value("${security.jwt.token.secret-key:fQzvKofPe1erX4xLqt9f/UL15vi2PQh54QJoBT2QGO0=}")
+    private String secretKey;
     @Value("${security.jwt.token.expire-length:3600000}")
-    private long validityInMilliseconds = 3600000L;
+    private long validityInMilliseconds;
     @Value("${security.jwt.refresh-token.expire-length:10800000}")
-    private long validityRefreshTokenInMilliseconds = 10800000L;
+    private long validityRefreshTokenInMilliseconds;
 
     @Autowired
     private UserDetailsService userDetailsService;
