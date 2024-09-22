@@ -1,10 +1,10 @@
 package br.com.escritorioDeVaquejada.vqr.controller;
 
 import br.com.escritorioDeVaquejada.vqr.exception.BadRequestException;
-import br.com.escritorioDeVaquejada.vqr.model.Address;
 import br.com.escritorioDeVaquejada.vqr.service.ClientService;
-import br.com.escritorioDeVaquejada.vqr.vo.client.ClientRequestVO;
+import br.com.escritorioDeVaquejada.vqr.vo.address.AddressVO;
 import br.com.escritorioDeVaquejada.vqr.vo.client.ClientResponseVO;
+import br.com.escritorioDeVaquejada.vqr.vo.client.ClientSaveVO;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,7 +27,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class ClientControllerTest {
     private static ClientResponseVO clientResponse;
-    private static ClientRequestVO clientRequest;
+    private static ClientSaveVO clientRequest;
     @Mock
     private BindingResult bindingResult;
     @Mock
@@ -37,14 +37,14 @@ class ClientControllerTest {
 
     @BeforeAll
     static void setupForAllTests() {
-        clientRequest = new ClientRequestVO();
+        clientRequest = new ClientSaveVO();
         clientResponse = new ClientResponseVO();
     }
 
     @BeforeEach
     void setupForEachTest() {
         clientRequest.setName("NameTest");
-        clientRequest.setAddress(new Address("StateTest", "CityTest"));
+        clientRequest.setAddress(new AddressVO("StateTest", "CityTest"));
         clientRequest.setEmail("teste@gmail.com");
         clientRequest.setNumber("99999999999");
 

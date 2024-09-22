@@ -5,7 +5,8 @@ import br.com.escritorioDeVaquejada.vqr.mapper.Mapper;
 import br.com.escritorioDeVaquejada.vqr.model.Address;
 import br.com.escritorioDeVaquejada.vqr.model.ClientModel;
 import br.com.escritorioDeVaquejada.vqr.repository.ClientRepository;
-import br.com.escritorioDeVaquejada.vqr.vo.client.ClientRequestVO;
+import br.com.escritorioDeVaquejada.vqr.vo.address.AddressVO;
+import br.com.escritorioDeVaquejada.vqr.vo.client.ClientSaveVO;
 import br.com.escritorioDeVaquejada.vqr.vo.client.ClientResponseVO;
 import jakarta.validation.ConstraintViolationException;
 import org.aspectj.lang.annotation.Before;
@@ -27,7 +28,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class ClientServiceImplementationTest {
     @Mock
-    private Address address;
+    private AddressVO address;
     @Mock
     private Mapper mapper;
 
@@ -37,7 +38,7 @@ class ClientServiceImplementationTest {
     @InjectMocks
     private ClientServiceImplementation clientServices;
 
-    ClientRequestVO clientRequestVo;
+    ClientSaveVO clientSaveVo;
     ClientResponseVO clientResponseVo;
     ClientModel clientModel;
     @Before("saveClientOk")
@@ -46,61 +47,61 @@ class ClientServiceImplementationTest {
     @Test
     @DisplayName("Deve salvar o usuário com sucesso")
     void saveClientOk() {
-        clientRequestVo = new ClientRequestVO();
-        clientRequestVo.setAddress(address);
-        clientRequestVo.setEmail("String email");
-        clientRequestVo.setNumber("123");
-        clientRequestVo.setName("joao");
+        clientSaveVo = new ClientSaveVO();
+        clientSaveVo.setAddress(address);
+        clientSaveVo.setEmail("String email");
+        clientSaveVo.setNumber("123");
+        clientSaveVo.setName("joao");
 
         clientResponseVo = new ClientResponseVO();
         clientResponseVo.setId(UUID.randomUUID());
-        clientResponseVo.setAddress(clientRequestVo.getAddress());
-        clientResponseVo.setEmail(clientRequestVo.getEmail());
-        clientResponseVo.setNumber(clientRequestVo.getNumber());
-        clientResponseVo.setName(clientRequestVo.getName());
+        clientResponseVo.setAddress(clientSaveVo.getAddress());
+        clientResponseVo.setEmail(clientSaveVo.getEmail());
+        clientResponseVo.setNumber(clientSaveVo.getNumber());
+        clientResponseVo.setName(clientSaveVo.getName());
 
         clientModel= new ClientModel("joao", "123", "String email", null, null);
 
-        when(mapper.parseObject(clientRequestVo, ClientModel.class)).thenReturn(clientModel);
+        when(mapper.parseObject(clientSaveVo, ClientModel.class)).thenReturn(clientModel);
         when(clientRepository.save(clientModel)).thenReturn(clientModel);
         when(mapper.parseObject(clientModel, ClientResponseVO.class)).thenReturn(clientResponseVo);
-        ClientResponseVO result = clientServices.saveClient(clientRequestVo);
+        ClientResponseVO result = clientServices.saveClient(clientSaveVo);
         Assertions.assertThat(clientResponseVo).isEqualTo(result);
     }
     @Test
     @DisplayName("Deve lançar uma exceção quando tentar salvar")
     void saveClientBadRequestWithoutName(){
         //without Name test
-        ClientRequestVO clientRequestVOWithoutName = new ClientRequestVO();
-        clientRequestVOWithoutName.setAddress(address);
-        clientRequestVOWithoutName.setEmail("String email");
-        clientRequestVOWithoutName.setNumber("123");
+        ClientSaveVO clientSaveVOWithoutName = new ClientSaveVO();
+        clientSaveVOWithoutName.setAddress(address);
+        clientSaveVOWithoutName.setEmail("String email");
+        clientSaveVOWithoutName.setNumber("123");
 
-        when(mapper.parseObject(clientRequestVOWithoutName, ClientModel.class)).thenThrow(new ConstraintViolationException(null));
+        when(mapper.parseObject(clientSaveVOWithoutName, ClientModel.class)).thenThrow(new ConstraintViolationException(null));
 
-        assertThrows(ConstraintViolationException.class, () -> clientServices.saveClient(clientRequestVOWithoutName));
+        assertThrows(ConstraintViolationException.class, () -> clientServices.saveClient(clientSaveVOWithoutName));
     }
     @Test
     void saveClientBadRequestWithoutNumber(){
-        ClientRequestVO clientRequestVOWithoutNumber = new ClientRequestVO();
-        clientRequestVOWithoutNumber.setAddress(address);
-        clientRequestVOWithoutNumber.setEmail("String email");
-        clientRequestVOWithoutNumber.setName("nameExample");
+        ClientSaveVO clientSaveVOWithoutNumber = new ClientSaveVO();
+        clientSaveVOWithoutNumber.setAddress(address);
+        clientSaveVOWithoutNumber.setEmail("String email");
+        clientSaveVOWithoutNumber.setName("nameExample");
 
-        when(mapper.parseObject(clientRequestVOWithoutNumber, ClientModel.class)).thenThrow(new ConstraintViolationException(null));
+        when(mapper.parseObject(clientSaveVOWithoutNumber, ClientModel.class)).thenThrow(new ConstraintViolationException(null));
 
-        assertThrows(ConstraintViolationException.class, () -> clientServices.saveClient(clientRequestVOWithoutNumber));
+        assertThrows(ConstraintViolationException.class, () -> clientServices.saveClient(clientSaveVOWithoutNumber));
     }
     @Test
     void saveClientBadRequestWithoutAddress(){
-        ClientRequestVO clientRequestVOWithoutAddress = new ClientRequestVO();
-        clientRequestVOWithoutAddress.setAddress(null);
-        clientRequestVOWithoutAddress.setEmail("String email");
-        clientRequestVOWithoutAddress.setName("nameExample");
+        ClientSaveVO clientSaveVOWithoutAddress = new ClientSaveVO();
+        clientSaveVOWithoutAddress.setAddress(null);
+        clientSaveVOWithoutAddress.setEmail("String email");
+        clientSaveVOWithoutAddress.setName("nameExample");
 
-        when(mapper.parseObject(clientRequestVOWithoutAddress, ClientModel.class)).thenThrow(new ConstraintViolationException(null));
+        when(mapper.parseObject(clientSaveVOWithoutAddress, ClientModel.class)).thenThrow(new ConstraintViolationException(null));
 
-        assertThrows(ConstraintViolationException.class, () -> clientServices.saveClient(clientRequestVOWithoutAddress));
+        assertThrows(ConstraintViolationException.class, () -> clientServices.saveClient(clientSaveVOWithoutAddress));
 
     }
 

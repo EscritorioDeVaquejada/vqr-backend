@@ -1,10 +1,10 @@
 package br.com.escritorioDeVaquejada.vqr.controller;
 
 import br.com.escritorioDeVaquejada.vqr.exception.BadRequestException;
+import br.com.escritorioDeVaquejada.vqr.representation.PagedClientResponse;
 import br.com.escritorioDeVaquejada.vqr.service.ClientService;
-import br.com.escritorioDeVaquejada.vqr.vo.client.ClientRequestVO;
 import br.com.escritorioDeVaquejada.vqr.vo.client.ClientResponseVO;
-import br.com.escritorioDeVaquejada.vqr.vo.client.PagedClientResponseVO;
+import br.com.escritorioDeVaquejada.vqr.vo.client.ClientSaveVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -25,9 +26,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@RestController
-@RequestMapping("/api/clients/v1")
 @Tag(name = "Clients", description = "Endpoint for managing clients.")
+@RestController
+@RequestMapping("/api/clients")
 public class ClientController {
     private final ClientService clientService;
 
@@ -36,9 +37,6 @@ public class ClientController {
         this.clientService = clientService;
     }
 
-    @PostMapping(
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             summary = "Save a client",
             description = "Saves a new client in the database.",
@@ -48,17 +46,32 @@ public class ClientController {
                             description = "Created",
                             responseCode = "201",
                             content = @Content(
-                                    schema = @Schema(implementation = ClientResponseVO.class))
+                                    schema = @Schema(
+                                            implementation = ClientResponseVO.class))
                     ),
-                    @ApiResponse(description = "Bad Request", responseCode = "400",
-                            content = @Content),
-                    @ApiResponse(description = "Forbidden", responseCode = "403",
-                            content = @Content),
-                    @ApiResponse(description = "Internal Server Error", responseCode = "500",
-                            content = @Content)
-            })
+                    @ApiResponse(
+                            description = "Bad Request",
+                            responseCode = "400",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "Forbidden",
+                            responseCode = "403",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "Internal Server Error",
+                            responseCode = "500",
+                            content = @Content
+                    )
+            }
+    )
+    @PostMapping(
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<ClientResponseVO> saveClient(
-            @Valid @RequestBody ClientRequestVO newClient,
+            @Valid @RequestBody ClientSaveVO newClient,
             BindingResult errorsInRequest) throws BadRequestException {
         if (errorsInRequest.hasErrors()) {
             throw new BadRequestException("Invalid client data!");
@@ -68,11 +81,12 @@ public class ClientController {
                 .body(clientService.saveClient(newClient));
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
-            summary = "Get clients by name",
-            description = "Retrieve a paginated list of clients whose names contain the " +
-                    "specified value. The search is case-insensitive.",
+            summary = "Get clients by name containing specified text",
+            description = "Retrieves a paginated list of clients. Clients can be filtered by names " +
+                    "that contain the specified text, with the search being case-insensitive. " +
+                    "If no name is provided, all clients will be returned while adhering " +
+                    "to the pagination constraints.",
             tags = "Clients",
             responses = {
                     @ApiResponse(
@@ -80,42 +94,96 @@ public class ClientController {
                             responseCode = "200",
                             content = @Content(
                                     schema = @Schema(
-                                            implementation = PagedClientResponseVO.class))),
-                    @ApiResponse(description = "Forbidden", responseCode = "403",
-                            content = @Content),
-                    @ApiResponse(description = "Internal Sever Error", responseCode = "500",
-                            content = @Content)
-            })
-    public ResponseEntity<PagedClientResponseVO> findClientsByName(
-            @RequestParam(value = "page", defaultValue = "0") Integer page,
-            @RequestParam(value = "size", defaultValue = "12") Integer size,
-            @RequestParam(value = "direction", defaultValue = "asc") String direction,
-            @RequestParam(value = "name", defaultValue = "") String name) {
+                                            implementation = PagedClientResponse.class)
+                            )
+                    ),
+                    @ApiResponse(
+                            description = "Forbidden",
+                            responseCode = "403",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "Internal Sever Error",
+                            responseCode = "500",
+                            content = @Content
+                    )
+            }
+    )
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Page<ClientResponseVO>> findClientsByNameContainingIgnoreCase(
+            @Parameter(
+                    name = "page",
+                    required = false,
+                    in = ParameterIn.QUERY,
+                    description = "The page number to retrieve (zero-based index)."
+            )
+            @RequestParam(value = "page", defaultValue = "0")
+            Integer page,
+            @Parameter(
+                    name = "size",
+                    required = false,
+                    in = ParameterIn.QUERY,
+                    description = "The number of items per page."
+            )
+            @RequestParam(value = "size", defaultValue = "12")
+            Integer size,
+            @Parameter(
+                    name = "direction",
+                    required = false,
+                    in = ParameterIn.QUERY,
+                    description = "The sorting direction for the results. Use 'asc' for " +
+                            "ascending and 'desc' for descending."
+            )
+            @RequestParam(value = "direction", defaultValue = "asc")
+            String direction,
+            @Parameter(
+                    name = "name",
+                    required = false,
+                    in = ParameterIn.QUERY,
+                    description = "The text to search for in client names. " +
+                            "Only clients whose names contain this text will be returned."
+            )
+            @RequestParam(value = "name", defaultValue = "")
+            String name) {
         Sort.Direction sortDirection =
                 "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable pageable =
                 PageRequest.of(page, size, Sort.by(sortDirection, "name"));
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(clientService.findAll(name, pageable));
+                .body(clientService.findClientsByNameContainingIgnoreCase(name, pageable));
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @Operation(
             summary = "Get a client by ID",
             description = "Returns a client based on their ID.",
             tags = "Clients",
             responses = {
-                    @ApiResponse(description = "Ok", responseCode = "200", content = @Content(
-                            schema = @Schema(implementation = ClientResponseVO.class)
-                    )),
-                    @ApiResponse(description = "Forbidden", responseCode = "403",
-                            content = @Content),
-                    @ApiResponse(description = "Not Found", responseCode = "404",
-                            content = @Content),
-                    @ApiResponse(description = "Internal Server Error", responseCode = "500",
-                            content = @Content)
-            })
+                    @ApiResponse(
+                            description = "Ok",
+                            responseCode = "200",
+                            content = @Content(
+                                    schema = @Schema(
+                                            implementation = ClientResponseVO.class))
+                    ),
+                    @ApiResponse(
+                            description = "Forbidden",
+                            responseCode = "403",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "Not Found",
+                            responseCode = "404",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            description = "Internal Server Error",
+                            responseCode = "500",
+                            content = @Content
+                    )
+            }
+    )
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ClientResponseVO> findById(
             @Parameter(
                     description = "ID of the client to be retrieved. Must be a valid UUID format.",
