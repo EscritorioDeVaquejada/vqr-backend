@@ -5,6 +5,7 @@ import br.com.escritorioDeVaquejada.vqr.representation.PagedClientResponse;
 import br.com.escritorioDeVaquejada.vqr.service.ClientService;
 import br.com.escritorioDeVaquejada.vqr.vo.client.ClientResponseVO;
 import br.com.escritorioDeVaquejada.vqr.vo.client.ClientSaveVO;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -13,11 +14,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -109,33 +112,12 @@ public class ClientController {
                     )
             }
     )
+    @PageableAsQueryParam
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Page<ClientResponseVO>> findClientsByNameContainingIgnoreCase(
-            @Parameter(
-                    name = "page",
-                    required = false,
-                    in = ParameterIn.QUERY,
-                    description = "The page number to retrieve (zero-based index)."
-            )
-            @RequestParam(value = "page", defaultValue = "0")
-            Integer page,
-            @Parameter(
-                    name = "size",
-                    required = false,
-                    in = ParameterIn.QUERY,
-                    description = "The number of items per page."
-            )
-            @RequestParam(value = "size", defaultValue = "12")
-            Integer size,
-            @Parameter(
-                    name = "direction",
-                    required = false,
-                    in = ParameterIn.QUERY,
-                    description = "The sorting direction for the results. Use 'asc' for " +
-                            "ascending and 'desc' for descending."
-            )
-            @RequestParam(value = "direction", defaultValue = "asc")
-            String direction,
+            @Parameter(hidden = true)
+            @PageableDefault(size = 20, page = 0, sort = {"name"}, direction = Sort.Direction.ASC)
+            Pageable pageable,
             @Parameter(
                     name = "name",
                     required = false,
@@ -145,10 +127,6 @@ public class ClientController {
             )
             @RequestParam(value = "name", defaultValue = "")
             String name) {
-        Sort.Direction sortDirection =
-                "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
-        Pageable pageable =
-                PageRequest.of(page, size, Sort.by(sortDirection, "name"));
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(clientService.findClientsByNameContainingIgnoreCase(name, pageable));

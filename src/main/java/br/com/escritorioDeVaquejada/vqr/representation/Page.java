@@ -17,9 +17,13 @@ import java.util.Objects;
  * as configured by {@code @EnableSpringDataWebSupport(pageSerializationMode =
  * EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO)} in WebConfig.java.
  */
-@Schema(description = "Represents a paginated response structure containing metadata about the pagination state.")
+@Schema(description = "Represents a paginated response structure containing metadata about the " +
+        "pagination state.")
 public class Page {
-    @Schema(description = "The maximum number of items that can be delivered on a single page.", defaultValue = "12")
+    @Schema(
+            description = "The maximum number of items that can be delivered on a single page.",
+            defaultValue = "20"
+    )
     private Integer size;
 
     @Schema(description = "The current page number (zero-based index).", defaultValue = "0")
