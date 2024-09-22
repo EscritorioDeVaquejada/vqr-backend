@@ -1,6 +1,7 @@
 package br.com.escritorioDeVaquejada.vqr.vo.client;
 
 import br.com.escritorioDeVaquejada.vqr.model.Address;
+import br.com.escritorioDeVaquejada.vqr.vo.address.AddressVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serial;
@@ -23,12 +24,12 @@ public class ClientResponseVO implements Serializable {
     @Schema(description = "Client contact email.", example = "john_doe@email.com")
     private String email;
     //todo verificar necessidade do endereço do cliente ser obrigatório
-    private Address address;
+    private AddressVO address;
 
     public ClientResponseVO() {
     }
 
-    public ClientResponseVO(UUID id, String name, String number, String email, Address address) {
+    public ClientResponseVO(UUID id, String name, String number, String email, AddressVO address) {
         this.id = id;
         this.name = name;
         this.number = number;
@@ -81,11 +82,11 @@ public class ClientResponseVO implements Serializable {
         this.email = email;
     }
 
-    public Address getAddress() {
+    public AddressVO getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(AddressVO address) {
         this.address = address;
     }
 }

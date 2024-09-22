@@ -1,6 +1,7 @@
 package br.com.escritorioDeVaquejada.vqr.vo.event;
 
 import br.com.escritorioDeVaquejada.vqr.model.Address;
+import br.com.escritorioDeVaquejada.vqr.vo.address.AddressVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -24,7 +25,7 @@ public class EventRequestVO implements Serializable {
     @Schema(description = "Initial number of tickets available for the event.", example = "100")
     private int numberOfInitialTickets;
     @NotNull
-    private Address address;
+    private AddressVO address;
     @NotNull @Min(0)
     @Schema(description = "Standard price of a ticket for the event.", example = "1000.00")
     private double defaultTicketPrice;
@@ -41,7 +42,7 @@ public class EventRequestVO implements Serializable {
     public EventRequestVO(
             String name,
             int numberOfInitialTickets,
-            Address address,
+            AddressVO address,
             double defaultTicketPrice,
             double priceOfBoiTVAnticipated,
             double priceOfBoiTVPurchasedOnDemand) {
@@ -93,11 +94,11 @@ public class EventRequestVO implements Serializable {
         this.numberOfInitialTickets = numberOfInitialTickets;
     }
 
-    public Address getAddress() {
+    public AddressVO getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(AddressVO address) {
         this.address = address;
     }
 

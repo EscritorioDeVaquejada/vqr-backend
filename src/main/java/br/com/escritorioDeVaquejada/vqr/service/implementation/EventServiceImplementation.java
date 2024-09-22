@@ -13,12 +13,13 @@ import br.com.escritorioDeVaquejada.vqr.vo.event.EventRequestVO;
 import br.com.escritorioDeVaquejada.vqr.vo.event.EventResponseVO;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -51,10 +52,15 @@ public class EventServiceImplementation implements EventService {
         ticketService.saveEmptyTickets(eventCreated);
         return mapper.parseObject(eventCreated, EventResponseVO.class);
     }
-    public List<EventResponseVO> findEventsByClientId(UUID clientId){
+    public Page<EventResponseVO> findEventsByClientIdAndNameContains(
+            UUID clientId, String name, Pageable pageable){
         ClientModel owner = clientService.findEntityById(clientId);
-        List<EventModel> events = eventRepository.findAllByOwnerOrderByDateTime(owner);
-        return mapper.parseListObjects(events, EventResponseVO.class);
+        Page<EventModel> eventModelsPage =
+                eventRepository.findByOwnerAndNameContainingIgnoreCase(owner, name, pageable);
+        Page<EventResponseVO> eventResponsesPage =
+                eventModelsPage.map(
+                        eventModel -> mapper.parseObject(eventModel, EventResponseVO.class));
+        return eventResponsesPage;
     }
     public EventResponseVO findEventByID(UUID eventID) throws ResourceNotFoundException{
         EventModel eventModel= eventRepository.findById(eventID).orElseThrow(()->
@@ -62,7 +68,7 @@ public class EventServiceImplementation implements EventService {
         return mapper.parseObject(eventModel, EventResponseVO.class);
     }
 
-    //todo verificar se o método captureCurrentDateAndTime não deveria ser público em uuma classe de utils
+    //todo verificar se o método captureCurrentDateAndTime não deveria ser público em uma classe de utils
     private LocalDateTime captureCurrentDateAndTime(){
         Instant now = Instant.now();
         ZoneId localZone = ZoneId.systemDefault();
