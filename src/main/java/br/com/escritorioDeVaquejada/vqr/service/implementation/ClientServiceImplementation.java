@@ -6,9 +6,12 @@ import br.com.escritorioDeVaquejada.vqr.mapper.Mapper;
 import br.com.escritorioDeVaquejada.vqr.model.ClientModel;
 import br.com.escritorioDeVaquejada.vqr.repository.ClientRepository;
 import br.com.escritorioDeVaquejada.vqr.service.ClientService;
-import br.com.escritorioDeVaquejada.vqr.vo.client.ClientSaveVO;
+import br.com.escritorioDeVaquejada.vqr.vo.client.ClientPatchVO;
 import br.com.escritorioDeVaquejada.vqr.vo.client.ClientResponseVO;
-import br.com.escritorioDeVaquejada.vqr.representation.PagedClientResponse;
+import br.com.escritorioDeVaquejada.vqr.vo.client.ClientSaveVO;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +21,7 @@ import java.util.UUID;
 
 @Service
 public class ClientServiceImplementation implements ClientService {
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private final ClientRepository clientRepository;
     private final Mapper mapper;
 
@@ -48,4 +52,31 @@ public class ClientServiceImplementation implements ClientService {
         return clientRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("Client not found!"));
     }
+
+    @Override
+    @Transactional
+    public void deleteById(UUID id) {
+        ClientModel clientToBeDeleted = clientRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Client not found!"));
+        clientRepository.delete(clientToBeDeleted);
+    }
+
+    /*
+    @Transactional
+    public ClientResponseVO partialUpdates(UUID id, JsonNode patchNode)
+            throws ResourceNotFoundException {
+        ClientModel clientToBeUpdated = clientRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Client not found!"));
+        try {
+            objectMapper.readerForUpdating(clientToBeUpdated).readValue(patchNode);
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to copy properties!");
+        }
+
+        return mapper.parseObject(clientRepository.save(clientToBeUpdated), ClientResponseVO.class);
+    }
+
+     */
+
+
 }

@@ -1,6 +1,7 @@
 package br.com.escritorioDeVaquejada.vqr.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
 
