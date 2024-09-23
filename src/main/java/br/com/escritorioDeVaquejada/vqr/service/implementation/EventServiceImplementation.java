@@ -62,10 +62,15 @@ public class EventServiceImplementation implements EventService {
                         eventModel -> mapper.parseObject(eventModel, EventResponseVO.class));
         return eventResponsesPage;
     }
-    public EventResponseVO findEventByID(UUID eventID) throws ResourceNotFoundException{
+    public EventResponseVO findEventById(UUID eventID) throws ResourceNotFoundException{
         EventModel eventModel= eventRepository.findById(eventID).orElseThrow(()->
                 new ResourceNotFoundException("Event not found!"));
         return mapper.parseObject(eventModel, EventResponseVO.class);
+    }
+
+    public EventModel findEventModelById(UUID eventID) throws ResourceNotFoundException{
+        return eventRepository.findById(eventID).orElseThrow(()->
+                new ResourceNotFoundException("Event not found!"));
     }
 
     @Transactional

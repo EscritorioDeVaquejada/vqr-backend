@@ -166,7 +166,7 @@ class EventServiceImplementationTest {
         when(eventRepository.findById(eventId)).thenReturn(Optional.ofNullable(eventModel));
         when(mapper.parseObject(eventModel, EventResponseVO.class)).thenReturn(eventResponseVO);
 
-        EventResponseVO event = eventServicesImplementation.findEventByID(eventId);
+        EventResponseVO event = eventServicesImplementation.findEventById(eventId);
 
         assertThat(event).isEqualTo(eventResponseVO);
         verify(eventRepository, times(1)).findById(eventId);
@@ -180,7 +180,7 @@ class EventServiceImplementationTest {
 
         when(eventRepository.findById(eventId)).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> eventServicesImplementation.findEventByID(eventId))
+        assertThatThrownBy(() -> eventServicesImplementation.findEventById(eventId))
                 .isInstanceOf(ResourceNotFoundException.class);
         verify(eventRepository, times(1)).findById(eventId);
     }

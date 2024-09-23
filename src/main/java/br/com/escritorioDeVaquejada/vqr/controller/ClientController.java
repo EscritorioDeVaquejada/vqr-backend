@@ -3,11 +3,8 @@ package br.com.escritorioDeVaquejada.vqr.controller;
 import br.com.escritorioDeVaquejada.vqr.exception.BadRequestException;
 import br.com.escritorioDeVaquejada.vqr.representation.PagedClientResponse;
 import br.com.escritorioDeVaquejada.vqr.service.ClientService;
-import br.com.escritorioDeVaquejada.vqr.vo.client.ClientPatchVO;
 import br.com.escritorioDeVaquejada.vqr.vo.client.ClientResponseVO;
 import br.com.escritorioDeVaquejada.vqr.vo.client.ClientSaveVO;
-import com.fasterxml.jackson.databind.JsonNode;
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -16,11 +13,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -30,7 +25,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 import java.util.UUID;
 
 @Tag(name = "Clients", description = "Endpoint for managing clients.")
@@ -179,7 +173,7 @@ public class ClientController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteById(@PathVariable(value = "id") UUID id){
+    public ResponseEntity deleteById(@PathVariable(value = "id") UUID id) {
         clientService.deleteById(id);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
