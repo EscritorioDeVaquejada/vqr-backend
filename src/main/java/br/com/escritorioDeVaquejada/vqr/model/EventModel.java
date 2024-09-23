@@ -34,7 +34,7 @@ public class EventModel implements Serializable {
     private Address address;
     @ManyToOne @JoinColumn(name = "client_id")
     private ClientModel owner;
-    @OneToMany(mappedBy = "event")
+    @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
     List<TicketModel> tickets;
     @OneToOne() @JoinColumn(name = "finance_id")
     private FinanceModel financialReport;

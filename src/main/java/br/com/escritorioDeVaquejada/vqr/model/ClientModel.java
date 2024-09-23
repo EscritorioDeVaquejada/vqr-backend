@@ -24,7 +24,7 @@ public class ClientModel implements Serializable {
     @Column(unique = true)
     private String email;
     //todo verificar condição de remoção de entidades associadas
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
     private List<EventModel> events;
     @Embedded
     @Column

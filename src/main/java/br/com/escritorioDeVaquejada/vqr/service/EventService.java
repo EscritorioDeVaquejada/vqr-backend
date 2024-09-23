@@ -13,4 +13,6 @@ public interface EventService {
     Page<EventResponseVO> findEventsByClientIdAndNameContains(
             UUID clientId, String name, Pageable pageable);
     EventResponseVO findEventByID(UUID eventId);
+
+    void deleteById(UUID id);
 }

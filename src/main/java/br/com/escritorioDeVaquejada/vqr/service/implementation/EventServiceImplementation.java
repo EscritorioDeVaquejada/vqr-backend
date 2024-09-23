@@ -68,6 +68,13 @@ public class EventServiceImplementation implements EventService {
         return mapper.parseObject(eventModel, EventResponseVO.class);
     }
 
+    @Transactional
+    public void deleteById(UUID id) {
+        EventModel eventToBeDeleted = eventRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found!"));
+        eventRepository.deleteById(id);
+    }
+
     //todo verificar se o método captureCurrentDateAndTime não deveria ser público em uma classe de utils
     private LocalDateTime captureCurrentDateAndTime(){
         Instant now = Instant.now();

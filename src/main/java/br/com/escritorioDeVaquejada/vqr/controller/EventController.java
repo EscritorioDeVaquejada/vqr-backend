@@ -150,4 +150,11 @@ public class EventController {
                 .status(HttpStatus.OK)
                 .body(eventService.findEventsByClientIdAndNameContains(clientId, name, pageable));
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteById(@PathVariable(value = "id")UUID id){
+        eventService.deleteById(id);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
 }
