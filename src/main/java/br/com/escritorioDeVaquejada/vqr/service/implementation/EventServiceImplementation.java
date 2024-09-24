@@ -5,9 +5,11 @@ import br.com.escritorioDeVaquejada.vqr.exception.ResourceNotFoundException;
 import br.com.escritorioDeVaquejada.vqr.mapper.Mapper;
 import br.com.escritorioDeVaquejada.vqr.model.ClientModel;
 import br.com.escritorioDeVaquejada.vqr.model.EventModel;
+import br.com.escritorioDeVaquejada.vqr.model.FinanceModel;
 import br.com.escritorioDeVaquejada.vqr.repository.EventRepository;
 import br.com.escritorioDeVaquejada.vqr.service.ClientService;
 import br.com.escritorioDeVaquejada.vqr.service.EventService;
+import br.com.escritorioDeVaquejada.vqr.service.FinanceService;
 import br.com.escritorioDeVaquejada.vqr.service.TicketService;
 import br.com.escritorioDeVaquejada.vqr.vo.event.EventRequestVO;
 import br.com.escritorioDeVaquejada.vqr.vo.event.EventResponseVO;
@@ -27,6 +29,7 @@ public class EventServiceImplementation implements EventService {
     private final EventRepository eventRepository;
     private final ClientService clientService;
     private final TicketService ticketService;
+    private  final FinanceService financeService;
     private final Mapper mapper;
 
     @Autowired
@@ -34,10 +37,12 @@ public class EventServiceImplementation implements EventService {
             EventRepository eventRepository,
             ClientService clientService,
             TicketService ticketService,
+            FinanceService financeService,
             Mapper mapper) {
         this.eventRepository = eventRepository;
         this.clientService = clientService;
         this.ticketService = ticketService;
+        this.financeService = financeService;
         this.mapper = mapper;
     }
 
@@ -45,22 +50,27 @@ public class EventServiceImplementation implements EventService {
     @Transactional
     public EventResponseVO saveEvent(EventRequestVO newEvent, UUID clientId) {
         ClientModel owner = clientService.findEntityById(clientId);
+        FinanceModel financialReport = financeService.createFinance();
+
         EventModel eventToBeSaved = mapper.parseObject(newEvent, EventModel.class);
         eventToBeSaved.setOwner(owner);
         eventToBeSaved.setDateTime(captureCurrentDateAndTime());
+        eventToBeSaved.setFinancialReport(financialReport);
+
         EventModel eventCreated = eventRepository.save(eventToBeSaved);
+
         ticketService.saveEmptyTickets(eventCreated);
         return mapper.parseObject(eventCreated, EventResponseVO.class);
     }
+
+    @Transactional
     public Page<EventResponseVO> findEventsByClientIdAndNameContains(
             UUID clientId, String name, Pageable pageable){
         ClientModel owner = clientService.findEntityById(clientId);
         Page<EventModel> eventModelsPage =
                 eventRepository.findByOwnerAndNameContainingIgnoreCase(owner, name, pageable);
-        Page<EventResponseVO> eventResponsesPage =
-                eventModelsPage.map(
+        return eventModelsPage.map(
                         eventModel -> mapper.parseObject(eventModel, EventResponseVO.class));
-        return eventResponsesPage;
     }
     public EventResponseVO findEventById(UUID eventID) throws ResourceNotFoundException{
         EventModel eventModel= eventRepository.findById(eventID).orElseThrow(()->

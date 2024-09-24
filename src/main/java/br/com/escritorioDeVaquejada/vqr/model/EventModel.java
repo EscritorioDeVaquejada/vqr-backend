@@ -121,15 +121,6 @@ public class EventModel implements Serializable {
     public void setPriceOfBoiTVPurchasedOnDemand(double priceOfBoiTVPurchasedOnDemand) {
         this.priceOfBoiTVPurchasedOnDemand = priceOfBoiTVPurchasedOnDemand;
     }
-
-    public FinanceModel getFinanceRelatory() {
-        return financialReport;
-    }
-
-    public void setFinanceRelatory(FinanceModel financialReport) {
-        this.financialReport = financialReport;
-    }
-
     public UUID getId() {
         return id;
     }

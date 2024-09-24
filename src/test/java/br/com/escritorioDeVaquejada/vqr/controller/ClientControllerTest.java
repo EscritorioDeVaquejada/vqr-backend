@@ -3,7 +3,7 @@ package br.com.escritorioDeVaquejada.vqr.controller;
 import br.com.escritorioDeVaquejada.vqr.exception.BadRequestException;
 import br.com.escritorioDeVaquejada.vqr.service.ClientService;
 import br.com.escritorioDeVaquejada.vqr.vo.address.AddressVO;
-import br.com.escritorioDeVaquejada.vqr.vo.client.ClientResponseVO;
+import br.com.escritorioDeVaquejada.vqr.vo.client.ClientDetailResponseVO;
 import br.com.escritorioDeVaquejada.vqr.vo.client.ClientSaveVO;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ClientControllerTest {
-    private static ClientResponseVO clientResponse;
+    private static ClientDetailResponseVO clientResponse;
     private static ClientSaveVO clientRequest;
     @Mock
     private BindingResult bindingResult;
@@ -38,7 +38,7 @@ class ClientControllerTest {
     @BeforeAll
     static void setupForAllTests() {
         clientRequest = new ClientSaveVO();
-        clientResponse = new ClientResponseVO();
+        clientResponse = new ClientDetailResponseVO();
     }
 
     @BeforeEach
@@ -61,7 +61,7 @@ class ClientControllerTest {
         when(bindingResult.hasErrors()).thenReturn(false);
         when(clientService.saveClient(clientRequest)).thenReturn(clientResponse);
 
-        ResponseEntity<ClientResponseVO> result = clientController.saveClient(clientRequest, bindingResult);
+        ResponseEntity<ClientDetailResponseVO> result = clientController.saveClient(clientRequest, bindingResult);
 
         verify(clientService, times(1)).saveClient(clientRequest);
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.CREATED);

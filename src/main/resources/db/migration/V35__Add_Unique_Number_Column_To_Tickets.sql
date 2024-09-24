@@ -1,1 +1,1 @@
-ALTER TABLE public.tickets ADD COLUMN number integer UNIQUE;
+ALTER TABLE public.tickets ADD COLUMN number integer;

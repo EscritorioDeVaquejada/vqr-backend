@@ -1,10 +1,13 @@
 package br.com.escritorioDeVaquejada.vqr.controller;
 
+import br.com.escritorioDeVaquejada.vqr.exception.BadRequestException;
 import br.com.escritorioDeVaquejada.vqr.service.TicketService;
 import br.com.escritorioDeVaquejada.vqr.vo.ticket.TicketDetailResponseVO;
 import br.com.escritorioDeVaquejada.vqr.vo.ticket.TicketRepresentationSummaryVO;
 import br.com.escritorioDeVaquejada.vqr.vo.ticket.TicketStatusResponseVO;
+import br.com.escritorioDeVaquejada.vqr.vo.ticket.TicketUpdateVO;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
 import org.springdoc.core.converters.models.PageableAsQueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -75,4 +79,23 @@ public class TicketController {
         );
     }
 
+    @PutMapping()
+    public ResponseEntity<TicketDetailResponseVO> updateByEventIdAndNumber(
+            @RequestParam(value = "eventId") UUID eventId,
+            @RequestParam(value = "number") Integer number,
+            @RequestBody @Valid TicketUpdateVO update,
+            BindingResult errorsInValidationRequest) throws BadRequestException
+    {
+        if(errorsInValidationRequest.hasErrors()){
+            throw new BadRequestException("Invalid data!");
+        }
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ticketService.updateByEventIdAndNumber(
+                    eventId,
+                    number,
+                    update
+                )
+        );
+    }
 }

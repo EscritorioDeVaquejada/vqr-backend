@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public interface EventRepository extends JpaRepository<EventModel, UUID> {
     List<EventModel> findAllByOwnerOrderByDateTime(ClientModel Owner);
-
+    List<EventModel> findAllByOwner(ClientModel owner);
     Page<EventModel> findByOwnerAndNameContainingIgnoreCase(
             ClientModel clientModel, String name, Pageable pageable);
 }

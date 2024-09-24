@@ -1,6 +1,5 @@
 package br.com.escritorioDeVaquejada.vqr.representation;
 
-import br.com.escritorioDeVaquejada.vqr.vo.client.ClientResponseVO;
 import br.com.escritorioDeVaquejada.vqr.vo.event.EventResponseVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 

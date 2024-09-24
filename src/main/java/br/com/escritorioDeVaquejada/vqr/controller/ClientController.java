@@ -3,8 +3,9 @@ package br.com.escritorioDeVaquejada.vqr.controller;
 import br.com.escritorioDeVaquejada.vqr.exception.BadRequestException;
 import br.com.escritorioDeVaquejada.vqr.representation.PagedClientResponse;
 import br.com.escritorioDeVaquejada.vqr.service.ClientService;
-import br.com.escritorioDeVaquejada.vqr.vo.client.ClientResponseVO;
+import br.com.escritorioDeVaquejada.vqr.vo.client.ClientDetailResponseVO;
 import br.com.escritorioDeVaquejada.vqr.vo.client.ClientSaveVO;
+import br.com.escritorioDeVaquejada.vqr.vo.client.ClientSummaryResponseVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -48,7 +49,7 @@ public class ClientController {
                             responseCode = "201",
                             content = @Content(
                                     schema = @Schema(
-                                            implementation = ClientResponseVO.class))
+                                            implementation = ClientDetailResponseVO.class))
                     ),
                     @ApiResponse(
                             description = "Bad Request",
@@ -71,7 +72,7 @@ public class ClientController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<ClientResponseVO> saveClient(
+    public ResponseEntity<ClientDetailResponseVO> saveClient(
             @Valid @RequestBody ClientSaveVO newClient,
             BindingResult errorsInRequest) throws BadRequestException {
         if (errorsInRequest.hasErrors()) {
@@ -111,8 +112,11 @@ public class ClientController {
             }
     )
     @PageableAsQueryParam
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Page<ClientResponseVO>> findClientsByNameContainingIgnoreCase(
+    @GetMapping(
+            value = "/detail",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Page<ClientDetailResponseVO>> findClientDetailByNameContainingIgnoreCase(
             @Parameter(hidden = true)
             @PageableDefault(size = 20, page = 0, sort = {"name"}, direction = Sort.Direction.ASC)
             Pageable pageable,
@@ -127,7 +131,33 @@ public class ClientController {
             String name) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(clientService.findClientsByNameContainingIgnoreCase(name, pageable));
+                .body(clientService.findClientDetailsByNameContainingIgnoreCase(
+                        name,
+                        pageable
+                )
+        );
+    }
+
+    @PageableAsQueryParam
+    @GetMapping(value = "/summary")
+    public ResponseEntity<Page<ClientSummaryResponseVO>> findClientSummaryByNameContainingIgnoreCase(
+            @Parameter(hidden = true)
+            @PageableDefault(
+                    size = 20,
+                    direction = Sort.Direction.ASC,
+                    sort = {"name"},
+                    page = 0
+            )
+            Pageable pageable,
+            @RequestParam(value = "name") String name)
+    {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(clientService.findClientSummaryByNameContainingIgnoreCase(
+                    name,
+                    pageable
+                )
+        );
     }
 
     @Operation(
@@ -140,7 +170,7 @@ public class ClientController {
                             responseCode = "200",
                             content = @Content(
                                     schema = @Schema(
-                                            implementation = ClientResponseVO.class))
+                                            implementation = ClientDetailResponseVO.class))
                     ),
                     @ApiResponse(
                             description = "Forbidden",
@@ -160,7 +190,7 @@ public class ClientController {
             }
     )
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ClientResponseVO> findById(
+    public ResponseEntity<ClientDetailResponseVO> findById(
             @Parameter(
                     description = "ID of the client to be retrieved. Must be a valid UUID format.",
                     in = ParameterIn.PATH,
@@ -182,7 +212,7 @@ public class ClientController {
 
     /*
     @PatchMapping("/{id}")
-    public ResponseEntity<ClientResponseVO> partialUpdates(
+    public ResponseEntity<ClientDetailResponseVO> partialUpdates(
             @PathVariable(value = "id") UUID id,
             @RequestBody JsonNode patchNode)
     {

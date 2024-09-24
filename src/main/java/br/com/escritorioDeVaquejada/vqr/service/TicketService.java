@@ -5,6 +5,7 @@ import br.com.escritorioDeVaquejada.vqr.model.TicketModel;
 import br.com.escritorioDeVaquejada.vqr.vo.ticket.TicketDetailResponseVO;
 import br.com.escritorioDeVaquejada.vqr.vo.ticket.TicketRepresentationSummaryVO;
 import br.com.escritorioDeVaquejada.vqr.vo.ticket.TicketStatusResponseVO;
+import br.com.escritorioDeVaquejada.vqr.vo.ticket.TicketUpdateVO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -18,4 +19,7 @@ public interface TicketService {
     TicketDetailResponseVO findTicketDetailsById(UUID ticketId);
     Page<TicketStatusResponseVO> findTicketStatusByEventId(UUID eventId, Pageable pageable);
     Page<TicketRepresentationSummaryVO> findTicketRepresentationSummaryByEventId(UUID eventId, Pageable pageable);
+
+    TicketDetailResponseVO updateByEventIdAndNumber(
+            UUID eventId, Integer number, TicketUpdateVO update);
 }

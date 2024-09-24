@@ -19,7 +19,7 @@ public class ModelMapper implements Mapper {
         }
         return endList;
     }
-    public <O, D> void copyProperties(O origin, D destination){
-        mapper.map(origin, destination);
+    public <O, D> void copyProperties(O source, D target){
+        mapper.map(source, target);
     }
 }

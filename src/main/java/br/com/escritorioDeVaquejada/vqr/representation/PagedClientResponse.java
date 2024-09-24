@@ -1,6 +1,6 @@
 package br.com.escritorioDeVaquejada.vqr.representation;
 
-import br.com.escritorioDeVaquejada.vqr.vo.client.ClientResponseVO;
+import br.com.escritorioDeVaquejada.vqr.vo.client.ClientDetailResponseVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.Objects;
  * a paginated list of clients. It does not represent the actual data sent in the
  * response but serves as an informative structure for API documentation.
  * <p>
- * This implementation represents the {@code Page<ClientResponseVO>} class,
+ * This implementation represents the {@code Page<ClientDetailResponseVO>} class,
  * encapsulating the 'content' and 'page' attributes, as configured by
  * {@code @EnableSpringDataWebSupport(pageSerializationMode =
  * EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO)} in WebConfig.java.
@@ -24,9 +24,9 @@ import java.util.Objects;
 public class PagedClientResponse {
     private Page page;
     @Schema(description = "A list of client data objects returned in the current page.")
-    private List<ClientResponseVO> content;
+    private List<ClientDetailResponseVO> content;
 
-    public PagedClientResponse(Page page, List<ClientResponseVO> content) {
+    public PagedClientResponse(Page page, List<ClientDetailResponseVO> content) {
         this.page = page;
         this.content = content;
     }
@@ -39,11 +39,11 @@ public class PagedClientResponse {
         this.page = page;
     }
 
-    public List<ClientResponseVO> getContent() {
+    public List<ClientDetailResponseVO> getContent() {
         return content;
     }
 
-    public void setContent(List<ClientResponseVO> content) {
+    public void setContent(List<ClientDetailResponseVO> content) {
         this.content = content;
     }
 
