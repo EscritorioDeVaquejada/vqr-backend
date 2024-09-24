@@ -39,8 +39,6 @@ public class AuthServiceImplementation implements AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    //todo adicionar um método no exception handler para uma BadCredentialsException
-    //todo adicionar um método no exception handler para uma UsernameNotFoundException
     public TokenVO login(AccountCredentialsVO data)
             throws BadCredentialsException, UsernameNotFoundException {
         try {

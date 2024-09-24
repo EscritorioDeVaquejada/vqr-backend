@@ -1,6 +1,7 @@
 package br.com.escritorioDeVaquejada.vqr.vo.event;
 
 import br.com.escritorioDeVaquejada.vqr.model.Address;
+import br.com.escritorioDeVaquejada.vqr.vo.address.AddressVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -26,7 +27,7 @@ public class EventResponseVO implements Serializable {
     private int numberOfInitialTickets;
     @Schema(description = "Scheduled date and time for the event.", example = "2024-12-12T10:50:00")
     private LocalDateTime dateTime;
-    private Address address;
+    private AddressVO address;
     @Schema(description = "Standard price of a ticket for the event.", example = "1000.00")
     private double defaultTicketPrice;
     @Schema(description = "Payment amount for BoiTV in advance.", example = "300.00")
@@ -42,7 +43,7 @@ public class EventResponseVO implements Serializable {
             String name,
             int numberOfInitialTickets,
             LocalDateTime dateTime,
-            Address address,
+            AddressVO address,
             double defaultTicketPrice,
             double priceOfBoiTVAnticipated,
             double priceOfBoiTVPurchasedOnDemand) {
@@ -112,11 +113,11 @@ public class EventResponseVO implements Serializable {
         this.dateTime = dateTime;
     }
 
-    public Address getAddress() {
+    public AddressVO getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(AddressVO address) {
         this.address = address;
     }
 

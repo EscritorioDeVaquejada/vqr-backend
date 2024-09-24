@@ -8,12 +8,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-@Table(name ="clients")
+@Table(name = "clients")
 @Entity
 public class ClientModel implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    @Id @GeneratedValue(strategy = GenerationType.UUID) @Column(name="client_id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "client_id")
     private UUID id;
     @Column(nullable = false)
     private String name;
@@ -21,9 +23,11 @@ public class ClientModel implements Serializable {
     private String number;
     @Column(unique = true)
     private String email;
-    @OneToMany(mappedBy = "owner")
+    //todo verificar condição de remoção de entidades associadas
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
     private List<EventModel> events;
-    @Embedded @Column(nullable = false)
+    @Embedded
+    @Column
     private Address address;
 
     public ClientModel(

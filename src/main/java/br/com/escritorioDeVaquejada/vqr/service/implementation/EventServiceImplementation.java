@@ -5,20 +5,23 @@ import br.com.escritorioDeVaquejada.vqr.exception.ResourceNotFoundException;
 import br.com.escritorioDeVaquejada.vqr.mapper.Mapper;
 import br.com.escritorioDeVaquejada.vqr.model.ClientModel;
 import br.com.escritorioDeVaquejada.vqr.model.EventModel;
+import br.com.escritorioDeVaquejada.vqr.model.FinanceModel;
 import br.com.escritorioDeVaquejada.vqr.repository.EventRepository;
 import br.com.escritorioDeVaquejada.vqr.service.ClientService;
 import br.com.escritorioDeVaquejada.vqr.service.EventService;
+import br.com.escritorioDeVaquejada.vqr.service.FinanceService;
 import br.com.escritorioDeVaquejada.vqr.service.TicketService;
 import br.com.escritorioDeVaquejada.vqr.vo.event.EventRequestVO;
 import br.com.escritorioDeVaquejada.vqr.vo.event.EventResponseVO;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -26,6 +29,7 @@ public class EventServiceImplementation implements EventService {
     private final EventRepository eventRepository;
     private final ClientService clientService;
     private final TicketService ticketService;
+    private  final FinanceService financeService;
     private final Mapper mapper;
 
     @Autowired
@@ -33,10 +37,12 @@ public class EventServiceImplementation implements EventService {
             EventRepository eventRepository,
             ClientService clientService,
             TicketService ticketService,
+            FinanceService financeService,
             Mapper mapper) {
         this.eventRepository = eventRepository;
         this.clientService = clientService;
         this.ticketService = ticketService;
+        this.financeService = financeService;
         this.mapper = mapper;
     }
 
@@ -44,25 +50,47 @@ public class EventServiceImplementation implements EventService {
     @Transactional
     public EventResponseVO saveEvent(EventRequestVO newEvent, UUID clientId) {
         ClientModel owner = clientService.findEntityById(clientId);
+        FinanceModel financialReport = financeService.createFinance();
+
         EventModel eventToBeSaved = mapper.parseObject(newEvent, EventModel.class);
         eventToBeSaved.setOwner(owner);
         eventToBeSaved.setDateTime(captureCurrentDateAndTime());
+        eventToBeSaved.setFinancialReport(financialReport);
+
         EventModel eventCreated = eventRepository.save(eventToBeSaved);
+
         ticketService.saveEmptyTickets(eventCreated);
         return mapper.parseObject(eventCreated, EventResponseVO.class);
     }
-    public List<EventResponseVO> findEventsByClientId(UUID clientId){
+
+    @Transactional
+    public Page<EventResponseVO> findEventsByClientIdAndNameContains(
+            UUID clientId, String name, Pageable pageable){
         ClientModel owner = clientService.findEntityById(clientId);
-        List<EventModel> events = eventRepository.findAllByOwnerOrderByDateTime(owner);
-        return mapper.parseListObjects(events, EventResponseVO.class);
+        Page<EventModel> eventModelsPage =
+                eventRepository.findByOwnerAndNameContainingIgnoreCase(owner, name, pageable);
+        return eventModelsPage.map(
+                        eventModel -> mapper.parseObject(eventModel, EventResponseVO.class));
     }
-    public EventResponseVO findEventByID(UUID eventID) throws ResourceNotFoundException{
+    public EventResponseVO findEventById(UUID eventID) throws ResourceNotFoundException{
         EventModel eventModel= eventRepository.findById(eventID).orElseThrow(()->
                 new ResourceNotFoundException("Event not found!"));
         return mapper.parseObject(eventModel, EventResponseVO.class);
     }
 
-    //todo verificar se o método captureCurrentDateAndTime não deveria ser público em uuma classe de utils
+    public EventModel findEventModelById(UUID eventID) throws ResourceNotFoundException{
+        return eventRepository.findById(eventID).orElseThrow(()->
+                new ResourceNotFoundException("Event not found!"));
+    }
+
+    @Transactional
+    public void deleteById(UUID id) {
+        EventModel eventToBeDeleted = eventRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found!"));
+        eventRepository.deleteById(id);
+    }
+
+    //todo verificar se o método captureCurrentDateAndTime não deveria ser público em uma classe de utils
     private LocalDateTime captureCurrentDateAndTime(){
         Instant now = Instant.now();
         ZoneId localZone = ZoneId.systemDefault();

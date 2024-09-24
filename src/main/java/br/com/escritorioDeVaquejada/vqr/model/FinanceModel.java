@@ -14,6 +14,7 @@ public class FinanceModel implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id @GeneratedValue(strategy = GenerationType.UUID) @Column(name = "finance_id")
     private UUID id;
+    //todo alterar o nome do campo do eventId, pois não representa um ID na classe
     @OneToOne(mappedBy = "financialReport")
     private EventModel eventId;
     @Column(name = "total_pix")
@@ -32,8 +33,7 @@ public class FinanceModel implements Serializable {
     @Column(name = "total_free")
     private int totalFree;
 
-    public FinanceModel(EventModel eventId, Double totalPix, Double totalCredit, Double totalDebit, Double totalCash, int totalTicketsSold, int totalBoiTV, int totalFree) {
-        this.eventId = eventId;
+    public FinanceModel(Double totalPix, Double totalCredit, Double totalDebit, Double totalCash, int totalTicketsSold, int totalBoiTV, int totalFree) {
         this.totalPix = totalPix;
         this.totalCredit = totalCredit;
         this.totalDebit = totalDebit;

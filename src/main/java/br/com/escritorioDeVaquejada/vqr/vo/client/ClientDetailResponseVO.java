@@ -1,6 +1,6 @@
 package br.com.escritorioDeVaquejada.vqr.vo.client;
 
-import br.com.escritorioDeVaquejada.vqr.model.Address;
+import br.com.escritorioDeVaquejada.vqr.vo.address.AddressVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serial;
@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Schema(description = "Represents the data returned in HTTP responses for client-related operations. " +
         "This object is used to send client information in HTTP responses.")
-public class ClientResponseVO implements Serializable {
+public class ClientDetailResponseVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     @Schema(description = "Unique identifier of the client.",
@@ -23,12 +23,12 @@ public class ClientResponseVO implements Serializable {
     @Schema(description = "Client contact email.", example = "john_doe@email.com")
     private String email;
     //todo verificar necessidade do endereço do cliente ser obrigatório
-    private Address address;
+    private AddressVO address;
 
-    public ClientResponseVO() {
+    public ClientDetailResponseVO() {
     }
 
-    public ClientResponseVO(UUID id, String name, String number, String email, Address address) {
+    public ClientDetailResponseVO(UUID id, String name, String number, String email, AddressVO address) {
         this.id = id;
         this.name = name;
         this.number = number;
@@ -40,7 +40,7 @@ public class ClientResponseVO implements Serializable {
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
-        ClientResponseVO that = (ClientResponseVO) object;
+        ClientDetailResponseVO that = (ClientDetailResponseVO) object;
         return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(number, that.number) && Objects.equals(email, that.email) && Objects.equals(address, that.address);
     }
 
@@ -81,11 +81,11 @@ public class ClientResponseVO implements Serializable {
         this.email = email;
     }
 
-    public Address getAddress() {
+    public AddressVO getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(AddressVO address) {
         this.address = address;
     }
 }

@@ -1,14 +1,20 @@
 package br.com.escritorioDeVaquejada.vqr.service;
 
 
+import br.com.escritorioDeVaquejada.vqr.model.EventModel;
 import br.com.escritorioDeVaquejada.vqr.vo.event.EventRequestVO;
 import br.com.escritorioDeVaquejada.vqr.vo.event.EventResponseVO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface EventService {
     EventResponseVO saveEvent(EventRequestVO newEvent, UUID clientId);
-    List<EventResponseVO> findEventsByClientId(UUID clientId);
-    EventResponseVO findEventByID(UUID eventId);
+    Page<EventResponseVO> findEventsByClientIdAndNameContains(
+            UUID clientId, String name, Pageable pageable);
+    EventResponseVO findEventById(UUID eventId);
+    EventModel findEventModelById(UUID eventId);
+
+    void deleteById(UUID id);
 }

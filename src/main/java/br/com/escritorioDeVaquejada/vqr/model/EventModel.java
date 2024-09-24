@@ -34,7 +34,7 @@ public class EventModel implements Serializable {
     private Address address;
     @ManyToOne @JoinColumn(name = "client_id")
     private ClientModel owner;
-    @OneToMany(mappedBy = "event")
+    @OneToMany(mappedBy = "event", cascade = CascadeType.REMOVE)
     List<TicketModel> tickets;
     @OneToOne() @JoinColumn(name = "finance_id")
     private FinanceModel financialReport;
@@ -121,15 +121,6 @@ public class EventModel implements Serializable {
     public void setPriceOfBoiTVPurchasedOnDemand(double priceOfBoiTVPurchasedOnDemand) {
         this.priceOfBoiTVPurchasedOnDemand = priceOfBoiTVPurchasedOnDemand;
     }
-
-    public FinanceModel getFinanceRelatory() {
-        return financialReport;
-    }
-
-    public void setFinanceRelatory(FinanceModel financialReport) {
-        this.financialReport = financialReport;
-    }
-
     public UUID getId() {
         return id;
     }
